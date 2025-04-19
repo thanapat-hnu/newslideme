@@ -19,6 +19,7 @@ import Payment from "./src/Payment/Payment";
 
 // import driver
 import DriverHome from "./src/driver/home/home";
+import RegisterDriver from "./src/driver/register/register";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -52,6 +53,7 @@ function App() {
 
           {/* driver routes */}
           <Route path="/driver/index" element={<DriverHome />} />
+          <Route path="/driver/register" element={<RegisterDriver />} />
         </Routes>
       </BrowserRouter>
     </div>
