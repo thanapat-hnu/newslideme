@@ -1,0 +1,41 @@
+.container-calendars{
+    display: flex;
+    width: 390px;
+    height: 776px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.calendar-back{
+    width: 390px;
+    height: 333;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+.calendar{
+    width: 390px;
+    height: 490px;
+    background-color: #ffff;
+    z-index: 1003;
+    position: absolute;
+    border-radius: 15px 15px 0px 0px;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.ly{
+    width: 330px;
+
+}
+
+.titles{
+    margin: 1rem 0;
+    font-size: 20px;
+}
+

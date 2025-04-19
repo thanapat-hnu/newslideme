@@ -1,0 +1,40 @@
+
+/* Notification Popup */
+.notification-popup {
+  position: fixed;
+  top: 20px; /* Space from the top */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2e7f52;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+  display: flex; /* Enable flex layout */
+  align-items: center; /* Center-align logo and text vertically */
+  gap: 10px; /* Space between logo and text */
+  animation: slideDown 0.5s ease-out, fadeOut 0.5s 2.5s ease-in forwards;
+  z-index: 1000;
+}
+
+/* Logo styling inside the notification */
+.notification-popup .logo {
+  width: 50px; /* Set logo size */
+  margin-bottom: 0; /* No bottom margin */
+}
+
+/* Animations */
+@keyframes slideDown {
+  from { top: 0; opacity: 0; }
+  to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+

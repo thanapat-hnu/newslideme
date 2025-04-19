@@ -1,0 +1,179 @@
+.otp-container {
+    width: 390px;
+    height: 844px;
+    border: 1px solid black;
+    position: relative;
+}
+
+.back-btn-OTP {
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    margin-left: 10px;
+    margin-top: 10px;
+    border: none;
+    background-color: white;
+}
+
+.otp-text,
+.otp-number {
+    margin-left: 20px;
+}
+
+.input-OTP {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.otp-input {
+    width: 250px;
+    height: 70px;
+    font-size: 40px;
+    text-align: center;
+    border: 1px solid #838383;
+    border-radius: 5px;
+    color: #585858;
+    outline: none;
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.otp-footer {
+    margin-top: 400px;
+    margin-left: 20px;
+}
+
+.otp-btn {
+    margin-top: 10px;
+    background-color: white;
+    border: none;
+    color: #0600B1;
+    font-weight: bold;
+}
+
+.otp-next {
+    display: flex;
+    justify-content: center;
+}
+
+.otp-next-btn {
+    width: 100%;
+    max-width: 348px;
+    margin-top: 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 35px;
+    border: none;
+    background-color: #14BF61;
+    color: white;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.otp-next-btn:active {
+    background-color: #cccccc;
+    transform: scale(0.98);
+}
+
+/* ปรับ CSS สำหรับ popup */
+.otp-popup {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 40px; /* ปรับความสูง */
+    background-color: #0f4b28;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 300px;
+    display: flex; /* ใช้ flexbox */
+    align-items: center; /* จัดข้อความให้อยู่กึ่งกลางในแนวตั้ง */
+    justify-content: center; /* จัดข้อความให้อยู่กึ่งกลางในแนวนอน */
+    text-align: center;
+    animation: slideDown 0.5s ease-out, fadeOut 2s 4s ease-in forwards;
+    z-index: 10;
+}
+
+@keyframes OTPFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes OTPFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.OTP-fadeIn {
+    animation: OTPFadeIn 0.5s ease-in-out forwards;
+}
+
+.OTP-fadeOut {
+    animation: OTPFadeOut 0.5s ease-in-out forwards;
+}
+
+
+
+
+/* อนิเมชั่นเลื่อนลง */
+@keyframes slideDown {
+    from {
+        top: -50px;
+        opacity: 0;
+    }
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+
+/* ปรับการแสดงปุ่มใน OTP Popup */
+.otp-popup button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff; /* สีน้ำเงิน */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.otp-popup button:hover {
+    background-color: #0056b3; /* สีน้ำเงินเข้มเมื่อ hover */
+}
+.error-message {
+    color: red; /* เปลี่ยนสีข้อความเป็นสีแดง */
+    font-size: 14px; /* ขนาดตัวอักษรเล็กน้อย */
+    margin-top: 10px; /* ระยะห่างจาก input */
+    text-align: center; /* จัดข้อความให้ตรงกลาง */
+  }
+  

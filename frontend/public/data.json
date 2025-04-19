@@ -1,0 +1,66 @@
+[
+  {
+    "providerId": 1,
+    "providerName": "บริการลากจูดเร็วทันใจ",
+    "locations": {
+      "origin": {
+        "city": "กรุงเทพมหานคร",
+        "address": "123 ถนนหลัก, กรุงเทพมหานคร"
+      },
+      "destination": {
+        "city": "นนทบุรี",
+        "address": "45/6 ถนนริมแม่น้ำ, นนทบุรี"
+      }
+    },
+    "towTruckType": "Flatbed",
+    "price": 1500
+  },
+  {
+    "providerId": 2,
+    "providerName": "โซลูชันลากจูดด่วน",
+    "locations": {
+      "origin": {
+        "city": "เชียงใหม่",
+        "address": "789 วิวภูเขา, เชียงใหม่"
+      },
+      "destination": {
+        "city": "ลำพูน",
+        "address": "99 ซอยสวน, ลำพูน"
+      }
+    },
+    "towTruckType": "Hook & Chain",
+    "price": 1200
+  },
+  {
+    "providerId": 3,
+    "providerName": "บริษัทลากจูดเชื่อใจได้",
+    "locations": {
+      "origin": {
+        "city": "ภูเก็ต",
+        "address": "55 ถนนริมทะเล, ภูเก็ต"
+      },
+      "destination": {
+        "city": "กระบี่",
+        "address": "20 ถนนหน้าผา, กระบี่"
+      }
+    },
+    "towTruckType": "Integrated",
+    "price": 1800
+  },
+  {
+    "providerId": 4,
+    "providerName": "TowPro",
+    "locations": {
+      "origin": {
+        "city": "พัทยา",
+        "address": "88 ถนนเลียบทะเล, พัทยา"
+      },
+      "destination": {
+        "city": "ระยอง",
+        "address": "11 ถนนพระอาทิตย์, ระยอง"
+      }
+    },
+    "towTruckType": "Wheel-Lift",
+    "price": 1400
+  }
+]

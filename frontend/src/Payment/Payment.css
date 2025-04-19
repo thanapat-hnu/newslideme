@@ -1,0 +1,829 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.payment-method {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    max-height: 844px;
+    margin-bottom: 100px;
+    font-family: kanit, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: 390px;
+    height: 774px;
+    z-index: 1011;
+}
+
+#go-back {
+    position: relative;
+    top: 25px;
+    right: 150px;
+    font-size: 20px;
+}
+
+.payment-title {
+    text-align: center;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+}
+
+.payment-text {
+    margin-top: 30px;
+    position: relative;
+    right: 100px;
+}
+
+.payment-add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-card {
+    border: 1px solid rgb(194, 194, 194);
+    color: black;
+    padding: 15px 32px;
+    text-align: left;
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+    top: 10px;
+    right: 0px;
+    border-radius: 5px;
+    width: 350px;
+}
+
+.btn-paypal {
+    border: 1px solid rgb(194, 194, 194);
+    color: black;
+    padding: 15px 32px;
+    text-align: left;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    position: relative;
+    top: 10px;
+    right: 0px;
+    border-radius: 5px;
+    width: 350px;
+}
+
+.btn-qr {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid rgb(194, 194, 194);
+    margin: auto;
+    width: 350px;
+    height: 55px;
+    padding: 7px;
+    border-radius: 5px;
+
+    .img-qr {
+        width: 50px;
+        height: 50px;
+        position: relative;
+        bottom: 5px;
+    }
+
+    .qr {
+        position: relative;
+        top: 5px;
+        left: 50px;
+        text-align: center;
+    }
+}
+
+.newcard-text {
+    margin: 0;
+    margin-top: 20px;
+}
+
+#back {
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    position: relative;
+    top: 30px;
+    right: 120px;
+}
+
+.imgcard {
+    width: 50px;
+    height: 25px;
+    position: relative;
+    top: 0;
+}
+
+.imgcard-1 {
+    height: 25px;
+    width: 50px;
+    position: relative;
+    top: 10px;
+    padding-left: 10px;
+}
+
+.pay {
+    margin-top: 25px;
+    text-align: center;
+    color: red;
+    font-family: kanit, sans-serif;
+    font-size: 15px;
+}
+
+.pay-text {
+    margin: 0;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-family: kanit, sans-serif;
+}
+
+.pay-text-1 {
+    margin: 0;
+    text-align: center;
+    font-size: 15px;
+    font-family: kanit, sans-serif;
+}
+
+.newcard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(194, 194, 194);
+}
+
+.payment-newcard {
+    display: flex;
+    flex-direction: column;
+    /* margin-left: 10px; */
+    gap: 10px;
+    font-family: kanit, sans-serif;
+    border: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: white;
+    z-index: 1011;
+    width: 390px;
+    height: 774px;
+    label {
+        font-size: 20px;
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    #number {
+        width: 350px;
+        height: 60px;
+        border-radius: 10px;
+        font-size: 20px;
+    }
+
+    #holder {
+        width: 350px;
+        height: 60px;
+        border-radius: 10px;
+        font-size: 20px;
+    }
+
+    #exp-month {
+        width: 67px;
+        height: 60px;
+        font-family: kanit, sans-serif;
+        font-size: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    #exp-year {
+        width: 67px;
+        height: 60px;
+        font-family: kanit, sans-serif;
+        font-size: 18px;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+        left: 80px;
+        bottom: 70px;
+    }
+
+    #cvv {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+        font-family: kanit, sans-serif;
+        border-radius: 10px;
+        position: relative;
+        bottom: 180px;
+        left: 250px;
+        text-align: center;
+    }
+
+    .cvv {
+        position: relative;
+        left: 200px;
+        bottom: 180px;
+    }
+
+    .addcard {
+        position: relative;
+        bottom: 113px;
+        left: -10px;
+        width: 370px;
+        height: 60px;
+        border-radius: 10px;
+        border: none;
+        margin: auto;
+        width: 200px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        background-color: green;
+        color: white;
+        transition: background-color 0.2s ease-out;
+    }
+
+    .addcard:hover {
+        background-color: gray;
+        color: black;
+        transition: background-color 0.2s ease-out;
+    }
+}
+
+.number-newcard {
+    position: relative;
+}
+
+.card-number-container {
+    position: relative;
+    margin-top: 30px;
+
+    label {
+        position: relative;
+        bottom: 10px;
+        font-size: 20px;
+        font-family: kanit, sans-serif;
+    }
+}
+
+.card-number-container img {
+    position: absolute;
+    top: 67%;
+    left: 280px;
+    /* ปรับตำแหน่งตามต้องการ */
+    transform: translateY(-50%);
+    z-index: 1;
+    /* ให้แน่ใจว่ารูปอยู่ด้านหลัง */
+}
+
+.card-number-container input {
+    padding-left: 10px;
+    /* เพิ่ม padding ให้กับ input เพื่อไม่ให้ตัวอักษรทับกับรูป */
+}
+
+.mastercard {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 40px;
+    width: 60px;
+    text-align: center;
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    /* left: 290px; */
+    top: 103px;
+    object-fit: contain;
+}
+
+.visa {
+    position: relative;
+    height: 40px;
+    width: 60px;
+    text-align: center;
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    left: 290px;
+    top: 103px;
+    object-fit: contain;
+}
+
+.container-overview {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    /* margin-top: 200px; */
+    width: 390px;
+    height: 774px;
+    background-color: #ffff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1011;
+    overflow: scroll;
+}
+
+.overview-title {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: relative;
+    top: 20px;
+    font-size: 30px;
+    font-family: kanit, sans-serif;
+}
+
+.warn-container {
+    position: relative;
+    top: 35px;
+}
+
+.warn {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10px;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 30px;
+    left: 30px;
+}
+
+.warn-text {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-family: kanit, sans-serif;
+    position: relative;
+    left: 55px;
+}
+
+.container-maps {
+    position: relative;
+    top: 20px;
+}
+
+.map {
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 35px;
+}
+
+.map-1 {
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 35px;
+}
+
+.map-text-up {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    position: relative;
+}
+
+.map-text-down {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    position: relative;
+}
+
+.map-line {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: -20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.line {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.delivery {
+    padding: 0;
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    position: relative;
+}
+
+.delivery-title {
+    padding: 0;
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    position: relative;
+}
+
+.summary {
+    padding: 0;
+    text-align: left;
+    margin-bottom: 10px;
+    position: relative;
+    left: -25px;
+}
+
+.summary-title {
+    padding: 0;
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    position: relative;
+}
+
+.summary-line {
+    position: relative;
+    top: -10px;
+    left: 0;
+}
+
+.summary-price {
+    padding: 0;
+    margin-top: 10px;
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    position: relative;
+    bottom: 20px;
+}
+
+.summary-price-text {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    left: 85px;
+    font-family: kanit, sans-serif;
+}
+
+.summary-price-text1 {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    left: 45px;
+    font-family: kanit, sans-serif;
+}
+
+.summary-price-text2 {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    left: 40px;
+    font-family: kanit, sans-serif;
+}
+
+.total {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    margin-top: 15px;
+}
+
+.total-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    position: relative;
+    left: -50px;
+    /* font-weight: bold; */
+}
+
+.card-option {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgb(194, 194, 194);
+    text-align: center;
+    width: 350px;
+    margin: 10px;
+    padding: 7px;
+    border-radius: 5px;
+    font-family: kanit, sans-serif;
+}
+
+.card-option:active {
+    background-color: gray;
+}
+
+.card-name {
+    position: relative;
+    top: 5px;
+}
+
+.card-num {
+    position: relative;
+    top: 5px;
+}
+
+.card-option-1 {
+    border: 1px solid black;
+    font-size: 16px;
+    width: 270px;
+    position: relative;
+    top: 10px;
+    left: -10px;
+    border-radius: 5px;
+    height: 50px;
+}
+
+.selected-card-num {
+    text-align: center;
+    position: relative;
+    top: -15px;
+    left: 60px;
+}
+
+.btn-add {
+    text-align: left;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    width: 300px;
+    height: 50px;
+    position: relative;
+    top: 5px;
+    border-radius: 5px;
+    font-family: kanit, sans-serif;
+    font-weight: 400;
+}
+
+.btn-add:active {
+    background-color: gray;
+}
+
+.img-plus {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.total-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    font-size: 20px;
+    font-family: kanit, sans-serif;
+    border-radius: 5px;
+    width: 360px;
+    position: relative;
+    left: 0;
+    background-color: rgb(236, 236, 236);
+}
+
+.total-text {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-family: kanit, sans-serif;
+    position: relative;
+    left: -110px;
+    top: 17px;
+}
+
+.total-amount {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-family: kanit, sans-serif;
+    position: relative;
+    left: 130px;
+    top: -17px;
+}
+
+.btn-pay {
+    text-align: center;
+    font-size: 16px;
+    border-radius: 7px;
+    background-color: #14BF61;
+    margin-bottom: 10px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-content h3 {
+    margin: 0;
+    color: #333;
+}
+
+.modal-content input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.modal-content button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delivery-option {
+    padding: 5px 10px;
+    margin: 5px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: kanit, sans-serif;
+    width: 300px;
+    height: 50px;
+    object-position: center;
+    object-fit: contain;
+}
+
+.delivery-option-immediate {
+    padding: 5px 10px;
+    margin: 5px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: kanit, sans-serif;
+    width: 300px;
+    height: 50px;
+    object-position: center;
+    object-fit: contain;
+}
+
+.delivery-option.selected {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+    height: 85px;
+}
+
+.delivery-option-immediate.selected {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+}
+
+.selected-date {
+    margin: 0;
+    position: relative;
+    top: -5px;
+    color: #4CAF50;
+    font-size: 0.9em;
+    font-family: kanit, sans-serif;
+}
+
+.btn-pay.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    font-family: kanit, sans-serif;
+}
+
+.img-qr-selected {
+    width: 40px;
+    height: 50px;
+    object-fit: contain;
+    position: relative;
+    left: 10px;
+}
+
+.selected-payment {
+    margin: 0;
+    font-size: 16px;
+    color: black;
+    font-weight: 300;
+    font-family: kanit, sans-serif;
+    position: relative;
+    top: -38px;
+    left: 140px;
+}
+
+.prompt-container {
+    width: 390px;
+    height: 774px;
+    background-color: #ffff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1011;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-qr-render {
+    position: relative;
+    width: 280px;
+    height: 120px;
+}
+
+.img-code-render {
+    position: relative;
+    width: 280px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.prompt-text {
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.prompt-text-user {
+    font-size: 18px;
+    font-family: kanit, sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.done-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: kanit, sans-serif;
+    position: relative;
+    width: 390px;
+    height: 774px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1011;
+    background-color: #ffff;
+}
+
+.done-img {
+    width: 150px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.done-title {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 20px;
+}

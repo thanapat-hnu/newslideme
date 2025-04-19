@@ -1,0 +1,312 @@
+/* General Container */
+.chat-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    position: fixed;
+}
+
+/* Title */
+.chat-title {
+    margin-top: 30px;
+    font-size: 20px;
+    margin-left: 30px;
+    text-align: left;
+}
+
+/* Tabs */
+.chat-tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+    gap: 10px;
+    /* เพิ่มระยะห่างระหว่างปุ่ม */
+    padding: 30px;
+}
+
+.tab-button {
+    width: 180px;
+    /* กำหนดความกว้างเฉพาะของปุ่ม */
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: #c7e9d6;
+    border-radius: 30px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.tab-button.active {
+    background-color: #12a956;
+    color: white;
+    transform: scale(1.05);
+    /* ขยายเล็กน้อยเมื่อเลือก */
+}
+
+.tab-button:hover {
+    background-color: #12a956;
+    /* เพิ่มสีเมื่อ hover */
+}
+
+/* Chat Box */
+.chat-box {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    max-height: 200px;
+    height: 75px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-box:hover {
+    background-color: #f9f9f9;
+}
+
+/* Avatar */
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-left: 20px;
+
+}
+
+/* Chat Details */
+.chat-details {
+    flex: 1;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.chat-name {
+    margin-left: 20px;
+    padding: 2px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.chat-time {
+    font-size: 12px;
+    color: #999;
+    margin-right: 10px;
+}
+
+.message-time {
+    font-size: 10px;
+    gap: 10px;
+    margin-right: 6px;
+    color: black;
+}
+
+.chat-message {
+    font-size: 14px;
+    color: #555;
+    justify-content: center;
+    position: relative;
+    margin-left: 25px;
+}
+
+.avatar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* Ensures the avatar is not distorted */
+}
+
+/* Animation for chat popup to rise and bounce */
+@keyframes popupAnimation {
+    0% {
+        transform: translateY(100px);
+        /* Start below the screen */
+        opacity: 0;
+    }
+
+    60% {
+        transform: translateY(-10px);
+        /* Moves slightly above */
+    }
+
+    80% {
+        transform: translateY(5px);
+        /* Slightly bounce back down */
+    }
+
+    100% {
+        transform: translateY(0);
+        /* Final position */
+        opacity: 1;
+    }
+}
+
+.chat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* Ensure overlay appears above everything */
+}
+
+.chat-popup-header {
+    background-color: #12a956;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    display: flex;
+    /* Use flexbox to manage children layout */
+    justify-content: space-between;
+    /* Ensures proper alignment */
+    align-items: center;
+    color: aliceblue;
+}
+
+.chat-popup {
+    position: relative;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    right: auto;
+    /* เลื่อน popup ไปอยู่ตรงกลาง */
+
+    max-height: 500px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: popupAnimation 0.5s ease-out;
+    /* Apply the animation */
+}
+
+
+.chat-popup-body {
+    flex-grow: 1;
+    /* ทำให้ขยายได้ตาม container */
+    padding: 10px;
+    overflow-y: auto;
+    /* ทำให้ scroll ได้หากข้อความยาว */
+    max-height: 500px;
+    /* ปรับความสูงสูงสุด (เพิ่มจากเดิม) */
+    height: 500px;
+    background-color: #c7e9d6;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    color: #000000;
+}
+
+.chat-message-you {
+    margin-bottom: 10px;
+    text-align: right;
+    color: #000000;
+}
+
+.chat-popup-footer {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    align-items: center;
+}
+
+.chat-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.send-button {
+    padding: 8px 12px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: rgb(92, 163, 92);
+}
+
+
+.close-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+
+
+/* animation page */
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.chat-container {
+    animation: slideIn 0.5s ease-out;
+}
+
+.notification1-popup {
+    position: fixed;
+    top: 20%;
+    right: 10%;
+    background-color: #2d6e48;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    width: 300px;
+    z-index: 10;
+}
+
+.notification1-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff; /* White color for the header text */
+    margin-left: 10px;
+}
+
+.notification1-logo {
+    width: 30px; /* Adjust width as needed */
+    height: 30px; /* Adjust height as needed */
+    margin-right: 10px; /* Space between logo and text */
+}
+
+.notification1-body {
+    margin-top: 10px;
+    color: #f0f0f0; /* Light gray color for body text */
+    margin-left: 10px;
+}
+
+
+
+

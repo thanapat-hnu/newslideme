@@ -1,0 +1,218 @@
+/* Base container styles */
+.list-container {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    position: relative;
+    transition: transform 0.5s ease-in-out;
+    overflow-y: auto;
+    height: 100vh;
+    box-sizing: border-box;
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Header Styles */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding: 16px 0;
+    z-index: 100; /* เพิ่ม z-index */
+    width: 100%;
+}
+
+.list-title {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-icon {
+    font-size: 18px;
+}
+
+/* ส่วนของ history button container */
+.history-btn-container {
+    position: relative;
+    z-index: 101; /* สูงกว่าส่วนอื่น */
+}
+
+/* History Button */
+.history-btn {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 101; /* สูงกว่าส่วนอื่น */
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.history-btn:hover {
+    background-color: #eeeeee;
+}
+
+.history-btn i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Section heading */
+.section-heading {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px;
+    display: block;
+    position: relative;
+    z-index: 10;
+}
+
+/* Latest Section */
+.latest-section {
+    overflow: visible;
+    margin-top: 16px;
+    position: relative; 
+    z-index: 5; /* ต่ำกว่า header */
+}
+
+/* Loading and No Data */
+.loading, .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+/* Card Styling */
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: relative;
+    z-index: 5; /* ต่ำกว่า header */
+}
+
+.card-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.card-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #ffffff;
+    margin-right: 16px;
+    background-color: #14bf61;
+}
+
+.card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    line-height: 1.4;
+}
+
+.card-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.card-date {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.card-price {
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    text-align: right;
+    white-space: nowrap;
+    margin-left: 12px;
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+/* Status colors */
+.green-bg {
+    background-color: #14bf61;
+}
+
+.green-text {
+    color: #14bf61;
+}
+
+.red {
+    color: #e53935;
+}
+
+.green {
+    color: #14bf61;
+}
+
+/* Animation for page transitions */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.list-container.slide-in-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.list-container.slide-out {
+    transform: translateX(100%);
+}

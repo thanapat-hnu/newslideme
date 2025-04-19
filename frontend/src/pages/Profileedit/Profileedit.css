@@ -1,0 +1,365 @@
+.profileedit-container{
+    width: 390px;
+    height: 844px;
+    border: 1px solid black;
+    
+}
+.profileedit-banner {
+    padding: 0;
+    margin: 0;
+    width: 390px;
+    height: 170px; 
+    border-radius: 6px;
+    background: linear-gradient(to top, #00A048, rgba(255, 255, 255, 0.1)); 
+    position: relative; 
+}
+
+.profileedit-welcome {
+    position: absolute; 
+    top: 60px;
+    left: 35px;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+}
+.profile-containers{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin-left: 65%;
+    margin-top: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid cornsilk;
+    background-color: rgb(238, 238, 238);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.profile-containers img {
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    object-fit: cover; 
+    border-radius: 50%; 
+}
+
+.form-containers{
+    background-color: rgba(226, 236, 230, 0.5); 
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    
+    
+    
+}
+
+.form-name{
+    width: 330px; 
+    margin: 0 auto; 
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; 
+    gap: 15px; 
+    padding: 20px;
+    margin-top: 5px;
+
+
+
+
+    
+}
+.form-name input {
+    
+    height: 40px; 
+    border: 1px solid #d9d9d9; 
+    border-radius: 5px; 
+    padding: 0 10px; 
+    font-size: 16px; 
+    outline: none; 
+    box-sizing: border-box; 
+}
+
+.form-lastname{
+    width: 290px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column; 
+    margin-top: -5px;
+}
+
+.form-lastname input {
+    width: 100%; /* ให้ input กว้างเต็ม container */
+    height: 40px; /* กำหนดความสูงของ input */
+    border: 1px solid #d9d9d9; /* สีขอบของ input */
+    border-radius: 5px; /* มุมโค้งมน */
+    padding: 0 10px; /* ระยะห่างระหว่างขอบและข้อความ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+    box-sizing: border-box; /* รวม padding และ border */
+}
+
+.form-numbercountry {
+    width: 300px; /* กำหนดความกว้างของฟอร์ม */
+    margin: 0 auto; /* จัดให้อยู่กึ่งกลาง */
+    display: flex;
+    flex-direction: row; /* จัดวาง input ในแนวนอน */
+    padding: 5px;
+    gap: 10px; /* กำหนดระยะห่างระหว่าง input */
+    margin-top: 5px;
+}
+
+.form-numbercountry input {
+    width: 65%; /* ให้ input กว้างเต็ม container */
+    height: 40px; /* กำหนดความสูงของ input */
+    border: 1px solid #d9d9d9; /* สีขอบของ input */
+    border-radius: 5px; /* มุมโค้งมน */
+    padding: 0 10px; /* ระยะห่างระหว่างขอบและข้อความ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+    box-sizing: border-box; /* รวม padding และ border */
+}
+#number {
+    width: 90%;
+    -moz-appearance: textfield; /* ซ่อนลูกศรใน Firefox */
+    -webkit-appearance: none; /* ซ่อนลูกศรใน Webkit (Chrome, Safari) */
+    appearance: none; /* ซ่อนลูกศรในเบราว์เซอร์อื่นๆ */
+}
+
+#number::-webkit-outer-spin-button,
+#number::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* ซ่อนลูกศรใน Webkit */
+    margin: 0; /* กำจัดระยะขอบ */
+}
+
+#country {
+    width: 100px; /* กำหนดความกว้างของ input */
+    height: 40px; /* กำหนดความสูงของ input */
+    padding-left: 60px; /* เว้นพื้นที่ด้านซ้ายเพื่อไม่ให้ข้อความทับกับรูป */
+    background-image: url('../img/TH.png'); /* ใส่รูปภาพ */
+    background-position: 12px center; /* ตั้งรูปภาพที่ซ้ายสุด */
+    background-size: 35px 20px; /* ขนาดรูปภาพที่เล็กลง */
+    background-repeat: no-repeat; /* ไม่ให้รูปซ้ำ */
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box; /* เพื่อให้ padding และ border ไม่ทำให้ขนาด input เปลี่ยน */
+}
+.form-email{
+    width: 300px; /* กำหนดความกว้างของฟอร์ม */
+    margin: 0 auto; /* จัดให้อยู่กึ่งกลาง */
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; /* จัดวาง input ในแนวตั้ง */
+    gap: 15px; /* ระยะห่างระหว่างแต่ละช่อง */
+    padding: 5px;
+    margin-top: 5px;
+}
+.form-email input {
+    width: 100%; /* ให้ input กว้างเต็ม container */
+    height: 40px; /* กำหนดความสูงของ input */
+    border: 1px solid #d9d9d9; /* สีขอบของ input */
+    border-radius: 5px; /* มุมโค้งมน */
+    padding: 0 10px; /* ระยะห่างระหว่างขอบและข้อความ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+    box-sizing: border-box; /* รวม padding และ border */
+}
+.form-sex{
+    width: 300px; /* กำหนดความกว้างของฟอร์ม */
+    margin: 0 auto; /* จัดให้อยู่กึ่งกลาง */
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; /* จัดวาง input ในแนวตั้ง */
+    gap: 15px; /* ระยะห่างระหว่างแต่ละช่อง */
+    padding: 5px;
+    margin-top: 5px;
+    
+}
+.form-sex input {
+    width: 100%; /* ให้ input กว้างเต็ม container */
+    height: 40px; /* กำหนดความสูงของ input */
+    border: 1px solid #d9d9d9; /* สีขอบของ input */
+    border-radius: 5px; /* มุมโค้งมน */
+    padding: 0 10px; /* ระยะห่างระหว่างขอบและข้อความ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+    box-sizing: border-box; /* รวม padding และ border */
+    
+}
+.form-selects  {
+    width: 100%; /* ความกว้างเต็ม */
+    height: 40px; /* ความสูงของ Dropdown */
+    border: 1px solid #d9d9d9; /* ขอบสีเทาอ่อน */
+    border-radius: 5px; /* มุมโค้งมน */
+    padding: 0 10px; /* ระยะห่างระหว่างขอบและข้อความ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+    box-sizing: border-box; /* รวม padding และ border */
+    appearance: none; /* ซ่อนลูกศร default */
+    background-color: white; /* พื้นหลังขาว */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อชี้ */
+    color: rgb(0, 0, 0);
+    
+}
+.form-selects:disabled {
+    color: #000000 !important; /* ใช้ !important เพื่อบังคับให้ข้อความเป็นสีดำ */
+    opacity: 1; /* ปรับความโปร่งใสกลับเป็น 100% (บางครั้ง disabled อาจทำให้มันโปร่งใส) */
+}
+
+
+
+/* ตั้งค่าตัว container ให้เป็น flex */
+.form-logout {
+    display: flex;
+    justify-content: center; /* จัดกลางในแนวนอน */
+    align-items: center; /* จัดกลางในแนวตั้ง */
+    margin: 0;
+    padding: 0;
+}
+
+/* ตั้งค่าปุ่ม */
+.form-logout button {
+    background-color: white; /* เพิ่มพื้นหลังสีขาว */
+    color: red; /* สีตัวอักษร */
+    border-radius: 10px;
+    font-size: 16px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ตัวหนา */
+    padding: 10px 20px; /* เพิ่มขนาดปุ่ม */
+    outline: none;
+    cursor: pointer; /* เพิ่มตัวชี้เมื่ออยู่เหนือปุ่ม */
+    margin-top: 100px;
+    border: none;
+
+    /* เพิ่มเงา */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                0 1px 3px rgba(0, 0, 0, 0.06);
+
+    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์เปลี่ยนแปลงเมื่อ hover */
+}
+
+.form-logout button:hover {
+    opacity: 0.9; /* เอฟเฟกต์โปร่งเล็กน้อย */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 
+                0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มความลึก */
+    transform: scale(1.05); /* ขยายขนาดปุ่มเล็กน้อย */
+}
+
+.form-logout button:active {
+    transform: scale(0.95); /* ย่อขนาดเล็กลงเมื่อกดปุ่ม */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ลดเงา */
+}
+
+
+.profileedit-button {
+    width: 30px; /* กำหนดขนาดปุ่มเล็กลง */
+    height: 30px;
+    padding: 5px; /* เพิ่ม padding ภายในถ้าจำเป็น */
+    border: none;
+    background-color: transparent; /* ปรับพื้นหลังเป็นโปร่งใส */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* ปรับตำแหน่ง */
+    top: 60px;
+    left: 200px;
+
+    /* เพิ่มเอฟเฟกต์เงา */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                0 1px 3px rgba(0, 0, 0, 0.06);
+    border-radius: 50%; /* ทำให้ปุ่มกลม */
+    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์เปลี่ยนสีและเงาเมื่อโฮเวอร์ */
+}
+
+.profileedit-button:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 
+                0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: scale(1.1); /* ขยายปุ่มเล็กน้อยเมื่อโฮเวอร์ */
+}
+
+.profileedit-button img {
+    width: 20px; /* ปรับขนาดรูปเล็กลง */
+    height: 20px;
+    border-radius: 50%; /* ทำให้รูปเป็นวงกลม */
+    padding: 3px;
+    border: 2px solid #666666;
+
+    /* เพิ่มเอฟเฟกต์เงา */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์เมื่อโฮเวอร์ */
+}
+
+.profileedit-button img:hover {
+    border-color: rgb(82, 82, 82); /* เปลี่ยนสีขอบเมื่อโฮเวอร์ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.form-summit{
+    display: flex;
+    justify-content: center; /* จัดกลางในแนวนอน */
+    align-items: center; /* จัดกลางในแนวตั้ง */
+    margin: 0; /* ลบการจัดระยะขอบที่อาจเกิดขึ้น */
+    padding: 0; /* ลบการจัดระยะขอบที่อาจเกิดขึ้น */
+    margin: 10px;
+    position: absolute;
+    margin-left: 130px;
+    
+    
+    
+}
+.btn-summit {
+    color: rgb(55, 82, 231);
+    
+    border: none;
+    background-color: white;
+    font-size: medium;
+    padding: 10px 20px; /* เพิ่มขนาดปุ่มให้ดูสมดุล */
+    border-radius: 8px; /* มุมมน */
+    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์เมื่อโฮเวอร์ */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                0 1px 3px rgba(0, 0, 0, 0.06); /* เงาแบบนุ่ม */
+}
+
+.btn-summit:hover {
+    background-color: rgb(55, 82, 231); /* สีพื้นหลังเมื่อโฮเวอร์ */
+    color: white; /* สีตัวอักษรเมื่อโฮเวอร์ */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 
+                0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเมื่อโฮเวอร์ */
+    transform: translateY(-2px); /* ยกขึ้นเล็กน้อย */
+}
+
+
+.form-delete{
+    display: flex;
+    justify-content: center; 
+    padding: 40px;
+}
+
+.btn-delete {
+    border: none;
+    background-color: #ff4d4f; /* สีแดงแบบ modern */
+    color: white;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(255, 77, 79, 0.2);
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-delete:hover {
+    background-color: #d9363e; /* สีแดงเข้มตอน hover */
+    transform: scale(1.03);
+  }
+  
+  .btn-delete:active {
+    transform: scale(0.98);
+  }
+  
+

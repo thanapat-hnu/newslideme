@@ -1,0 +1,9 @@
+.container-home {
+    width: 390px;
+    height: 775px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
