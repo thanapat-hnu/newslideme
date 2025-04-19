@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import phoneRoutes from './routes.js'; 
-import HomeRoutes from './Homeroutes.js';
-import bookingRoutes from './bookingRoutes.js';
-import locationRoutes from './locationRoutes.js';
-import mapRoutes from './mapRoutes.js';
+
+import phoneRoutes from './All-Routes/routes.js';
+import HomeRoutes from './All-Routes/Homeroutes.js';
+import bookingRoutes from './All-Routes/bookingRoutes.js';
+import locationRoutes from './All-Routes/locationRoutes.js';
+import mapRoutes from './All-Routes/mapRoutes.js';
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -15,9 +17,9 @@ app.use(bodyParser.json());
 // ✅ ใช้ router ที่รวม logic คุยกับ DB
 app.use('/api', phoneRoutes);
 app.use('/api', HomeRoutes);
- app.use('/api', bookingRoutes);
- app.use('/api', locationRoutes);
- app.use('/api', mapRoutes);
+app.use('/api', bookingRoutes);
+app.use('/api', locationRoutes);
+app.use('/api', mapRoutes);
 
 // ✅ In-memory store สำหรับ OTP เท่านั้น
 const otps = {};
@@ -57,5 +59,5 @@ app.post('/api/verify-otp', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`✅ Server is running on http://localhost:${port}`);
 });
