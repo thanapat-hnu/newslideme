@@ -1,0 +1,63 @@
+// App.jsx
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.min.css";
+
+import "./App.css";
+
+import Layout from "./src/layouts/layout/layout";
+import Home from "./src/pages/home/home";
+import Profileedit from "./src/pages/Profileedit/Profileedit";
+import Login from "./src/pages/Login/Login";
+import Inputphone from "./src/pages/Inputphone/Inputphone";
+import OTP from "./src/pages/OTP/OTP";
+import Register from "./src/pages/Register/Register";
+import Create from "./src/pages/Create/Create";
+import List from "./src/pages/list/list";
+import History from "./src/pages/history/history";
+import Chat from "./src/pages/Chat/Chat";
+import Payment from "./src/Payment/Payment";
+
+// import driver
+// import DriverHome from "./src/driver/home/home";
+// import RegisterDriver from "./src/driver/register/register";
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+function App() {
+  return (
+    <div className="container-app">
+      <BrowserRouter basename="/slide_me2">
+        <Routes>
+          {/* redirect หน้าแรกไป login */}
+          <Route path="/" element={<Navigate to="/login" />} />
+
+          {/* layout routes */}
+          <Route element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/list" element={<List />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/profile" element={<Profileedit />} />
+          </Route>
+
+          {/* auth routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/inputphone" element={<Inputphone />} />
+          <Route path="/otp" element={<OTP />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/create" element={<Create />} />
+          <Route path="/payment" element={<Payment />} />
+
+          {/* fallback route (optional) */}
+          <Route path="*" element={<Navigate to="/login" />} />
+
+          {/* driver routes */}
+          {/* <Route path="/driver/index" element={<DriverHome />} />
+          <Route path="/driver/register" element={<RegisterDriver />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
