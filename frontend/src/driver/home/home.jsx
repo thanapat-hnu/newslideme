@@ -13,7 +13,7 @@ function DriverHome() {
 
             <div className='reg-log'>
                 <h3 style={{marginBottom: "20px"}}>ลงทะเบียนหรือเข้าสู่ระบบด้วย</h3>
-                <button className='btnN' style={{marginBottom: "10px"}}><b>กดเข้าสู่ระบบ</b></button>
+                <button className='btnN' style={{marginBottom: "10px"}} onClick={() => navigator('/driver/main')}><b>กดเข้าสู่ระบบ</b></button>
                 <button className='btnN' style={{marginBottom: "10px"}} onClick={() => navigator('/driver/register')}><b>สมัครสมาชิก</b></button>
             </div>
         </div>
