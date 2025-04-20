@@ -1,0 +1,119 @@
+.container-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.btn-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  width: 90vw;
+}
+
+.btn-income {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #151515;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.btn-income-value {
+  background-color: #151515;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  width: 90px;
+  height: 60px;
+  font-size: 1rem;
+  position: absolute;
+  top: 60px;
+  text-indent: 10px;
+  
+}
+
+.profile-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #151515;
+}
+
+.btn-online {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #151515;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: 155px;
+}
+
+.btn-bottom {
+  display: flex;
+  background-color: #151515;
+  width: 90vw;
+  height: 100px;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 40px;
+  color: #fff;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.btn-bottom-item1,
+.btn-bottom-item2,
+.btn-bottom-item3,
+.btn-bottom-item4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-bottom-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #232323;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 15px;
+}
+
+.btn-bottom-item1 label,
+.btn-bottom-item2 label,
+.btn-bottom-item3 label,
+.btn-bottom-item4 label {
+  font-size: 0.85rem;
+  /* font-weight: 700; */
+}
+
+.map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: aqua;
+}

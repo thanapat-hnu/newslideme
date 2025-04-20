@@ -18,8 +18,9 @@ import Chat from "./src/pages/Chat/Chat";
 import Payment from "./src/Payment/Payment";
 
 // import driver
-// import DriverHome from "./src/driver/home/home";
-// import RegisterDriver from "./src/driver/register/register";
+import DriverHome from "./src/driver/home/home";
+import RegisterDriver from "./src/driver/register/register";
+import Main from "./src/driver/main/main";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -52,8 +53,9 @@ function App() {
           <Route path="*" element={<Navigate to="/login" />} />
 
           {/* driver routes */}
-          {/* <Route path="/driver/index" element={<DriverHome />} />
-          <Route path="/driver/register" element={<RegisterDriver />} /> */}
+          <Route path="/driver/index" element={<DriverHome />} />
+          <Route path="/driver/register" element={<RegisterDriver />} />
+          <Route path="/driver/main" element={<Main />} />
         </Routes>
       </BrowserRouter>
     </div>

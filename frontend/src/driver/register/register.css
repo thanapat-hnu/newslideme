@@ -1,0 +1,79 @@
+.btn-back{
+  background-color: #fff;
+  color: #FF3D00;
+  border: none;
+  font-size: 1rem;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+}
+
+.coolinput {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  position: static;
+  /* max-width: 240px; */
+  width: 340px;
+}
+
+.coolinput label.text {
+  font-size: 0.75rem;
+  color: #14BF61;
+  font-weight: 700;
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #fff;
+  width: fit-content;
+}
+
+.coolinput input[type=text].input {
+  padding: 15px 10px;
+  font-size: 0.75rem;
+  border: 2px #14BF61 solid;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.coolinput input[type=text].input:focus {
+  outline: none;
+}
+
+.container-login {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Kanit', sans-serif;
+}
+
+.formReg{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 100px;
+}
+
+.btn-login-driver {
+  background-color: #14BF61;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 120px;
+  margin-top: 10px;
+  font-size: 1rem;
+  position: absolute;
+  bottom: 40px;
+}
+
+.btn-login-driver:hover {
+  background-color: #fff;
+  color: #14BF61;
+  border: 2px #14BF61 solid;
+}
