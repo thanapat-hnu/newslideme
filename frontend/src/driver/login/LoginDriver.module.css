@@ -1,0 +1,53 @@
+.containerLoginDriver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #4b4b4b;
+}
+
+.coolInput {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  position: static;
+  width: 340px;
+}
+
+.labelText {
+  font-size: 0.75rem;
+  color: #14bf61;
+  font-weight: 700;
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #fff;
+  width: fit-content;
+}
+
+.input {
+  padding: 15px 10px;
+  font-size: 0.75rem;
+  border: 2px #14bf61 solid;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.btnLoginDriver {
+  background-color: #14bf61;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 120px;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.btnLoginDriver:hover {
+  background-color: #fff;
+  color: #14bf61;
+  border: 2px #14bf61 solid;
+}
