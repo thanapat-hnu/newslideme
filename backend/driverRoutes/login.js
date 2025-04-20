@@ -1,10 +1,11 @@
 // routes/Login.js
 import express from "express";
 import pool from "../db.js";
+import e from "express";
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+router.post("/loginDriver", async (req, res) => {
   const clientIp = req.headers["client"] || req.socket.remoteAddress;
   const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 
@@ -37,13 +38,12 @@ router.post("/login", async (req, res) => {
     const user = rows[0];
     return res.status(200).json({
       message: "เข้าสู่ระบบสำเร็จ",
-      token: user.token,
+      token: email,
     });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({
       message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ",
-      error: error.message,
     });
   }
 });
