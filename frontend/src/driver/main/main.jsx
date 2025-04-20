@@ -1,11 +1,17 @@
 import "boxicons";
 import styles from "./main.module.css";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 // import Map from '../map/map';
 
 function Main() {
   const [status, setStatus] = useState(false);
   const [income, setIncome] = useState(false);
+
+  // test
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  const navigator = useNavigate();
 
   return (
     <div className={styles.containerMain}>
@@ -37,7 +43,13 @@ function Main() {
       {/* ปุ่มออนไลน์ */}
       <button
         className={styles.btnOnline}
-        onClick={() => setStatus(!status)}
+        onClick={() => {
+          setStatus(!status);
+          // test
+          setToken(localStorage.removeItem("token"));
+          navigator("/driver/index");
+
+        }}
         style={{
           backgroundColor: status ? "#14BF61" : "#232323",
         }}
