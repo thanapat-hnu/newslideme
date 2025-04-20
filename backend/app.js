@@ -10,6 +10,8 @@ import mapRoutes from './All-Routes/mapRoutes.js';
 
 // import driver
 import register from './driverRoutes/registerPersonal.js';
+import register2 from './driverRoutes/RegisterVehicle.js';
+
 
 
 const app = express();
@@ -28,6 +30,7 @@ app.use('/api', mapRoutes);
 
 // driver
 app.use('/api/drivers', register);
+app.use('/api/drivers',register2)
 
 // ✅ In-memory store สำหรับ OTP เท่านั้น
 const otps = {};

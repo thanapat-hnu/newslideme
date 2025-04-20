@@ -2,11 +2,14 @@ import "./register.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { RegistrationContext } from "../Context";
+import axios from "axios";
 
 function RegisterDriver() {
   const navigator = useNavigate();
   const { personalData, setPersonalData } = useContext(RegistrationContext);
   const [errors, setErrors] = useState({});
+  const [errorMessages, setErrorMessages] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleChange = (e) => {
     setPersonalData((prevData) => ({
@@ -15,14 +18,32 @@ function RegisterDriver() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  //   CALL API
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // console.log(personalData);
     if (validate()) {
-      console.log("✅ ส่งข้อมูล", personalData);
-      // navigator("/driver/register2");
+      try {
+        const res = await axios.post(
+          "http://localhost:3000/api/drivers/registerPersonal",
+          personalData
+        );
+        alert("บันทึกข้อมูลสําเร็จ");
+        console.log(res.data);
+      } catch (err) {
+        const data = err.response?.data;
+        // console.log(data);
+        if (data?.messages) {
+          setErrorMessages(data.messages);
+        //   console.log(errorMessages);
+        }
+        if (data?.fields) {
+          setFieldErrors(data.fields);
+        //   console.log(fieldErrors);
+        }
+      }
     } else {
-      console.log("❌ มีข้อผิดพลาด");
+      console.log("มีข้อผิดพลาด");
     }
   };
 
@@ -53,13 +74,9 @@ function RegisterDriver() {
       newErrors.email = "รูปแบบอีเมลไม่ถูกต้อง";
     }
 
-    if (!personalData.address?.trim()) {
-      newErrors.address = "กรุณากรอกที่อยู่";
-    }
-
-    if (!personalData.idCardImage) {
-      newErrors.idCardImage = "กรุณาอัปโหลดรูปบัตรประชาชน";
-    }
+    // if (!personalData.idCardImage) {
+    //   newErrors.idCardImage = "กรุณาอัปโหลดรูปบัตรประชาชน";
+    // }
 
     setErrors(newErrors);
 
@@ -67,12 +84,13 @@ function RegisterDriver() {
   };
 
   return (
-    <div className="container-login">
+    <div className="container-registerDriver">
       <button className="btn-back" onClick={() => navigator("/driver/index")}>
         <b>＜กลับ</b>
       </button>
       <div className="formReg">
         <h1 style={{ margin: "0", color: "#14BF61" }}>สมัครสมาชิก</h1>
+        {/* ชื่อ */}
         <div className="coolinput">
           <label className="text">ชื่อจริง:</label>
           <input
@@ -126,6 +144,11 @@ function RegisterDriver() {
               {errors.idCardNumber}
             </label>
           )}
+          {fieldErrors.idCardNumber && (
+            <label className="text" style={{ color: "red" }}>
+              {errorMessages.idCardNumber}
+            </label>
+          )}
         </div>
         {/* วันเกิด */}
         <div className="coolinput">
@@ -163,6 +186,11 @@ function RegisterDriver() {
               {errors.phoneNumber}
             </label>
           )}
+          {fieldErrors.phoneNumber && (
+            <label className="text" style={{ color: "red" }}>
+              {errorMessages.phoneNumber}
+            </label>
+          )}
         </div>
         {/* อีเมล */}
         <div className="coolinput">
@@ -182,7 +210,13 @@ function RegisterDriver() {
               {errors.email}
             </label>
           )}
+          {fieldErrors.email && (
+            <label className="text" style={{ color: "red" }}>
+              {errorMessages.email}
+            </label>
+          )}
         </div>
+
         {/* ไฟล์รูป */}
         <div className="coolinput">
           <label htmlFor="input" className="text">
@@ -212,7 +246,7 @@ function RegisterDriver() {
         style={{ marginBottom: "10px" }}
         onClick={handleSubmit}
       >
-        <b>ลงทะเบียน</b>
+        <b>หน้าถัดไป</b>
       </button>
     </div>
   );

@@ -1,9 +1,25 @@
 import express from "express";
-import pool from "../db.js"; 
+import pool from "../db.js";
 
 const router = express.Router();
 
 router.post("/registerPersonal", async (req, res) => {
+  const clientIp = req.headers["client"] || req.socket.remoteAddress;
+  const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  console.log("==========================================");
+  console.log(`📥 [${now}] Personal Registration`);
+  console.log(`🌐 IP Address: ${clientIp}`);
+  console.log("➡️ Request Body:", {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    idCardNumber: req.body.idCardNumber,
+    birthDate: req.body.birthDate,
+    phoneNumber: req.body.phoneNumber,
+    email: req.body.email,
+    idCardImage: req.body.idCardImage,
+  });
+  console.log("==========================================");
   try {
     const {
       firstName,
@@ -12,7 +28,6 @@ router.post("/registerPersonal", async (req, res) => {
       birthDate,
       phoneNumber,
       email,
-      address,
       idCardImage,
     } = req.body;
 
@@ -23,8 +38,7 @@ router.post("/registerPersonal", async (req, res) => {
       !idCardNumber ||
       !birthDate ||
       !phoneNumber ||
-      !email ||
-      !address
+      !email
     ) {
       return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบ" });
     }
@@ -35,41 +49,51 @@ router.post("/registerPersonal", async (req, res) => {
       [idCardNumber, phoneNumber, email]
     );
 
+    const errorsUser = {};
+    const fieldsUser = {};
+
     if (existingUser.length > 0) {
-      if (existingUser[0].id_card_number === idCardNumber) {
-        return res
-          .status(400)
-          .json({ message: "เลขบัตรประชาชนนี้ถูกใช้งานแล้ว" });
+      const existingIdCardnumber = existingUser.find(
+        (user) => user.id_card_number === idCardNumber
+      );
+      const existingPhoneNumber = existingUser.find(
+        (user) => user.phone_number === phoneNumber
+      );
+      const existingEmail = existingUser.find((user) => user.email === email);
+
+      if (existingIdCardnumber) {
+        errorsUser.idCardNumber = "บัตรประชาชนนี้มีอยู่ในระบบแล้ว";
+        fieldsUser.idCardNumber = true;
       }
-      if (existingUser[0].phone_number === phoneNumber) {
-        return res
-          .status(400)
-          .json({ message: "เบอร์โทรศัพท์นี้ถูกใช้งานแล้ว" });
+      if (existingPhoneNumber) {
+        errorsUser.phoneNumber = "เบอร์โทรศัพท์นี้มีอยู่ในระบบแล้ว";
+        fieldsUser.phoneNumber = true;
       }
-      if (existingUser[0].email === email) {
-        return res.status(400).json({ message: "อีเมลนี้ถูกใช้งานแล้ว" });
+      if (existingEmail) {
+        errorsUser.email = "อีเมลนี้มีอยู่ในระบบแล้ว";
+        fieldsUser.email = true;
       }
+      return res.status(400).json({ messages: errorsUser, fields: fieldsUser });
     }
 
     // If idCardImage is a file (binary data), ensure it's properly handled
     let idCardImageBinary = null;
-    if (idCardImage) {
-      // Assuming idCardImage is base64 encoded image
-      idCardImageBinary = Buffer.from(idCardImage, "base64");
-    }
+    // if (idCardImage) {
+    //   // Assuming idCardImage is base64 encoded image
+    //   idCardImageBinary = Buffer.from(idCardImage, "base64");
+    // }
 
     // Insert new personal info
     const [result] = await pool.query(
       `INSERT INTO personal_info (
-          first_name, 
-          last_name, 
-          id_card_number, 
-          birth_date, 
-          phone_number, 
-          email, 
-          address, 
+          first_name,
+          last_name,
+          id_card_number,
+          birth_date,
+          phone_number,
+          email,
           id_card_image
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         firstName,
         lastName,
@@ -77,11 +101,12 @@ router.post("/registerPersonal", async (req, res) => {
         birthDate,
         phoneNumber,
         email,
-        address,
         idCardImageBinary,
       ]
     );
 
+    console.log("Data saved successfully:", result);
+    console.log("==========================================");
     return res.status(201).json({
       message: "บันทึกข้อมูลส่วนตัวสำเร็จ",
       personalId: result.insertId,
@@ -95,4 +120,4 @@ router.post("/registerPersonal", async (req, res) => {
   }
 });
 
-export default router; // Use export default for ESM
+export default router;

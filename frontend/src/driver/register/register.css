@@ -1,4 +1,4 @@
-.btn-back{
+.btn-back {
   background-color: #fff;
   color: #FF3D00;
   border: none;
@@ -29,7 +29,8 @@
   width: fit-content;
 }
 
-.coolinput input.input {
+.coolinput input.input,
+.coolinput select.input {
   padding: 15px 10px;
   font-size: 0.75rem;
   border: 2px #14BF61 solid;
@@ -41,23 +42,23 @@
   outline: none;
 }
 
-.container-login {
+.container-registerDriver {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Kanit', sans-serif;
+  overflow-y: auto; /* ✅ ให้ scroll ได้ */
+  padding: 20px 0 100px; /* เพิ่ม padding ด้านล่างเผื่อปุ่ม */
 }
 
-.formReg{
+.formReg {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 100px;
+  margin-top: 60px; /* แทน top: 100px */
+  width: 100%;
+  max-width: 400px;
 }
 
 .btn-login-driver {
@@ -68,7 +69,7 @@
   padding: 15px 120px;
   margin-top: 10px;
   font-size: 1rem;
-  position: absolute;
+  /* position: absolute; */
   bottom: 40px;
 }
 
