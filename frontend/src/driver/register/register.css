@@ -60,7 +60,7 @@
   top: 100px;
 }
 
-.btn-login {
+.btn-login-driver {
   background-color: #14BF61;
   color: #fff;
   border: none;
@@ -72,7 +72,7 @@
   bottom: 40px;
 }
 
-.btn-login:hover {
+.btn-login-driver:hover {
   background-color: #fff;
   color: #14BF61;
   border: 2px #14BF61 solid;

@@ -35,7 +35,7 @@ function RegisterDriver() {
                     <input type="text" placeholder="ประเภทรถ..." name="input" className="input" />
                 </div>
             </div>
-            <button className='btn-login' style={{ marginBottom: "10px" }}><b>ลงทะเบียน</b></button>
+            <button className='btn-login-driver' style={{ marginBottom: "10px" }}><b>ลงทะเบียน</b></button>
         </div>
     );
 }
