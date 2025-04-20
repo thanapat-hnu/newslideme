@@ -1,4 +1,4 @@
-.container-home{
+.containerHome {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,13 +7,13 @@
     color: #fff;
     background-color: hsl(147, 81%, 41%);
     font-family: 'Kanit', sans-serif;
-}
-
-.title{
+  }
+  
+  .title {
     margin-left: 20px;
-}
-
-.reg-log{
+  }
+  
+  .regLog {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -21,16 +21,17 @@
     position: absolute;
     bottom: 40px;
     width: 100vw;
-}
-
-.btnN{
+  }
+  
+  .btnN {
     background-color: #fff;
     color: #000;
     border: none;
     border-radius: 30px;
     padding: 15px 120px;
-}
-
-.btnN:hover{
+    margin-bottom: 10px;
+  }
+  
+  .btnN:hover {
     background-color: #efefef;
-}
+  }

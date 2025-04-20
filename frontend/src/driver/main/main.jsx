@@ -1,5 +1,5 @@
 import "boxicons";
-import "./main.css";
+import styles from "./main.module.css";
 import { useState } from "react";
 // import Map from '../map/map';
 
@@ -8,16 +8,11 @@ function Main() {
   const [income, setIncome] = useState(false);
 
   return (
-    <div className="container-main">
+    <div className={styles.containerMain}>
       {/* รายได้,โปรไฟล์ */}
-      <div className="btn-top">
+      <div className={styles.btnTop}>
         {/* รายได้ */}
-        <button
-          className="btn-income"
-          onClick={() => {
-            setIncome(!income);
-          }}
-        >
+        <button className={styles.btnIncome} onClick={() => setIncome(!income)}>
           <box-icon
             type={income ? "" : "solid"}
             name={income ? "x" : "bar-chart-alt-2"}
@@ -25,67 +20,47 @@ function Main() {
           ></box-icon>
           &nbsp;{income ? "" : "รายได้"}
         </button>
-        {income ? (
-          <>
-            <button className="btn-income-value">
-              <label htmlFor="" className="label-income">รายได้</label><br />
-              <label htmlFor="" className="label-value">1,000</label>
-              <label htmlFor="" className="label-icon">฿</label>
-            </button>
-          </>
-        ) : (
-          ""
+
+        {income && (
+          <button className={styles.btnIncomeValue}>
+            <label className={styles.labelIncome}>รายได้</label>
+            <br />
+            <label className={styles.labelValue}>1,000</label>
+            <label className={styles.labelIcon}>฿</label>
+          </button>
         )}
+
         {/* โปรไฟล์ */}
-        <label className="profile-img" />
+        <label className={styles.profileImg}></label>
       </div>
+
       {/* ปุ่มออนไลน์ */}
       <button
-        className="btn-online"
-        onClick={() => {
-          setStatus(!status);
+        className={styles.btnOnline}
+        onClick={() => setStatus(!status)}
+        style={{
+          backgroundColor: status ? "#14BF61" : "#232323",
         }}
-        style={
-          status
-            ? { backgroundColor: "#14BF61" }
-            : { backgroundColor: "#232323" }
-        }
       >
         <box-icon name="power-off" color="#ffffff"></box-icon>&nbsp;ออนไลน์
       </button>
+
       {/* ปุ่มด้านล่าง */}
-      <div className="btn-bottom">
-        {/* ปุ่ม ... */}
-        <div className="btn-bottom-item1">
-          <div className="btn-bottom-icon">
-            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+      <div className={styles.btnBottom}>
+        {["btn1", "btn2", "btn3", "btn4"].map((labelText, i) => (
+          <div key={i} className={styles[`btnBottomItem${i + 1}`]}>
+            <div className={styles.btnBottomIcon}>
+              <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+            </div>
+            <label>{labelText}</label>
           </div>
-          <label htmlFor="">btn1</label>
-        </div>
-        {/* ปุ่ม ... */}
-        <div className="btn-bottom-item2">
-          <div className="btn-bottom-icon">
-            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-          </div>
-          <label htmlFor="">btn2</label>
-        </div>
-        {/* ปุ่ม ... */}
-        <div className="btn-bottom-item3">
-          <div className="btn-bottom-icon">
-            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-          </div>
-          <label htmlFor="">btn3</label>
-        </div>
-        {/* ปุ่ม ... */}
-        <div className="btn-bottom-item4">
-          <div className="btn-bottom-icon">
-            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-          </div>
-          <label htmlFor="">btn4</label>
-        </div>
+        ))}
       </div>
+
       {/* แผนที่ */}
-      <div id="map">{/* <Map /> */}</div>
+      <div className={styles.map} id="map">
+        {/* <Map /> */}
+      </div>
     </div>
   );
 }

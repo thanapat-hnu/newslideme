@@ -1,6 +1,6 @@
-.btn-back {
+.btnBack {
   background-color: #fff;
-  color: #FF3D00;
+  color: #ff3d00;
   border: none;
   font-size: 1rem;
   position: absolute;
@@ -8,18 +8,17 @@
   left: 20px;
 }
 
-.coolinput {
+.coolInput {
   display: flex;
   flex-direction: column;
   width: fit-content;
   position: static;
-  /* max-width: 240px; */
   width: 340px;
 }
 
-.coolinput label.text {
+.labelText {
   font-size: 0.75rem;
-  color: #14BF61;
+  color: #14bf61;
   font-weight: 700;
   position: relative;
   top: 0.5rem;
@@ -29,52 +28,49 @@
   width: fit-content;
 }
 
-.coolinput input.input,
-.coolinput select.input {
+.input {
   padding: 15px 10px;
   font-size: 0.75rem;
-  border: 2px #14BF61 solid;
+  border: 2px #14bf61 solid;
   border-radius: 5px;
   background: #fff;
 }
 
-.coolinput input.input:focus {
+.input:focus {
   outline: none;
 }
 
-.container-registerDriver {
+.containerRegisterDriver {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  font-family: 'Kanit', sans-serif;
-  overflow-y: auto; /* ✅ ให้ scroll ได้ */
-  padding: 20px 0 100px; /* เพิ่ม padding ด้านล่างเผื่อปุ่ม */
+  font-family: "Kanit", sans-serif;
+  overflow-y: auto;
+  padding: 20px 0 100px;
 }
 
 .formReg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60px; /* แทน top: 100px */
+  margin-top: 60px;
   width: 100%;
   max-width: 400px;
 }
 
-.btn-login-driver {
-  background-color: #14BF61;
+.btnLoginDriver {
+  background-color: #14bf61;
   color: #fff;
   border: none;
   border-radius: 30px;
   padding: 15px 120px;
   margin-top: 10px;
   font-size: 1rem;
-  /* position: absolute; */
-  bottom: 40px;
 }
 
-.btn-login-driver:hover {
+.btnLoginDriver:hover {
   background-color: #fff;
-  color: #14BF61;
-  border: 2px #14BF61 solid;
+  color: #14bf61;
+  border: 2px #14bf61 solid;
 }

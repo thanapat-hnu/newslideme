@@ -1,4 +1,5 @@
-.container-main {
+/* main.module.css */
+.containerMain {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,7 +8,7 @@
   height: 100vh;
 }
 
-.btn-top {
+.btnTop {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,7 +17,7 @@
   width: 90vw;
 }
 
-.btn-income {
+.btnIncome {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +30,7 @@
   font-weight: 700;
 }
 
-.btn-income-value {
+.btnIncomeValue {
   background-color: #151515;
   color: #fff;
   border: none;
@@ -40,10 +41,9 @@
   position: absolute;
   top: 60px;
   text-indent: 10px;
-  
 }
 
-.profile-img {
+.profileImg {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -51,7 +51,7 @@
   background-color: #151515;
 }
 
-.btn-online {
+.btnOnline {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,7 +66,7 @@
   bottom: 155px;
 }
 
-.btn-bottom {
+.btnBottom {
   display: flex;
   background-color: #151515;
   width: 90vw;
@@ -79,17 +79,17 @@
   align-items: center;
 }
 
-.btn-bottom-item1,
-.btn-bottom-item2,
-.btn-bottom-item3,
-.btn-bottom-item4 {
+.btnBottomItem1,
+.btnBottomItem2,
+.btnBottomItem3,
+.btnBottomItem4 {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.btn-bottom-icon {
+.btnBottomIcon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,12 +100,11 @@
   padding: 15px 15px;
 }
 
-.btn-bottom-item1 label,
-.btn-bottom-item2 label,
-.btn-bottom-item3 label,
-.btn-bottom-item4 label {
+.btnBottomItem1 label,
+.btnBottomItem2 label,
+.btnBottomItem3 label,
+.btnBottomItem4 label {
   font-size: 0.85rem;
-  /* font-weight: 700; */
 }
 
 .map {
@@ -117,3 +116,23 @@
   z-index: -1;
   background-color: aqua;
 }
+
+/* .labelIncome {
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.labelValue {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.labelIcon {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff;
+} */

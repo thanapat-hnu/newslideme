@@ -1,4 +1,4 @@
-import "./register.css";
+import styles from "./register.module.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { RegistrationContext } from "../Context";
@@ -88,148 +88,146 @@ function RegisterDriver() {
   };
 
   return (
-    <div className="container-registerDriver">
-      <button className="btn-back" onClick={() => navigator("/driver/index")}>
+    <div className={styles.containerRegisterDriver}>
+      <button
+        className={styles.btnBack}
+        onClick={() => navigator("/driver/index")}
+      >
         <b>＜กลับ</b>
       </button>
-      <div className="formReg">
+
+      <div className={styles.formReg}>
         <h1 style={{ margin: "0", color: "#14BF61" }}>สมัครสมาชิก</h1>
+
         {/* ชื่อ */}
-        <div className="coolinput">
-          <label className="text">ชื่อจริง:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>ชื่อจริง:</label>
           <input
             type="text"
             placeholder="ชื่อจริง..."
             value={personalData.firstName}
             name="firstName"
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.firstName && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.firstName}
             </label>
           )}
         </div>
+
         {/* นามสกุล */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            นามสกุล :{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>นามสกุล:</label>
           <input
             type="text"
             placeholder="นามสกุล..."
             value={personalData.lastName}
             name="lastName"
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.lastName && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.lastName}
             </label>
           )}
         </div>
+
         {/* เลขบัตรประชาชน */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            เลขบัตรประชาชน :{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>เลขบัตรประชาชน:</label>
           <input
             type="number"
             placeholder="เลขบัตรประชาชน..."
             value={personalData.idCardNumber}
             name="idCardNumber"
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.idCardNumber && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.idCardNumber}
             </label>
           )}
           {fieldErrors.idCardNumber && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errorMessages.idCardNumber}
             </label>
           )}
         </div>
+
         {/* วันเกิด */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            วันเกิด{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>วันเกิด:</label>
           <input
             type="date"
             name="birthDate"
             onChange={handleChange}
-            className="input"
             value={personalData.birthDate}
+            className={styles.input}
           />
           {errors.birthDate && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.birthDate}
             </label>
           )}
         </div>
+
         {/* เบอร์โทร */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            เบอร์โทร :{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>เบอร์โทร:</label>
           <input
             type="number"
             placeholder="เบอร์โทร..."
             value={personalData.phoneNumber}
             name="phoneNumber"
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.phoneNumber && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.phoneNumber}
             </label>
           )}
           {fieldErrors.phoneNumber && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errorMessages.phoneNumber}
             </label>
           )}
         </div>
+
         {/* อีเมล */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            อีเมล :{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>อีเมล:</label>
           <input
             type="text"
             placeholder="อีเมล..."
             value={personalData.email}
             name="email"
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.email && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.email}
             </label>
           )}
           {fieldErrors.email && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errorMessages.email}
             </label>
           )}
         </div>
 
         {/* ไฟล์รูป */}
-        <div className="coolinput">
-          <label htmlFor="input" className="text">
-            รูปบัตรประชาชน :{" "}
-          </label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>รูปบัตรประชาชน:</label>
           <input
             type="file"
             name="idCardImage"
-            className="input"
+            className={styles.input}
             onChange={(e) =>
               setPersonalData((prev) => ({
                 ...prev,
@@ -238,15 +236,16 @@ function RegisterDriver() {
             }
           />
           {errors.idCardImage && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.idCardImage}
             </label>
           )}
         </div>
       </div>
+
       {/* ปุ่ม */}
       <button
-        className="btn-login-driver"
+        className={styles.btnLoginDriver}
         style={{ marginBottom: "10px" }}
         onClick={handleSubmit}
       >

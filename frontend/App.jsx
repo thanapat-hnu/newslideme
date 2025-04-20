@@ -22,6 +22,7 @@ import DriverHome from "./src/driver/home/home";
 import RegisterDriver from "./src/driver/register/register";
 import RegisterDriver2 from "./src/driver/register/register2";
 import Main from "./src/driver/main/main";
+import LoginDriver from "./src/driver/login/LoginDriver";
 
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -57,8 +58,9 @@ function App() {
           {/* driver routes */}
           <Route path="/driver/index" element={<DriverHome />} />
           <Route path="/driver/register" element={<RegisterDriver />} />
-          <Route path="/driver/main" element={<Main />} />
           <Route path="/driver/register2" element={<RegisterDriver2 />} />
+          <Route path="/driver/main" element={<Main />} />
+          <Route path="/driver/login" element={<LoginDriver />} />
         </Routes>
       </BrowserRouter>
     </div>

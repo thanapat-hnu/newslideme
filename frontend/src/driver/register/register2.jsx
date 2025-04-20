@@ -1,4 +1,4 @@
-import "./register.css";
+import styles from "./register.module.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { RegistrationContext } from "../Context";
@@ -100,190 +100,203 @@ function RegisterDriver2() {
   };
 
   return (
-    <div className="container-registerDriver" style={{ position: "relative" }}>
+    <div
+      className={styles.containerRegisterDriver}
+      style={{ position: "relative" }}
+    >
       {/* ปุ่มกลับ */}
       <button
-        className="btn-back"
+        className={styles.btnBack}
         onClick={() => navigator("/driver/register")}
       >
         <b>＜กลับ</b>
       </button>
+
       {/* ฟอร์ม */}
-      <div className="formReg">
+      <div className={styles.formReg}>
         <h1 style={{ margin: "0", color: "#14BF61" }}>ข้อมูลรถและใบขับขี่</h1>
+
         {/* ประเภทใบขับขี่ */}
-        <div className="coolinput">
-          <label className="text">ประเภทใบขับขี่:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>ประเภทใบขับขี่:</label>
           <select
             name="licenseType"
             value={vehicleData.licenseType}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           >
             <option value="">-- กรุณาเลือกประเภทใบขับขี่ --</option>
             <option value="ใบขับขี่รถจักรยานยนต์">ใบขับขี่รถจักรยานยนต์</option>
             <option value="ใบขับขี่รถยนต์">ใบขับขี่รถยนต์</option>
           </select>
-
           {errors.licenseType && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.licenseType}
             </label>
           )}
         </div>
+
         {/* หมายเลขใบขับขี่ */}
-        <div className="coolinput">
-          <label className="text">หมายเลขใบขับขี่:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>หมายเลขใบขับขี่:</label>
           <input
             type="number"
             name="licenseNumber"
             value={vehicleData.licenseNumber}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {fieldErrors.license_number && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errorMessages.license_number}
             </label>
           )}
         </div>
+
         {/* วันหมดอายุใบขับขี่ */}
-        <div className="coolinput">
-          <label className="text">วันหมดอายุใบขับขี่:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>วันหมดอายุใบขับขี่:</label>
           <input
             type="date"
             name="licenseExpiryDate"
             value={vehicleData.licenseExpiryDate}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.licenseExpiryDate && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.licenseExpiryDate}
             </label>
           )}
         </div>
+
         {/* อัปโหลดรูปใบขับขี่ */}
-        <div className="coolinput">
-          <label className="text">อัปโหลดรูปใบขับขี่:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>อัปโหลดรูปใบขับขี่:</label>
           <input
             type="file"
             name="licenseImage"
             onChange={handleFileChange}
-            className="input"
+            className={styles.input}
           />
           {errors.licenseImage && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.licenseImage}
             </label>
           )}
         </div>
+
         {/* ประเภทรถ */}
-        <div className="coolinput">
-          <label className="text">ประเภทรถ:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>ประเภทรถ:</label>
           <select
             name="vehicleType"
             value={vehicleData.vehicleType}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           >
             <option value="">-- กรุณาเลือกประเภทรถ --</option>
             <option value="รถจักรยานยนต์">รถจักรยานยนต์</option>
             <option value="รถยนต์">รถยนต์</option>
           </select>
           {errors.vehicleType && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.vehicleType}
             </label>
           )}
         </div>
+
         {/* ยี่ห้อรถ */}
-        <div className="coolinput">
-          <label className="text">ยี่ห้อรถ:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>ยี่ห้อรถ:</label>
           <input
             type="text"
             name="vehicleBrand"
             value={vehicleData.vehicleBrand}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.vehicleBrand && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.vehicleBrand}
             </label>
           )}
         </div>
+
         {/* รุ่นรถ */}
-        <div className="coolinput">
-          <label className="text">รุ่นรถ:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>รุ่นรถ:</label>
           <input
             type="text"
             name="vehicleModel"
             value={vehicleData.vehicleModel}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.vehicleModel && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.vehicleModel}
             </label>
           )}
         </div>
+
         {/* เลขทะเบียนรถ */}
-        <div className="coolinput">
-          <label className="text">เลขทะเบียนรถ:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>เลขทะเบียนรถ:</label>
           <input
             type="text"
             name="plateNumber"
             value={vehicleData.plateNumber}
             onChange={handleChange}
-            className="input"
+            className={styles.input}
           />
           {errors.plateNumber && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.plateNumber}
             </label>
           )}
           {fieldErrors.plate_number && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errorMessages.plate_number}
             </label>
           )}
         </div>
+
         {/* อัปโหลดรูปรถ */}
-        <div className="coolinput">
-          <label className="text">อัปโหลดรูปรถ:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>อัปโหลดรูปรถ:</label>
           <input
             type="file"
             name="vehicleImage"
             onChange={handleFileChange}
-            className="input"
+            className={styles.input}
           />
           {errors.vehicleImage && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.vehicleImage}
             </label>
           )}
         </div>
+
         {/* อัปโหลดรูปป้ายทะเบียน */}
-        <div className="coolinput">
-          <label className="text">อัปโหลดรูปป้ายทะเบียน:</label>
+        <div className={styles.coolInput}>
+          <label className={styles.labelText}>อัปโหลดรูปป้ายทะเบียน:</label>
           <input
             type="file"
             name="plateImage"
             onChange={handleFileChange}
-            className="input"
+            className={styles.input}
           />
           {errors.plateImage && (
-            <label className="text" style={{ color: "red" }}>
+            <label className={styles.labelText} style={{ color: "red" }}>
               {errors.plateImage}
             </label>
           )}
         </div>
-        {/* ถัดไป */}
 
+        {/* ปุ่มยืนยัน */}
         <button
-          className="btn-login-driver"
+          className={styles.btnLoginDriver}
           style={{ marginBottom: "10px" }}
           onClick={handleSubmit}
         >
