@@ -18,4 +18,4 @@ pool.getConnection()
 
 
 
-export default pool; // ส่งออก pool
+export default pool;

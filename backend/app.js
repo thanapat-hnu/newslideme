@@ -8,11 +8,16 @@ import bookingRoutes from './All-Routes/bookingRoutes.js';
 import locationRoutes from './All-Routes/locationRoutes.js';
 import mapRoutes from './All-Routes/mapRoutes.js';
 
+// import driver
+import register from './driverRoutes/registerPersonal.js';
+
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json());
 
 // ✅ ใช้ router ที่รวม logic คุยกับ DB
 app.use('/api', phoneRoutes);
@@ -20,6 +25,9 @@ app.use('/api', HomeRoutes);
 app.use('/api', bookingRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', mapRoutes);
+
+// driver
+app.use('/api/drivers', register);
 
 // ✅ In-memory store สำหรับ OTP เท่านั้น
 const otps = {};
