@@ -30,16 +30,20 @@ function RegisterDriver() {
         );
         alert("บันทึกข้อมูลสําเร็จ");
         console.log(res.data);
+        localStorage.setItem("personalId", res.data.personalId);
+        setErrorMessages({});
+        setFieldErrors({});
+        navigator("/driver/register2");
       } catch (err) {
         const data = err.response?.data;
         // console.log(data);
         if (data?.messages) {
           setErrorMessages(data.messages);
-        //   console.log(errorMessages);
+          //   console.log(errorMessages);
         }
         if (data?.fields) {
           setFieldErrors(data.fields);
-        //   console.log(fieldErrors);
+          //   console.log(fieldErrors);
         }
       }
     } else {

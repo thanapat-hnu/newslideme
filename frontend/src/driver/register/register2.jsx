@@ -12,13 +12,23 @@ function RegisterDriver2() {
   const [errorMessages, setErrorMessages] = useState({});
   const [fieldErrors, setFieldErrors] = useState({});
 
-//   useEffect(() => {
-//     console.log("errorMessages:", errorMessages);
-//   }, [errorMessages]);
+  //   useEffect(() => {
+  //     console.log("errorMessages:", errorMessages);
+  //   }, [errorMessages]);
 
-//   useEffect(() => {
-//     console.log("fieldErrors:", fieldErrors);
-//   }, [fieldErrors]);
+  //   useEffect(() => {
+  //     console.log("fieldErrors:", fieldErrors);
+  //   }, [fieldErrors]);
+
+  useEffect(() => {
+    const storedPersonalId = localStorage.getItem("personalId");
+    if (storedPersonalId) {
+      setVehicleData((prev) => ({
+        ...prev,
+        personalId: storedPersonalId,
+      }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     setVehicleData((prev) => ({
@@ -70,8 +80,9 @@ function RegisterDriver2() {
         );
         setErrorMessages({});
         setFieldErrors({});
-        alert(res.data.vehicleId);
-        // navigator("/driver/index");
+        alert(res.data.message);
+        localStorage.removeItem("personalId");
+        navigator("/driver/index");
       } catch (err) {
         const data = err.response?.data;
         if (data?.messages) {
@@ -109,7 +120,7 @@ function RegisterDriver2() {
             onChange={handleChange}
             className="input"
           >
-            <option>-- กรุณาเลือกประเภทใบขับขี่ --</option>
+            <option value="">-- กรุณาเลือกประเภทใบขับขี่ --</option>
             <option value="ใบขับขี่รถจักรยานยนต์">ใบขับขี่รถจักรยานยนต์</option>
             <option value="ใบขับขี่รถยนต์">ใบขับขี่รถยนต์</option>
           </select>
@@ -176,7 +187,7 @@ function RegisterDriver2() {
             onChange={handleChange}
             className="input"
           >
-            <option>-- กรุณาเลือกประเภทรถ --</option>
+            <option value="">-- กรุณาเลือกประเภทรถ --</option>
             <option value="รถจักรยานยนต์">รถจักรยานยนต์</option>
             <option value="รถยนต์">รถยนต์</option>
           </select>
