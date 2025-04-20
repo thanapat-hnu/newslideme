@@ -93,6 +93,7 @@ function Profileedit() {
       lastname: formData.lastname,
       gender: translatedGender, // ✅ ส่งเป็น "ชาย"/"หญิง"
       phone: formData.number,
+      profileImage: profileImage,
     };
 
     try {

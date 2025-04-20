@@ -1,18 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 
 import phoneRoutes from './All-Routes/routes.js';
-
-
-
 import mapRoutes from './All-Routes/mapRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json({ limit: '10mb' })); // ✅ สำคัญ: รองรับ base64 ขนาดใหญ่
 
 // ✅ ใช้ router ที่รวม logic คุยกับ DB
 app.use('/api', phoneRoutes);
