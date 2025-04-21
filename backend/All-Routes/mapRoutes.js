@@ -1,8 +1,26 @@
 // All-Routes/map.route.js
 import express from 'express';
 import axios from 'axios';
+import pool from '../db.js'; 
 
 const router = express.Router();
+
+const mockProviders = [
+  {
+    id: 'P001',
+    name: 'ลากเร็วทันใจ',
+    price: 1500,
+    carType: 'Flatbed',
+    
+  },
+  {
+    id: 'P002',
+    name: 'ลากด่วน24ชม.',
+    price: 1800,
+    carType: 'Hook & Chain',
+    
+  },
+];
 
 // 🔍 ค้นหาสถานที่ (ใช้ Longdo API)
 router.get('/search-location', async (req, res) => {
@@ -82,25 +100,60 @@ router.get('/providers', (req, res) => {
 });
 
 // ✅ /api/book-service
-router.post('/book-service', (req, res) => {
-  const { origin, destination, providerId, time, carType } = req.body;
+router.post('/book-service', async (req, res) => {
+  const { origin, destination, providerId, time, carType, phone } = req.body;
 
-  console.log('📦 Booking service:', {
-    origin,
-    destination,
-    providerId,
-    carType, 
-    time,
-  });
+  if (!phone) {
+    return res.status(400).json({ message: 'กรุณาระบุเบอร์โทรศัพท์ผู้ใช้' });
+  }
 
-  res.json({ message: 'Booking confirmed' });
-});
+  try {
+    // ✅ ดึงชื่อผู้ใช้จาก DB
+    const [userRows] = await pool.query("SELECT firstname, lastname FROM users WHERE phone = ?", [phone]);
 
-// ✅ /api/history
-router.post('/history', (req, res) => {
-  const { userId, action, detail } = req.body;
-  console.log('🕘 Save history:', { userId, action, detail });
-  res.json({ message: 'History saved' });
+    if (userRows.length === 0) {
+      return res.status(404).json({ message: 'ไม่พบข้อมูลผู้ใช้จากเบอร์โทรนี้' });
+    }
+
+    const { firstname, lastname } = userRows[0];
+
+    // ✅ ค้นหาผู้ให้บริการจาก mockProviders
+    const matchedProvider = mockProviders.find(p => p.id === providerId);
+
+    if (!matchedProvider) {
+      return res.status(404).json({ message: 'ไม่พบผู้ให้บริการตามรหัสที่ระบุ' });
+    }
+
+    const price = matchedProvider.price;
+
+    // ✅ Log ข้อมูลการจอง
+    console.log("📦 [BOOKING LOG]");
+    console.log(`👤 ผู้จอง: ${firstname} ${lastname} (${phone})`);
+    console.log(`📍 ต้นทาง:`, origin);
+    console.log(`📍 ปลายทาง:`, destination);
+    console.log(`🚚 ประเภทรถ: ${carType}`);
+    console.log(`🏢 ผู้ให้บริการ: ${matchedProvider.name}`);
+    console.log(`💰 ราคา: ${price} บาท`);
+    console.log(`🕒 เวลา: ${time}`);
+    console.log("=======================================");
+
+    res.json({
+      message: '✅ Booking confirmed',
+      customer: { firstname, lastname },
+      booking: {
+        origin,
+        destination,
+        providerId,
+        providerName: matchedProvider.name,
+        carType,
+        time,
+        price,
+      },
+    });
+  } catch (err) {
+    console.error('❌ Error booking:', err.message);
+    res.status(500).json({ message: 'Booking failed' });
+  }
 });
 
 export default router;

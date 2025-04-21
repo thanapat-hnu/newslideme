@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './confirm.css';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ function Confirm({
   setReadLocal,
   readLocalB,
   setReadLocal2,
-  options,            // ✅ ใช้เป็น carType
+  options,
   setOptions,
   service,
   setService,
@@ -25,9 +25,9 @@ function Confirm({
   setShowButton,
 }) {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [user, setUser] = useState({ firstname: '', lastname: '', phone: '' });
 
   const isButtonVisible = button === 'a' || button === 'b' || (showService && service);
-
   const isDataValid =
     readLocal.lat !== 0 &&
     readLocal.lng !== 0 &&
@@ -37,6 +37,22 @@ function Confirm({
     showButton;
 
   const shouldDisplay = isButtonVisible || isDataValid;
+
+  // ✅ โหลดชื่อผู้ใช้จาก DB ด้วย phone
+  useEffect(() => {
+    const phone = localStorage.getItem('phoneNumber');
+    if (!phone) return;
+
+    axios
+      .get(`http://localhost:3000/api/get-user?phone=${phone}`)
+      .then((res) => {
+        if (res.data.success) {
+          const u = res.data.user;
+          setUser({ firstname: u.firstname, lastname: u.lastname, phone: u.phone });
+        }
+      })
+      .catch((err) => console.error("❌ ดึงข้อมูลผู้ใช้ล้มเหลว:", err));
+  }, []);
 
   const handleConfirm = async () => {
     const map = window.__longdoMapInstance;
@@ -50,7 +66,6 @@ function Confirm({
     console.log('📌 พิกัดหมุดกลาง:', selected);
 
     try {
-      // ✅ ส่งตำแหน่งไป backend
       await axios.post("http://localhost:3000/api/save-location", {
         type: button === 'a' ? 'origin' : 'destination',
         lat: selected.lat,
@@ -71,7 +86,6 @@ function Confirm({
         setButtonText('...');
         setShowMarker(true);
 
-        // ✅ ดึงผู้ให้บริการจากพิกัด
         const providers = await axios.get("http://localhost:3000/api/providers", {
           params: { lat: readLocal.lat, lng: readLocal.lng },
         });
@@ -79,21 +93,19 @@ function Confirm({
         const providerId = providers.data[0]?.id || "P001";
         console.log('📦 ผู้ให้บริการ:', providers.data);
 
-        // ✅ จองบริการพร้อม carType
-        await axios.post("http://localhost:3000/api/book-service", {
+        // ✅ ส่งข้อมูลจองพร้อมเบอร์โทร
+        const bookRes = await axios.post("http://localhost:3000/api/book-service", {
           origin: readLocal,
           destination: readLocalB,
           providerId,
-          carType: options, // ✅ ส่ง carType
+          carType: options,
           time: new Date().toISOString(),
+          phone: user.phone,
         });
 
-        // ✅ บันทึกประวัติ
-        await axios.post("http://localhost:3000/api/history", {
-          userId: "mock_user_01",
-          action: "book_service",
-          detail: `จองบริการรถลาก (${options}) สำเร็จ`,
-        });
+        console.log('✅ Booking Response:', bookRes.data);
+
+       
 
         console.log('✅ Booking & history saved');
       }
@@ -111,6 +123,8 @@ function Confirm({
 
   return (
     <div className="container-button">
+
+
       <button
         className="button-d"
         onClick={handleConfirm}
