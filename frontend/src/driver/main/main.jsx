@@ -1,19 +1,37 @@
 // src/driver/home/main/main.jsx
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "boxicons";
 import styles from "./main.module.css";
 import { useNavigate } from "react-router";
+import { io } from "socket.io-client";
+import { RegistrationContext } from "../Context";
+
+const socket = io("http://localhost:3000");
+
 // import Map from '../map/map';
 import DriverMap from "../drivermap/DriverMap";
 
 function Main() {
   const [status, setStatus] = useState(false);
   const [income, setIncome] = useState(false);
+  const navigator = useNavigate();
+  const { location, setLocation } = useContext(RegistrationContext);
 
   // test
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  // const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const navigator = useNavigate();
+  const handleOnline = () => {
+    setStatus(!status);
+    socket.emit("jobRequest", {
+      lonA: 100.523186,
+      latA: 13.736717,
+      lonB: 100.529186,
+      latB: 13.741717,
+    });
+    socket.on("jobRequest", (data) => {
+      setLocation(data);
+    });
+  };
 
   return (
     <div className={styles.containerMain}>
@@ -45,12 +63,7 @@ function Main() {
       {/* ปุ่มออนไลน์ */}
       <button
         className={styles.btnOnline}
-        onClick={() => {
-          setStatus(!status);
-          // test
-          setToken(localStorage.removeItem("token"));
-          navigator("/driver/index");
-        }}
+        onClick={handleOnline}
         style={{
           backgroundColor: status ? "#14BF61" : "#232323",
         }}

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
 export const RegistrationContext = createContext();
 
@@ -10,7 +10,7 @@ export function RegistrationProvider({ children }) {
     birthDate: "1990-01-01",
     phoneNumber: "1234567890",
     email: "admin@admin.com",
-    idCardImage: null
+    idCardImage: null,
   });
 
   const [vehicleData, setVehicleData] = useState({
@@ -24,16 +24,25 @@ export function RegistrationProvider({ children }) {
     vehicleModel: "Vios",
     plateNumber: "1admin",
     vehicleImage: null,
-    plateImage: null
+    plateImage: null,
+  });
+
+  const [location, setLocation] = useState({
+    lonA: 0,
+    latA: 0,
+    lonB: 0,
+    latB: 0
   });
 
   return (
-    <RegistrationContext.Provider 
-      value={{ 
-        personalData, 
-        setPersonalData, 
-        vehicleData, 
-        setVehicleData 
+    <RegistrationContext.Provider
+      value={{
+        personalData,
+        setPersonalData,
+        vehicleData,
+        setVehicleData,
+        location,
+        setLocation
       }}
     >
       {children}
