@@ -17,6 +17,7 @@ import History from "./src/pages/history/history";
 import Chat from "./src/pages/Chat/Chat";
 import Payment from "./src/Payment/Payment";
 
+
 // import driver
 import DriverHome from "./src/driver/home/home";
 import RegisterDriver from "./src/driver/register/register";
@@ -42,6 +43,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profileedit />} />
+
           </Route>
 
           {/* auth routes */}

@@ -1,8 +1,16 @@
-import express from "express";
-import cors from "cors";
-
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import phoneRoutes from "./All-Routes/routes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
+
+
+
+//chat secket
+import { initSocket } from './socketServer.js';
+import { createServer } from 'http';
+
+
 
 // import driver
 import register from "./driverRoutes/registerPersonal.js";
@@ -11,6 +19,7 @@ import loginDriver from "./driverRoutes/login.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
+const server = createServer(app); // ใช้ HTTP server กับ Socket.IO
 
 app.use(cors());
 // app.use(bodyParser.json());
@@ -25,13 +34,10 @@ app.use("/api/drivers", register);
 app.use("/api/drivers", register2);
 app.use("/api/drivers", loginDriver);
 
-// ✅ In-memory store สำหรับ OTP เท่านั้น
 const otps = {};
-
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
-
 function validateOTP(phoneNumber, otp) {
   return otps[phoneNumber] === otp;
 }
@@ -66,6 +72,7 @@ app.post("/api/verify-otp", (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server is running on http://localhost:${port}`);
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+  initSocket(server, app); // ✅ เรียกฟังก์ชันพร้อม app สำหรับ set io
 });
