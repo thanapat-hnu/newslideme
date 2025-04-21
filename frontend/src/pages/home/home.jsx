@@ -28,7 +28,7 @@ function Home() {
   const [payment, setPayment] = useState(false);
   const [towTruckData, setTowTruckData] = useState([]);
   const [name, setName] = useState('บริการลากจูดเร็วทันใจ');
-  const [carType, setCarType] = useState('Flatbed');
+  const [carType, setCarType] = useState('');
   const [carNumber, setCarNumber] = useState(555);
   const [price, setPrice] = useState(1500);
   const [mid, setMid] = useState('');

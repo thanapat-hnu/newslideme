@@ -19,8 +19,15 @@ function Create() {
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            const imageURL = URL.createObjectURL(file);
-            setProfileImage(imageURL);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImage(reader.result); // แสดงภาพ
+                setFormData((prevData) => ({
+                    ...prevData,
+                    profileImage: reader.result, // base64
+                }));
+            };
+            reader.readAsDataURL(file); // แปลงเป็น base64
         }
     };
 
@@ -43,6 +50,7 @@ function Create() {
                     firstname: formData.firstname,
                     lastname: formData.lastname,
                     gender: formData.gender,
+                    profileImage: formData.profileImage,
                 }),
             });
     

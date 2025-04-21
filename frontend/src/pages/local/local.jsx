@@ -34,21 +34,23 @@ function Locat({
     const value = e.target.value;
     setSearchQuery(value);
     if (value.length < 3) return setSearchResults([]);
-
+  
     try {
-      const res = await axios.get("https://search.longdo.com/mapsearch/json/search", {
-        params: {
-          key: "1b4327452cc20e14a37e40cc130bd03a",
-          keyword: value,
-        },
+      const res = await axios.get("http://localhost:3000/api/search-location", {
+        params: { keyword: value },
       });
-
-      const results = res.data.data.map((item) => ({
+  
+      // 🔁 บันทึกคำค้นหา
+      await axios.post("http://localhost:3000/api/search-log", {
+        keyword: value,
+      });
+  
+      const results = res.data.map((item) => ({
         name: item.name,
         lat: item.lat,
         lon: item.lon,
       }));
-
+  
       setSearchResults(results);
     } catch (err) {
       console.error("❌ Search error:", err);

@@ -1,8 +1,11 @@
+// src/driver/home/main/main.jsx
+import { useState } from "react";
 import "boxicons";
 import styles from "./main.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 // import Map from '../map/map';
+import DriverMap from "../drivermap/DriverMap";
 
 function Main() {
   const [status, setStatus] = useState(false);
@@ -48,7 +51,6 @@ function Main() {
           // test
           setToken(localStorage.removeItem("token"));
           navigator("/driver/index");
-
         }}
         style={{
           backgroundColor: status ? "#14BF61" : "#232323",
@@ -71,7 +73,7 @@ function Main() {
 
       {/* แผนที่ */}
       <div className={styles.map} id="map">
-        {/* <Map /> */}
+        <DriverMap />
       </div>
     </div>
   );
