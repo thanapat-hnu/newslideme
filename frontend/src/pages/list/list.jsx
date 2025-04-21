@@ -8,41 +8,44 @@ const List = () => {
   const [towingData, setTowingData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ฟังก์ชันสุ่มวันที่, เดือน, ปี และเวลา
-  const getRandomDateTime = () => {
-    const startDate = new Date(2023, 0, 1); // วันที่เริ่มต้น (1 ม.ค. 2023)
-    const endDate = new Date(2023, 11, 31); // วันที่สิ้นสุด (31 ธ.ค. 2023)
-    const randomDate = new Date(
-      startDate.getTime() +
-        Math.random() * (endDate.getTime() - startDate.getTime())
-    );
-
-    const day = randomDate.getDate().toString().padStart(2, "0");
-    const month = (randomDate.getMonth() + 1).toString().padStart(2, "0");
-    const year = randomDate.getFullYear();
-
-    const hour = Math.floor(Math.random() * 24);
-    const minute = Math.floor(Math.random() * 60);
-
-    return `${day}/${month}/${year} ${hour.toString().padStart(2, "0")}:${minute
-      .toString()
-      .padStart(2, "0")}`;
-  };
+  useEffect(() => {
+    setIsLoading(true);
+    const personalId = localStorage.getItem('userId');
+    
+    if (personalId) {
+      fetch(`http://localhost:3000/api/customer-orders/${personalId}`)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            setTowingData(result.data);
+          } else {
+            console.error("Error:", result.message);
+          }
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error loading data:", error);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("http://localhost:3000/api/towing-list")
+    // ระบุ orderId ที่ต้องการ
+    const orderId = 7;
+    
+    fetch(`http://localhost:3000/api/customer-orders/${orderId}`)
       .then((response) => response.json())
-      .then((data) => {
-        const updatedData = data.map((item) => ({
-          ...item,
-          randomDateTime: getRandomDateTime(),
-          locations: {
-            origin: { address: item.origin_address },
-            destination: { address: item.destination_address },
-          },
-        }));
-        setTowingData(updatedData);
+      .then((result) => {
+        if (result.success) {
+          // แปลงข้อมูลเดี่ยวให้เป็น array เพื่อใช้กับ map
+          setTowingData([result.data]);
+        } else {
+          console.error("Error:", result.message);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -56,6 +59,17 @@ const List = () => {
     setTimeout(() => {
       navigate("/history");
     }, 500);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('th-TH', { 
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   return (
@@ -83,14 +97,14 @@ const List = () => {
           <div className="loading">กำลังโหลดข้อมูล...</div>
         ) : towingData.length > 0 ? (
           towingData.slice(0, 2).map((item) => (
-            <div className="card" key={item.providerId}>
+            <div className="card" key={item.orderId}>
               <div className="card-row">
                 <div className="card-icon green-bg">
                   <i className="bi bi-truck"></i>
                 </div>
                 <div className="card-info">
                   <p className="card-date">
-                    {item.randomDateTime || "ไม่ระบุวันที่"}
+                    {formatDate(item.orderDateTime)}
                   </p>
                   <span style={{ fontWeight: "bold", fontSize: "14px" }}>
                     {item.providerName}
@@ -125,7 +139,9 @@ const List = () => {
                     <p>ประเภท: {item.towTruckType}</p>
                   </div>
 
-                  <p className={`card-status green-text`}>กำลังดำเนินการ...</p>
+                  <p className={`card-status ${item.status === 'completed' ? 'green-text' : 'yellow-text'}`}>
+                    {item.status === 'completed' ? 'เสร็จสิ้น' : 'กำลังดำเนินการ...'}
+                  </p>
                 </div>
                 <div className="card-price">฿ {item.price}</div>
               </div>

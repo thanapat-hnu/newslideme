@@ -14,7 +14,7 @@ import Register from "./src/pages/Register/Register";
 import Create from "./src/pages/Create/Create";
 import List from "./src/pages/list/list";
 import History from "./src/pages/history/history";
-import Chat from "./src/pages/Chat/Chat";
+import Chat from "./src/pages/chat/chat";
 import Payment from "./src/Payment/Payment";
 
 

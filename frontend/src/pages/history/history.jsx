@@ -11,37 +11,38 @@ const History = () => {
     const [rating, setRating] = useState(0); // เก็บคะแนนที่ผู้ใช้เลือก
     const navigate = useNavigate();
 
-    // ฟังก์ชันสุ่มวันที่และเวลา
-    const getRandomDateTime = () => {
-        const startDate = new Date(2023, 0, 1); // 1 มกราคม 2023
-        const endDate = new Date(2023, 11, 31); // 31 ธันวาคม 2023
-        const randomDate = new Date(
-            startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime())
-        );
-
-        const day = randomDate.getDate().toString().padStart(2, '0');
-        const month = (randomDate.getMonth() + 1).toString().padStart(2, '0'); // เดือนเริ่มที่ 0
-        const year = randomDate.getFullYear();
-        const hour = Math.floor(Math.random() * 24); // สุ่มชั่วโมง 0-23
-        const minute = Math.floor(Math.random() * 60); // สุ่มนาที 0-59
-
-        return `${day}/${month}/${year} ${hour.toString().padStart(2, '0')}:${minute
-            .toString()
-            .padStart(2, '0')}`; // รูปแบบ DD/MM/YYYY HH:MM
-    };
+    useEffect(() => {
+        const personalId = localStorage.getItem('userId');
+        
+        if (personalId) {
+            fetch(`http://localhost:3000/api/get-history/${personalId}`)
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result.success) {
+                        setHistoryData(result.data);
+                    }
+                })
+                .catch((error) => console.error('Error loading history:', error));
+        }
+    }, []);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/get-history')
-          .then((response) => response.json())
-          .then((result) => {
-            const updatedData = result.data.map((item) => ({
-              ...item,
-              hasRated: item.hasRated || false,
-            }));
-            setHistoryData(updatedData);
-          })
-          .catch((error) => console.error('Error loading history:', error));
-      }, []);
+        // ระบุ historyId ที่ต้องการ
+        const historyId = 1;
+        
+        fetch(`http://localhost:3000/api/history/${historyId}`)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.success) {
+                    // แปลงข้อมูลเดี่ยวให้เป็น array เพื่อใช้กับ map
+                    setHistoryData([result.data]);
+                } else {
+                    console.error("Error loading history:", result.message);
+                }
+            })
+            .catch((error) => console.error('Error loading history:', error));
+    }, []);
+
     const handleBackClick = () => {
         setShowSection(false); // ซ่อน section เมื่อกดปุ่ม
         setTimeout(() => {
