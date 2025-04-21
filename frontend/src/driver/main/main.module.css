@@ -15,6 +15,7 @@
   position: absolute;
   top: 50px;
   width: 90vw;
+  z-index: 2;
 }
 
 .btnIncome {
@@ -64,6 +65,7 @@
   font-weight: 700;
   position: absolute;
   bottom: 155px;
+  z-index: 2;
 }
 
 .btnBottom {
@@ -77,6 +79,7 @@
   color: #fff;
   justify-content: space-around;
   align-items: center;
+  z-index: 2;
 }
 
 .btnBottomItem1,
@@ -107,7 +110,7 @@
   font-size: 0.85rem;
 }
 
-.map {
+/* .map {
   position: absolute;
   top: 0;
   left: 0;
@@ -115,7 +118,7 @@
   height: 100vh;
   z-index: -1;
   background-color: aqua;
-}
+} */
 
 /* .labelIncome {
   font-size: 0.75rem;

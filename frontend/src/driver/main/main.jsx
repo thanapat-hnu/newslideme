@@ -2,7 +2,6 @@
 import { useState } from "react";
 import "boxicons";
 import styles from "./main.module.css";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 // import Map from '../map/map';
 import DriverMap from "../drivermap/DriverMap";

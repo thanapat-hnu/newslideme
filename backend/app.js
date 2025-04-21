@@ -2,9 +2,6 @@ import express from "express";
 import cors from "cors";
 
 import phoneRoutes from "./All-Routes/routes.js";
-import HomeRoutes from "./All-Routes/Homeroutes.js";
-import bookingRoutes from "./All-Routes/bookingRoutes.js";
-import locationRoutes from "./All-Routes/locationRoutes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
 
 // import driver
@@ -21,9 +18,6 @@ app.use(express.json());
 
 // ✅ ใช้ router ที่รวม logic คุยกับ DB
 app.use("/api", phoneRoutes);
-app.use("/api", HomeRoutes);
-app.use("/api", bookingRoutes);
-app.use("/api", locationRoutes);
 app.use("/api", mapRoutes);
 
 // driver
