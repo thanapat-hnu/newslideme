@@ -5,6 +5,23 @@ import pool from '../db.js';
 
 const router = express.Router();
 
+const mockProviders = [
+  {
+    id: 'P001',
+    name: 'ลากเร็วทันใจ',
+    price: 1500,
+    carType: 'Flatbed',
+    
+  },
+  {
+    id: 'P002',
+    name: 'ลากด่วน24ชม.',
+    price: 1800,
+    carType: 'Hook & Chain',
+    
+  },
+];
+
 // 🔍 ค้นหาสถานที่ (ใช้ Longdo API)
 router.get('/search-location', async (req, res) => {
   const { keyword } = req.query;
@@ -91,7 +108,7 @@ router.post('/book-service', async (req, res) => {
   }
 
   try {
-    // ✅ ดึงชื่อจาก DB
+    // ✅ ดึงชื่อผู้ใช้จาก DB
     const [userRows] = await pool.query("SELECT firstname, lastname FROM users WHERE phone = ?", [phone]);
 
     if (userRows.length === 0) {
@@ -100,20 +117,38 @@ router.post('/book-service', async (req, res) => {
 
     const { firstname, lastname } = userRows[0];
 
-    // ✅ Log ข้อมูลการจองอย่างละเอียด
+    // ✅ ค้นหาผู้ให้บริการจาก mockProviders
+    const matchedProvider = mockProviders.find(p => p.id === providerId);
+
+    if (!matchedProvider) {
+      return res.status(404).json({ message: 'ไม่พบผู้ให้บริการตามรหัสที่ระบุ' });
+    }
+
+    const price = matchedProvider.price;
+
+    // ✅ Log ข้อมูลการจอง
     console.log("📦 [BOOKING LOG]");
     console.log(`👤 ผู้จอง: ${firstname} ${lastname} (${phone})`);
-    console.log(`📍 ต้นทาง: lat=${origin.lat}, lng=${origin.lng}`);
-    console.log(`📍 ปลายทาง: lat=${destination.lat}, lng=${destination.lng}`);
+    console.log(`📍 ต้นทาง:`, origin);
+    console.log(`📍 ปลายทาง:`, destination);
     console.log(`🚚 ประเภทรถ: ${carType}`);
-    console.log(`🏢 ผู้ให้บริการ: ${providerId}`);
-    console.log(`🕒 เวลาที่จอง: ${time}`);
+    console.log(`🏢 ผู้ให้บริการ: ${matchedProvider.name}`);
+    console.log(`💰 ราคา: ${price} บาท`);
+    console.log(`🕒 เวลา: ${time}`);
     console.log("=======================================");
 
     res.json({
-      message: 'Booking confirmed',
+      message: '✅ Booking confirmed',
       customer: { firstname, lastname },
-      booking: { origin, destination, providerId, carType, time },
+      booking: {
+        origin,
+        destination,
+        providerId,
+        providerName: matchedProvider.name,
+        carType,
+        time,
+        price,
+      },
     });
   } catch (err) {
     console.error('❌ Error booking:', err.message);
