@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './confirm.css';
+import axios from 'axios';
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:3000');
 
 function Confirm({
   button,
@@ -24,9 +27,31 @@ function Confirm({
   setShowButton,
 }) {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const userId = "user123";
+  const driverId = "driver123";
+  const roomId = `${userId}-${driverId}`;
+
+  // ✅ ใช้ useEffect แทน useState สำหรับ logic mount
+  useEffect(() => {
+    socket.emit("joinRoom", roomId);
+    console.log("📡 Confirm component joined room:", roomId);
+
+    // ฟัง event jobConfirmed ที่ส่งกลับมาจาก server
+    socket.on("jobConfirmed", (data) => {
+      console.log("✅ Confirm received jobConfirmed:", data);
+      if (data.jobDetails?.status === "accepted") {
+        setButtonText("Service Accepted");
+        setShowMarker(true);
+        setShowfinish(true);
+      }
+    });
+
+    return () => {
+      socket.off("jobConfirmed");
+    };
+  }, []);
 
   const isButtonVisible = button === 'a' || button === 'b' || (showService && service);
-
   const isDataValid =
     readLocal.lat !== 0 &&
     readLocal.lng !== 0 &&
@@ -34,42 +59,67 @@ function Confirm({
     readLocalB.lng !== 0 &&
     options !== '' &&
     showButton;
-
   const shouldDisplay = isButtonVisible || isDataValid;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const map = window.__longdoMapInstance;
     if (!map) {
-      console.warn('❗ ไม่พบ longdo map instance');
+      console.warn('❗ Map instance not found');
       return;
     }
 
-    const center = map.location(); // ✅ ดึงพิกัดจากหมุดกลาง
+    const center = map.location();
     const selected = { lat: center.lat, lng: center.lon };
-    console.log('📌 พิกัดหมุดกลางจอ:', selected);
+    console.log('📌 Center pin coordinates:', selected);
 
     if (button === 'a') {
       setReadLocal(selected);
-      console.log('✅ ยืนยันต้นทาง:', selected);
+      console.log('✅ Origin confirmed:', selected);
+      setButton('');
+      return;
     } else if (button === 'b') {
       setReadLocal2(selected);
-      console.log('✅ ยืนยันปลายทาง:', selected);
+      console.log('✅ Destination confirmed:', selected);
+      setButton('');
+      return;
     }
 
-    setButton('');
-
-    if (isDataValid && !showService && button !== 'a' && button !== 'b') {
+    if (isDataValid && !showService && buttonText !== '...') {
       setButtonText('...');
+      return;
     }
 
+    // Second click = send booking request
     if (buttonText === '...') {
-      console.log('🔍 ค้นหาผู้ให้บริการ...');
-      setShowMarker(true);
+      console.log('🔍 Sending booking request...');
+      const payload = {
+        startLocation: readLocal,
+        endLocation: readLocalB,
+        serviceType: options,
+        dateTime: new Date().toISOString(),
+        userId,
+        driverId
+      };
+
+      try {
+        const res = await axios.post('http://localhost:3000/api/confirm', payload);
+        console.log('✅ Booking confirmed:', res.data);
+
+        // ✅ แก้ตรงนี้: emit เป็น jobRequest แทน jobConfirmed
+        socket.emit("jobRequest", {
+          roomId,
+          jobDetails: payload
+        });
+
+        setShowMarker(true);
+      } catch (err) {
+        console.error('❌ Booking failed:', err);
+      }
     }
   };
 
   const handleCancel = () => {
-    setButtonText('ค้นหาผู้ให้บริการ');
+    setButtonText('Find Service');
     setShowMarker(false);
     setShowfinish(false);
     setShowCancelPopup(false);
@@ -84,9 +134,8 @@ function Confirm({
       >
         {isDataValid && !showService && button !== 'a' && button !== 'b'
           ? buttonText
-          : 'ยืนยัน'}
+          : 'Confirm'}
       </button>
-
       <button
         className="button-e"
         onClick={() => setShowCancelPopup(!showCancelPopup)}
@@ -98,7 +147,6 @@ function Confirm({
       >
         <i className="bi bi-exclamation-circle"></i>
       </button>
-
       <div
         className="container-i"
         style={{ display: showCancelPopup ? 'flex' : 'none' }}
@@ -107,7 +155,7 @@ function Confirm({
         <div className="i2">
           <div className="i3">
             <button className="b2" onClick={handleCancel}>
-              ยกเลิก
+              Cancel
             </button>
           </div>
         </div>

@@ -14,9 +14,9 @@ import Register from './pages/Register/Register';
 import Create from './pages/Create/Create';
 import List from './pages/list/list';
 import History from './pages/history/history';
-import Chat from './pages/Chat/Chat';
+import Chat from './pages/chat/chat';
 import Payment from './Payment/Payment';
-
+import TesterD from './pages/TesterD/TesterD';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
@@ -34,6 +34,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profileedit />} />
+            <Route path="/tester-d" element={<TesterD />} />
           </Route>
 
           {/* auth routes */}
