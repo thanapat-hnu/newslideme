@@ -1,4 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+const generateRoomId = (userId, driverId) => {
+  return [userId, driverId].sort().join("-");
+};
+
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { io } from "socket.io-client";
 
 import "./Chat.css";
@@ -11,16 +15,22 @@ const Chat = () => {
   const [messages, setMessages] = useState([]); // State to store messages in the chat
   const [notification, setNotification] = useState(null); // State to store notification data
   const [isNotificationVisible, setIsNotificationVisible] = useState(false); // Track notification visibility
+  const [isTyping, setIsTyping] = useState(false); // Track if someone is typing
+  const [typingUser, setTypingUser] = useState(""); // Track who is typing
+  const [roomId, setRoomId] = useState(""); // Store current roomId
 
+  const typingTimeoutRef = useRef(null); // Ref for typing timeout
+  const messagesEndRef = useRef(null);
   const notificationSound = new Audio("/livechat-129007.mp3"); // Audio for notification
   const currentUserId = localStorage.getItem("userId") || "guest";
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
 
     if (tab === "notification") {
       // Set the notification from the data (simulated as an example)
       const notificationMessage =
-        data.length > 0
+        data?.length > 0
           ? `${data[0].providerName} has a new update!`
           : "No new notifications";
       setNotification(notificationMessage);
@@ -51,7 +61,7 @@ const Chat = () => {
         transports: ["websocket"],
       }),
     []
-  ); // เชื่อมต่อ socket เพียงครั้งเดียว
+  );
 
   useEffect(() => {
     console.log("Socket connected:", socket.id);
@@ -59,6 +69,7 @@ const Chat = () => {
     // Mock data for testing purposes
     setData([
       {
+        id: "driver123",
         providerName: "Driver A",
         lastMessage: "Hello!",
         time: new Date().toLocaleTimeString([], {
@@ -68,10 +79,12 @@ const Chat = () => {
       },
     ]);
 
-    // รับข้อความเฉพาะเมื่อเชื่อมต่อแล้วเท่านั้น
     const handleConnect = () => {
       console.log("✅ Socket connected:", socket.id);
-      socket.emit("joinRoom", "user123-driver123");
+      
+      if (roomId) {
+        socket.emit("joinRoom", roomId);
+      }
     };
 
     const handleReceiveMessage = (msg) => {
@@ -86,18 +99,60 @@ const Chat = () => {
             m.timestamp === msg.timestamp
         );
         if (isDuplicate) return prev;
-        return [...prev, { ...msg, isMe }];
+        
+        // Save messages to localStorage for persistence
+        const updatedMessages = [...prev, { ...msg, isMe }];
+        if (roomId) {
+          localStorage.setItem(`chat_${roomId}`, JSON.stringify(updatedMessages));
+        }
+        
+        return updatedMessages;
       });
+      
+      // Clear typing indicator when message is received
+      if (!isMe) {
+        setIsTyping(false);
+      }
+    };
+    
+    const handleTyping = ({ user }) => {
+      if (user !== currentUserId) {
+        setIsTyping(true);
+        setTypingUser(user);
+      }
+    };
+    
+    const handleStopTyping = ({ user }) => {
+      if (user !== currentUserId) {
+        setIsTyping(false);
+        setTypingUser("");
+      }
+    };
+    
+    const handleMessageHistory = ({ messages: historyMessages }) => {
+      if (historyMessages && historyMessages.length > 0) {
+        const formattedMessages = historyMessages.map(msg => ({
+          ...msg,
+          isMe: msg.sender === currentUserId
+        }));
+        setMessages(formattedMessages);
+      }
     };
 
     socket.on("connect", handleConnect);
     socket.on("receiveMessage", handleReceiveMessage);
+    socket.on("userTyping", handleTyping);
+    socket.on("userStopTyping", handleStopTyping);
+    socket.on("messageHistory", handleMessageHistory);
 
     return () => {
       socket.off("receiveMessage", handleReceiveMessage);
       socket.off("connect", handleConnect);
+      socket.off("userTyping", handleTyping);
+      socket.off("userStopTyping", handleStopTyping);
+      socket.off("messageHistory", handleMessageHistory);
     };
-  }, [socket]);
+  }, [socket, currentUserId, roomId]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -110,16 +165,23 @@ const Chat = () => {
 
       console.log("Sending message:", newMessage);
 
-      if (socket.connected) {
+      if (socket.connected && roomId) {
         socket.emit("chatMessage", {
-          roomId: "user123-driver123",
+          roomId: roomId,
           message: newMessage,
         });
+        
+        // Emit stop typing when sending message
+        socket.emit("stopTyping", { roomId, user: currentUserId });
+        
+        // Clear the typing timeout
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
 
-        setMessages((prev) => [...prev, { ...newMessage, isMe: true }]); // ตั้ง isMe = true
         setMessage("");
       } else {
-        console.error("Socket not connected");
+        console.error("Socket not connected or roomId missing");
         alert("ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง");
       }
     }
@@ -127,12 +189,56 @@ const Chat = () => {
 
   const handleChatClick = (chatItem) => {
     setActiveChat(chatItem); // Set the active chat when clicked
-    setMessages([]); // Clear previous messages
+    
+    // Create a room ID using user and driver IDs
+    const newRoomId = generateRoomId(currentUserId, chatItem.id);
+    setRoomId(newRoomId);
+    
+    // Join the room
+    socket.emit("joinRoom", newRoomId);
+    
+    // Try to load messages from localStorage first
+    const savedMessages = localStorage.getItem(`chat_${newRoomId}`);
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    } else {
+      setMessages([]); // Clear previous messages if no saved ones
+      
+      // Request message history from server
+      socket.emit("getMessageHistory", { roomId: newRoomId });
+    }
+  };
+  
+  const handleInputChange = (e) => {
+    setMessage(e.target.value);
+    
+    // Only emit typing events if there's an active chat
+    if (roomId) {
+      // Send typing event
+      socket.emit("typing", { roomId, user: currentUserId });
+      
+      // Clear previous timeout
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      
+      // Set timeout to stop typing indicator after 2 seconds of inactivity
+      typingTimeoutRef.current = setTimeout(() => {
+        socket.emit("stopTyping", { roomId, user: currentUserId });
+      }, 2000);
+    }
   };
 
   const closePopup = () => {
     setActiveChat(null); // Close the popup by setting activeChat to null
+    setRoomId(""); // Clear the room ID
   };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   if (data === null) {
     console.log("Data is null");
@@ -240,14 +346,28 @@ const Chat = () => {
                   <strong>{msg.sender}:</strong> {msg.text}
                 </div>
               ))}
+              
+              {/* Typing indicator */}
+              {isTyping && (
+                <div className="typing-indicator">
+                  <span>{typingUser || "Someone"} is typing</span>
+                  <span className="dots">
+                    <span className="dot">.</span>
+                    <span className="dot">.</span>
+                    <span className="dot">.</span>
+                  </span>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
             <div className="chat-popup-footer">
               <input
                 type="text"
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleInputChange}
                 placeholder="Type a message..."
                 className="chat-input"
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               />
               <button onClick={handleSendMessage} className="send-button">
                 Send
