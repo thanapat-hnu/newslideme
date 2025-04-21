@@ -76,7 +76,7 @@ router.post('/insert-phone', async (req, res) => {
 
 // อัปเดตรายละเอียดผู้ใช้ตามเบอร์
 router.post('/update-profile', async (req, res) => {
-  const { phone, email, firstname, lastname, gender } = req.body;
+  const { phone, email, firstname, lastname, gender, profileImage } = req.body;
 
   if (!phone) {
     return res.status(400).json({ success: false, message: "กรุณาระบุเบอร์โทรศัพท์" });
@@ -89,9 +89,10 @@ router.post('/update-profile', async (req, res) => {
       return res.status(404).json({ success: false, message: "ไม่พบเบอร์โทรนี้ในระบบ" });
     }
 
+    // ✅ เพิ่ม profileImage เข้า SQL ด้วย
     await pool.query(
-      "UPDATE users SET email = ?, firstname = ?, lastname = ?, gender = ? WHERE phone = ?",
-      [email, firstname, lastname, gender, phone]
+      "UPDATE users SET email = ?, firstname = ?, lastname = ?, gender = ?, profileImage = ? WHERE phone = ?",
+      [email, firstname, lastname, gender, profileImage || null, phone]
     );
 
     return res.json({ success: true, message: "อัปเดตข้อมูลโปรไฟล์เรียบร้อย" });
@@ -101,6 +102,7 @@ router.post('/update-profile', async (req, res) => {
     return res.status(500).json({ success: false, message: "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์" });
   }
 });
+
 
 //  ตรวจสอบว่าเบอร์มีอยู่ในระบบหรือไม่
 router.post('/check-phone', async (req, res) => {

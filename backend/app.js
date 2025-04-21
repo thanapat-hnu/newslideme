@@ -1,26 +1,38 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import phoneRoutes from './All-Routes/routes.js'; 
-import HomeRoutes from './All-Routes/Homeroutes.js';
-import bookingRoutes from './All-Routes/bookingRoutes.js';
-import locationRoutes from './All-Routes/locationRoutes.js';
-import mapRoutes from './All-Routes/mapRoutes.js';
+import phoneRoutes from "./All-Routes/routes.js";
+import mapRoutes from "./All-Routes/mapRoutes.js";
+
+
+
+//chat secket
 import { initSocket } from './socketServer.js';
 import { createServer } from 'http';
+
+
+
+// import driver
+import register from "./driverRoutes/registerPersonal.js";
+import register2 from "./driverRoutes/RegisterVehicle.js";
+import loginDriver from "./driverRoutes/login.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const server = createServer(app); // ใช้ HTTP server กับ Socket.IO
 
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json());
 
-app.use('/api', phoneRoutes);
-app.use('/api', HomeRoutes);
-app.use('/api', bookingRoutes);
-app.use('/api', locationRoutes);
-app.use('/api', mapRoutes);
+// ✅ ใช้ router ที่รวม logic คุยกับ DB
+app.use("/api", phoneRoutes);
+app.use("/api", mapRoutes);
+
+// driver
+app.use("/api/drivers", register);
+app.use("/api/drivers", register2);
+app.use("/api/drivers", loginDriver);
 
 const otps = {};
 function generateOTP() {
@@ -30,18 +42,28 @@ function validateOTP(phoneNumber, otp) {
   return otps[phoneNumber] === otp;
 }
 
-app.post('/api/generate-otp', (req, res) => {
+// ✅ ส่ง OTP
+app.post("/api/generate-otp", (req, res) => {
   const { phoneNumber } = req.body;
-  if (!phoneNumber) return res.status(400).json({ success: false, message: "กรุณาระบุเบอร์โทรศัพท์" });
+  if (!phoneNumber) {
+    return res
+      .status(400)
+      .json({ success: false, message: "กรุณาระบุเบอร์โทรศัพท์" });
+  }
   const otp = generateOTP();
   otps[phoneNumber] = otp;
   console.log(`OTP สำหรับ ${phoneNumber}: ${otp}`);
   return res.json({ success: true, message: "ส่ง OTP สำเร็จ", otp });
 });
 
-app.post('/api/verify-otp', (req, res) => {
+// ✅ ตรวจสอบ OTP
+app.post("/api/verify-otp", (req, res) => {
   const { phoneNumber, otp } = req.body;
-  if (!phoneNumber || !otp) return res.status(400).json({ success: false, message: "ต้องระบุเบอร์โทรศัพท์และ OTP" });
+  if (!phoneNumber || !otp) {
+    return res
+      .status(400)
+      .json({ success: false, message: "ต้องระบุเบอร์โทรศัพท์และ OTP" });
+  }
   if (validateOTP(phoneNumber, otp)) {
     delete otps[phoneNumber];
     return res.json({ success: true, message: "ยืนยัน OTP สำเร็จ" });
