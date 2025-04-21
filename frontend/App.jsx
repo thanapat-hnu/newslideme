@@ -63,6 +63,7 @@ function App() {
           <Route path="/driver/register2" element={<RegisterDriver2 />} />
           <Route path="/driver/main" element={<Main />} />
           <Route path="/driver/login" element={<LoginDriver />} />
+          
         </Routes>
       </BrowserRouter>
     </div>

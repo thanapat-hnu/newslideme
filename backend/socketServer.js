@@ -17,7 +17,7 @@ export const initSocket = (server, app) => {
     console.log(`🔌 New user connected: ${socket.id} from ${ip}`);
 
     // ✅ ส่ง socket เข้าไปให้ sendJobSocket แทน
-    sendJobSocket(socket);
+    sendJobSocket(socket, io);
 
     socket.on("joinRoom", (roomId) => {
       console.log(`🟢 User joined room: ${roomId}`);

@@ -1,5 +1,5 @@
 // src/driver/home/main/main.jsx
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import "boxicons";
 import styles from "./main.module.css";
 import { useNavigate } from "react-router";
@@ -20,17 +20,31 @@ function Main() {
   // test
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const handleOnline = () => {
-    setStatus(!status);
-    socket.emit("jobRequest", {
-      lonA: 100.523186,
-      latA: 13.736717,
-      lonB: 100.529186,
-      latB: 13.741717,
-    });
+  useEffect(() => {
     socket.on("jobRequest", (data) => {
+      console.log("Received job request:", data);
+      // แสดงผลข้อมูล หรือทำสิ่งที่ต้องการ
       setLocation(data);
     });
+
+    return () => {
+      // ระวังการ cleanup เพื่อลดการเกิด memory leaks
+      socket.off("jobRequest");
+    };
+  }, []);
+
+  const handleOnline = () => {
+    setStatus(!status);
+    // socket.emit("jobRequest", {
+    //   lonA: 100.523186,
+    //   latA: 13.736717,
+    //   lonB: 100.529186,
+    //   latB: 13.741717,
+    // });
+
+    // socket.on("jobRequest", (data) => {
+    //   setLocation(data);
+    // });
   };
 
   return (

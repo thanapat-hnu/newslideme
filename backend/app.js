@@ -1,6 +1,6 @@
+// app.js
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import phoneRoutes from "./All-Routes/routes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
 
