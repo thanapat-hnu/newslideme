@@ -60,8 +60,23 @@ function Main() {
 
       {/* ปุ่มด้านล่าง */}
       <div className={styles.btnBottom}>
-        {["btn1", "btn2", "btn3", "btn4"].map((labelText, i) => (
-          <div key={i} className={styles[`btnBottomItem${i + 1}`]}>
+        <div className={styles.btnBottomItem1}>
+          <div className={styles.btnBottomIcon}>
+            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+          </div>
+          <label>btn1</label>
+        </div>
+        <div
+          className={styles.btnBottomItem2}
+          onClick={() => navigator("/driver/orders")}
+        >
+          <div className={styles.btnBottomIcon}>
+            <box-icon name="task" color="#fff"></box-icon>
+          </div>
+          <label>งานที่รับ</label>
+        </div>
+        {["btn3", "btn4"].map((labelText, i) => (
+          <div key={i + 2} className={styles[`btnBottomItem${i + 3}`]}>
             <div className={styles.btnBottomIcon}>
               <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
             </div>

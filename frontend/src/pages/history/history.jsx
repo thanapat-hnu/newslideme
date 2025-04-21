@@ -9,38 +9,32 @@ const History = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false); // ควบคุมการแสดงผล Popup
     const [ratingItem, setRatingItem] = useState(null); // เก็บข้อมูลของรายการที่กำลังให้คะแนน
     const [rating, setRating] = useState(0); // เก็บคะแนนที่ผู้ใช้เลือก
+    const [isLoading, setIsLoading] = useState(false); // เพิ่ม loading state
     const navigate = useNavigate();
 
     useEffect(() => {
-        const personalId = localStorage.getItem('userId');
+        setIsLoading(true);
         
-        if (personalId) {
-            fetch(`http://localhost:3000/api/get-history/${personalId}`)
-                .then((response) => response.json())
-                .then((result) => {
-                    if (result.success) {
-                        setHistoryData(result.data);
-                    }
-                })
-                .catch((error) => console.error('Error loading history:', error));
-        }
-    }, []);
-
-    useEffect(() => {
-        // ระบุ historyId ที่ต้องการ
-        const historyId = 1;
-        
-        fetch(`http://localhost:3000/api/history/${historyId}`)
-            .then((response) => response.json())
+        fetch('http://localhost:3000/api/histories')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then((result) => {
                 if (result.success) {
-                    // แปลงข้อมูลเดี่ยวให้เป็น array เพื่อใช้กับ map
-                    setHistoryData([result.data]);
+                    setHistoryData(result.data);
                 } else {
-                    console.error("Error loading history:", result.message);
+                    console.error("Error:", result.message);
                 }
             })
-            .catch((error) => console.error('Error loading history:', error));
+            .catch((error) => {
+                console.error('Error loading histories:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
 
     const handleBackClick = () => {
@@ -77,46 +71,52 @@ const History = () => {
                 <FaArrowLeft />
             </button>
 
-            {historyData.map((item) => (
-                <section key={item.providerId} className={`latest-section ${showSection ? 'slide-in' : 'slide-out'}`}>
-                    <div className="card">
-                        <div className="card-row">
-                            <div className="card-icon green-bg">
-                                <i className="bi bi-truck"></i>
+            {isLoading ? (
+                <div>กำลังโหลด...</div>
+            ) : historyData.length > 0 ? (
+                historyData.map((item) => (
+                    <section key={item.providerId} className={`latest-section ${showSection ? 'slide-in' : 'slide-out'}`}>
+                        <div className="card">
+                            <div className="card-row">
+                                <div className="card-icon green-bg">
+                                    <i className="bi bi-truck"></i>
+                                </div>
+                                <div className="card-info">
+                                    <p className="card-date">{item.randomDateTime}</p>
+                                    <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.providerName}</span>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-geo-alt-fill red" style={{ fontSize: '14px' }}></i>
+                                        <p>ต้นทาง: {item.locations.origin.address}</p>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-geo-alt-fill green" style={{ fontSize: '14px' }}></i>
+                                        <p>ปลายทาง: {item.locations.destination.address}</p>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-car-front" style={{ fontSize: '14px' }}></i>
+                                        <p>ประเภท: {item.towTruckType}</p>
+                                    </div>
+
+                                    <p className="card-status green-text">ดำเนินการเสร็จสิ้น</p>
+                                    <div className="card-actions">
+                                        {/* ปรับปุ่มให้คะแนน */}
+                                        {!item.hasRated ? (
+                                            <button onClick={() => handleRateClick(item)}>ให้คะแนน</button>
+                                        ) : (
+                                            <p>ให้คะแนนแล้ว</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="card-price">฿ {item.price}</div>
                             </div>
-                            <div className="card-info">
-                                <p className="card-date">{item.randomDateTime}</p>
-                                <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.providerName}</span>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-geo-alt-fill red" style={{ fontSize: '14px' }}></i>
-                                    <p>ต้นทาง: {item.locations.origin.address}</p>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-geo-alt-fill green" style={{ fontSize: '14px' }}></i>
-                                    <p>ปลายทาง: {item.locations.destination.address}</p>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-car-front" style={{ fontSize: '14px' }}></i>
-                                    <p>ประเภท: {item.towTruckType}</p>
-                                </div>
-
-                                <p className="card-status green-text">ดำเนินการเสร็จสิ้น</p>
-                                <div className="card-actions">
-                                    {/* ปรับปุ่มให้คะแนน */}
-                                    {!item.hasRated ? (
-                                        <button onClick={() => handleRateClick(item)}>ให้คะแนน</button>
-                                    ) : (
-                                        <p>ให้คะแนนแล้ว</p>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="card-price">฿ {item.price}</div>
                         </div>
-                    </div>
-                </section>
-            ))}
+                    </section>
+                ))
+            ) : (
+                <div>ไม่พบข้อมูลประวัติ</div>
+            )}
 
             {isPopupOpen && (
                 <div className="popup-overlay">

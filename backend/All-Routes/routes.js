@@ -239,7 +239,6 @@ router.get('/customer-orders/:orderId', async (req, res) => {
 });
 
 
-
 router.get('/get-history/:personalId', async (req, res) => {
   const { personalId } = req.params;
   console.log('Fetching history for personalId:', personalId);
@@ -314,11 +313,157 @@ router.get('/history/:historyId', async (req, res) => {
   console.log('Requested historyId:', historyId);
 
   try {
-    const query = `SELECT * FROM history_cus WHERE history_id = ?`;
-    console.log('Executing query:', query);
+    // เพิ่ม logging
+    console.log('Testing database connection...');
+    await pool.query('SELECT 1');
+    console.log('Database connection successful');
+
+    const query = `
+      SELECT * FROM history_cus 
+      WHERE history_id = ?
+    `;
+    console.log('Executing query:', query, 'with historyId:', historyId);
     
     const [rows] = await pool.query(query, [historyId]);
     console.log('Query results:', rows);
+    
+    if (rows.length === 0) {
+      console.log('No history found with ID:', historyId);
+      return res.status(404).json({
+        success: false,
+        message: "ไม่พบข้อมูลประวัติ"
+      });
+    }
+
+    const history = rows[0];
+    console.log('Found history:', history);
+
+    const formattedHistory = {
+      historyId: history.history_id,
+      personalId: history.personal_id,
+      orderDateTime: history.order_datetime,
+      providerName: history.shop_name,
+      locations: {
+        origin: { address: history.origin },
+        destination: { address: history.destination }
+      },
+      vehicleType: history.vehicle_type,
+      status: history.status,
+      price: history.price,
+      moveAt: history.move_at
+    };
+
+    return res.json({ 
+      success: true, 
+      data: formattedHistory
+    });
+
+  } catch (err) {
+    console.error("Database Error:", err.message);
+    return res.status(500).json({ 
+      success: false, 
+      message: "เกิดข้อผิดพลาดในการดึงข้อมูล: " + err.message 
+    });
+  }
+});
+
+router.get('/histories', async (req, res) => {
+    try {
+        const query = `
+            SELECT * FROM history_cus 
+            WHERE history_id BETWEEN 9 AND 13 
+            ORDER BY history_id DESC
+        `;
+        
+        const [rows] = await pool.query(query);
+        
+        if (rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "ไม่พบข้อมูลประวัติ"
+            });
+        }
+
+        const formattedHistories = rows.map(history => ({
+            historyId: history.history_id,
+            personalId: history.personal_id,
+            orderDateTime: history.order_datetime,
+            providerName: history.shop_name,
+            locations: {
+                origin: { address: history.origin },
+                destination: { address: history.destination }
+            },
+            vehicleType: history.vehicle_type,
+            status: history.status,
+            price: history.price,
+            moveAt: history.move_at
+        }));
+
+        return res.json({ 
+            success: true, 
+            data: formattedHistories
+        });
+
+    } catch (err) {
+        console.error("Database Error:", err.message);
+        return res.status(500).json({ 
+            success: false, 
+            message: "เกิดข้อผิดพลาดในการดึงข้อมูล: " + err.message 
+        });
+    }
+});
+
+// Driver Order API
+router.get('/driver/orders/:orderId', async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const query = `SELECT * FROM order_cus WHERE order_id = ?`;
+    const [rows] = await pool.query(query, [orderId]);
+    
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "ไม่พบข้อมูลออเดอร์"
+      });
+    }
+
+    const order = rows[0];
+    const formattedOrder = {
+      orderId: order.order_id,
+      providerId: order.personal_id,
+      providerName: order.shop_name,
+      locations: {
+        origin: { address: order.origin },
+        destination: { address: order.destination }
+      },
+      towTruckType: order.vehicle_type,
+      price: order.price,
+      orderDateTime: order.order_datetime,
+      status: order.status
+    };
+
+    return res.json({ 
+      success: true, 
+      data: formattedOrder
+    });
+
+  } catch (err) {
+    console.error("Database Error:", err.message);
+    return res.status(500).json({ 
+      success: false, 
+      message: "เกิดข้อผิดพลาดในการดึงข้อมูล: " + err.message 
+    });
+  }
+});
+
+// Driver History API
+router.get('/driver/history/:historyId', async (req, res) => {
+  const { historyId } = req.params;
+
+  try {
+    const query = `SELECT * FROM history_cus WHERE history_id = ?`;
+    const [rows] = await pool.query(query, [historyId]);
     
     if (rows.length === 0) {
       return res.status(404).json({
