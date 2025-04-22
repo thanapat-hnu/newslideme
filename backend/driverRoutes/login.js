@@ -1,22 +1,22 @@
 // routes/Login.js
 import express from "express";
 import pool from "../db.js";
-import e from "express";
 
 const router = express.Router();
 
-router.post("/loginDriver", async (req, res) => {
-  const clientIp = req.headers["client"] || req.socket.remoteAddress;
-  const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+// สร้าง token แบบง่าย
+const generateToken = (userData) => {
+  const tokenData = {
+    name: userData.first_name ? `${userData.first_name} ${userData.last_name}` : null,
+    phone: userData.phone_number || null,
+    email: userData.email || null,
+    timestamp: new Date().getTime()
+  };
+  
+  return Buffer.from(JSON.stringify(tokenData)).toString('base64');
+};
 
-  console.log("==========================================");
-  console.log(`📥 [${now}] Login`);
-  console.log(`🌐 IP Address: ${clientIp}`);
-  console.log("➡️ Request Body:", {
-    email: req.body.email,
-    idCardNumber: req.body.idCardNumber,
-  });
-  console.log("==========================================");
+router.post("/loginDriver", async (req, res) => {
   try {
     const { email, idCardNumber } = req.body;
 
@@ -30,20 +30,38 @@ router.post("/loginDriver", async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res
-        .status(401)
-        .json({ message: "อีเมลหรือเลขบัตรประชาชนไม่ถูกต้อง" });
+      return res.status(401).json({ 
+        success: false,
+        message: "อีเมลหรือเลขบัตรประชาชนไม่ถูกต้อง" 
+      });
     }
 
-    const user = rows[0];
+    const token = generateToken(rows[0]);
+
     return res.status(200).json({
+      success: true,
       message: "เข้าสู่ระบบสำเร็จ",
-      token: email,
+      token: token
     });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({
-      message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ",
+      success: false,
+      message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ"
+    });
+  }
+});
+
+// เพิ่ม endpoint สำหรับถอดรหัส token
+router.post("/decode-token", (req, res) => {
+  try {
+    const { token } = req.body;
+    const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
+    return res.json({ success: true, data: decoded });
+  } catch (error) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Invalid token" 
     });
   }
 });
