@@ -127,7 +127,8 @@ router.post('/book-service', async (req, res) => {
     const price = matchedProvider.price;
     const order_datetime = new Date(time).toISOString().slice(0, 19).replace('T', ' ');
 
-    await pool.query(`
+    // ✅ เพิ่มข้อมูลการจองและรับ order_id ที่เพิ่มใหม่
+    const [result] = await pool.query(`
       INSERT INTO order_cus (
         order_datetime,
         shop_name,
@@ -151,11 +152,14 @@ router.post('/book-service', async (req, res) => {
       phone
     ]);
 
-    console.log("✅ บันทึกการจองสำเร็จ พร้อม id_user =", id_user, "และเบอร์ =", phone);
+    const order_id = result.insertId;
+
+    console.log("✅ บันทึกการจองสำเร็จ order_id =", order_id);
 
     res.json({
       message: '✅ Booking confirmed',
       booking: {
+        order_id,                    // ✅ ส่งกลับไปด้วย
         origin,
         destination,
         providerId,
@@ -172,6 +176,7 @@ router.post('/book-service', async (req, res) => {
     res.status(500).json({ message: 'Booking failed', error: err.message });
   }
 });
+
 
 
 

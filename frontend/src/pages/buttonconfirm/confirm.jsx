@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ เพิ่ม
 import "./confirm.css";
 import axios from "axios";
 import { io } from "socket.io-client";
@@ -29,6 +30,7 @@ function Confirm({
 }) {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [user, setUser] = useState({ firstname: "", lastname: "", phone: "" });
+  const navigate = useNavigate(); // ✅ เพิ่ม
 
   const isButtonVisible =
     button === "a" || button === "b" || (showService && service);
@@ -70,7 +72,7 @@ function Confirm({
     }
 
     const center = map.location();
-    const selected = { lat: center.lat, lng: center.lon }; // พิกัดหมุดกลาง
+    const selected = { lat: center.lat, lng: center.lon };
     console.log("📌 พิกัดหมุดกลาง:", selected);
 
     try {
@@ -124,6 +126,9 @@ function Confirm({
         );
 
         console.log("✅ Booking Response:", bookRes.data);
+
+        // ✅ ไปหน้า servicestatus พร้อมข้อมูล booking
+        // navigate("/servicestatus", { state: bookRes.data.booking });
 
         console.log("✅ Booking & history saved");
 
