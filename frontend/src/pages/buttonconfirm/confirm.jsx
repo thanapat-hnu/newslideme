@@ -128,7 +128,7 @@ function Confirm({
         console.log("✅ Booking Response:", bookRes.data);
 
         // ✅ ไปหน้า servicestatus พร้อมข้อมูล booking
-        // navigate("/servicestatus", { state: bookRes.data.booking });
+        navigate("/servicestatus", { state: { booking: bookRes.data.booking } });
 
         console.log("✅ Booking & history saved");
 

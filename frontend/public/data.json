@@ -31,22 +31,7 @@
     "towTruckType": "Hook & Chain",
     "price": 1200
   },
-  {
-    "providerId": 3,
-    "providerName": "บริษัทลากจูดเชื่อใจได้",
-    "locations": {
-      "origin": {
-        "city": "ภูเก็ต",
-        "address": "55 ถนนริมทะเล, ภูเก็ต"
-      },
-      "destination": {
-        "city": "กระบี่",
-        "address": "20 ถนนหน้าผา, กระบี่"
-      }
-    },
-    "towTruckType": "Integrated",
-    "price": 1800
-  },
+ 
   {
     "providerId": 4,
     "providerName": "TowPro",
