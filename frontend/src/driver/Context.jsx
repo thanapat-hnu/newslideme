@@ -66,6 +66,9 @@ export function RegistrationProvider({ children }) {
     created_at: "",
   });
 
+  const [fff, setFff] = useState(false);
+  
+
   return (
     <RegistrationContext.Provider
       value={{
@@ -81,6 +84,10 @@ export function RegistrationProvider({ children }) {
         setDescription,
         order,
         setOrder,
+        personal,
+        setPersonal,
+        fff,
+        setFff,
       }}
     >
       {children}

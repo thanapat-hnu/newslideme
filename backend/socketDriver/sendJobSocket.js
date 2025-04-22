@@ -18,4 +18,10 @@ export const sendJobSocket = (socket, io) => {
 
     io.emit("statusUpdate", data);
   });
+
+  socket.on("idPersonal", (id) => {
+    console.log("📩 ID personal:", id);
+
+    io.emit("idPersonal", id);
+  });
 };

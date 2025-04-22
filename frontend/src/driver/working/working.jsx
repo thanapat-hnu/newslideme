@@ -6,17 +6,11 @@ import io from "socket.io-client";
 const Socket = io("http://localhost:3000");
 
 function Working() {
-  const { status, setStatus, order, setOrder } =
+  const { status, setStatus, order, setOrder, fff, setFff } =
     useContext(RegistrationContext);
   const [isFull, setIsFull] = useState(true);
   const [time, setTime] = useState(new Date());
   const [isAccept, setIsAccept] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0); // 🟢 เพิ่มเพื่อควบคุมลำดับขั้นตอน
-
-  const steps = [
-    { label: "กำลังเดินทาง", value: "กำลังจัดส่ง" },
-    { label: "สำเร็จ", value: "จัดส่งแล้ว" },
-  ];
 
   const HandleClick = () => {
     setIsFull(!isFull);
@@ -30,16 +24,12 @@ function Working() {
   }, []);
 
   const handleAccept = () => {
-    if (stepIndex < steps.length) {
-      const currentStep = steps[stepIndex];
-
-      Socket.emit("statusUpdate", {
-        label: currentStep.label,
-        value: currentStep.value,
-      });
-
-      setStepIndex(stepIndex + 1); // 👉 ไปยังขั้นตอนถัดไป
-    }
+    Socket.emit("statusUpdate", {
+      label: "กำลังเดินทาง",
+      value: "กำลังจัดส่ง",
+    });
+    // setIsAccept(true);
+    setFff(true);
   };
 
   return (

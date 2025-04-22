@@ -9,10 +9,10 @@ import DriverMap from "../drivermap/DriverMap";
 import PopupJob from "../popupJob/popupJob";
 import Working from "../working/working";
 import axios from "axios";
+import RabNgein from "../rabngein/rabngein";
 
 const socket = io("http://localhost:3000");
 
-// testcommit
 function Main() {
   const [income, setIncome] = useState(false);
   const navigator = useNavigate();
@@ -25,9 +25,13 @@ function Main() {
     setOrder,
     personal,
     setPersonal,
+    fff,
+    setFff,
   } = useContext(RegistrationContext);
 
   const [isProfile, setIsProfile] = useState(false);
+  const token = localStorage.getItem("driverToken");
+
   const getLocationAddress = async (latLngString) => {
     try {
       const matches = latLngString.match(/lat:([\d.]+),lng:([\d.]+)/);
@@ -46,7 +50,6 @@ function Main() {
         }
       );
 
-      // แปลงข้อมูลที่ได้จาก Longdo API เป็น string
       const addressData = response.data;
       const formattedAddress = [
         addressData.road,
@@ -75,7 +78,7 @@ function Main() {
   useEffect(() => {
     socket.on("sendJob", async (data) => {
       console.log("Received job data:", data);
-      setStatus("sending"); // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่า popup จะแสดง
+      setStatus("sending");
 
       try {
         const res = await axios.get("http://localhost:3000/api/orders", {
@@ -83,10 +86,8 @@ function Main() {
         });
 
         const orderData = res.data.order;
-        // setOrder({});
         console.log("Order data:", orderData);
 
-        // แปลงพิกัดเป็นที่อยู่
         const origin = await getLocationAddress(orderData.origin);
         const destination = await getLocationAddress(orderData.destination);
 
@@ -122,8 +123,6 @@ function Main() {
       setLocation(data);
     });
 
-    getPersonalInfo();
-
     return () => {
       socket.off("jobRequest");
       socket.off("sendJob");
@@ -134,19 +133,59 @@ function Main() {
     setStatus("sending");
   };
 
-  const getPersonalInfo = async () => {
+  const decryptToken = async (token) => {
+    if (!token) return;
+
     try {
-      const response = await axios.get(
-        "http://localhost:3000/api/drivers/getPersonal",
-        {
-          params: {
-            email: personal.email, // replace with actual email
-          },
-        }
+      const response = await axios.post(
+        "http://localhost:3000/api/drivers/decode-token",
+        { token }
       );
-      console.log("xxxxxxxxxxx:",response.data);
+
+      const decodedEmail = response.data.data?.email;
+      if (!decodedEmail) {
+        console.warn("Decoded token has no email.");
+        return;
+      }
+
+      try {
+        const res = await axios.get(
+          "http://localhost:3000/api/drivers/getPersonal",
+          {
+            params: { email: decodedEmail },
+          }
+        );
+
+        setPersonal({
+          first_name: res.data.first_name,
+          last_name: res.data.last_name,
+          id: res.data.id,
+          id_card_number: res.data.id_card_number,
+          birth_date: res.data.birth_date,
+          phone_number: res.data.phone_number,
+          email: res.data.email,
+          id_card_image: res.data.id_card_image,
+          created_at: res.data.created_at,
+        });
+
+        socket.emit("idPersonal", res.data.id);
+
+        // socket.on("idPersonal", (data) => {
+        //   console.log("Received idPersonal:", data);
+        // })
+
+      } catch (err) {
+        console.error("Error fetching personal info:", err);
+      }
     } catch (error) {
-      console.error("Error fetching personal info:", error);
+      console.error("Error decoding token:", error);
+    }
+  };
+
+  const handleProfileClick = () => {
+    setIsProfile((prev) => !prev);
+    if (!isProfile) {
+      decryptToken(token);
     }
   };
 
@@ -176,9 +215,13 @@ function Main() {
         {/* โปรไฟล์ */}
         <button
           className={styles.profileImg}
-          onClick={() => setIsProfile(!isProfile)}
+          onClick={handleProfileClick}
         ></button>
-        {isProfile && <div className={styles.profilePopup}>ชื่อ นามสกุล</div>}
+        {isProfile && (
+          <div className={styles.profilePopup}>
+            {personal.first_name} {personal.last_name}
+          </div>
+        )}
       </div>
 
       {/* ปุ่มด้านล่าง */}
@@ -199,15 +242,6 @@ function Main() {
           </div>
           <label>งานที่รับ</label>
         </div>
-
-        {/* {["btn3", "btn4"].map((labelText, i) => (
-          <div key={i + 3} className={styles[`btnBottomItem${i + 3}`]}>
-            <div className={styles.btnBottomIcon}>
-              <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-            </div>
-            <label>{labelText}</label>
-          </div>
-        ))} */}
       </div>
 
       {/* แผนที่ */}
@@ -217,6 +251,7 @@ function Main() {
 
       {status === "sending" && <PopupJob />}
       {status === "working" && <Working />}
+      {fff && <RabNgein />}
     </div>
   );
 }
