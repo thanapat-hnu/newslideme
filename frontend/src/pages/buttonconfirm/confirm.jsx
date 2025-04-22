@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import "./confirm.css";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 function Confirm({
   button,
@@ -101,6 +104,12 @@ function Confirm({
         const providerId = providers.data[0]?.id || "P001";
         console.log("📦 ผู้ให้บริการ:", providers.data);
 
+        // console.log(`readLocal.lat : ${readLocal.lat}`);
+        // console.log(`readLocal.lng : ${readLocal.lng}`);
+
+        // console.log(`readLocalB.lat : ${readLocalB.lat}`);
+        // console.log(`readLocalB.lng : ${readLocalB.lng}`);
+
         // ✅ ส่งข้อมูลจองพร้อมเบอร์โทร
         const bookRes = await axios.post(
           "http://localhost:3000/api/book-service",
@@ -117,6 +126,17 @@ function Confirm({
         console.log("✅ Booking Response:", bookRes.data);
 
         console.log("✅ Booking & history saved");
+
+        socket.emit("sendJob", {
+          status: "sending",
+        });
+
+        // socket.emit("jobRequest", {
+        //   lonA: readLocal.lng,
+        //   latA: readLocal.lat,
+        //   lonB: readLocalB.lng,
+        //   latB: readLocalB.lat,
+        // });
       }
     } catch (err) {
       console.error("❌ Error during confirm:", err);

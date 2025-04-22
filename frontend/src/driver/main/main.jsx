@@ -24,6 +24,10 @@ function Main() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
+    socket.on("sendJob",(data) => {
+      setStatus(data.status)
+    })
+
     socket.on("jobRequest", (data) => {
       console.log("Received job request:", data);
       // แสดงผลข้อมูล หรือทำสิ่งที่ต้องการ
