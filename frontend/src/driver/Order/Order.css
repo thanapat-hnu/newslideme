@@ -1,0 +1,90 @@
+.order-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.history-button {
+  background: #14BF61;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.history-button i {
+  font-size: 16px;
+}
+
+.history-button:hover {
+  background: #0FA653;
+}
+
+.order-card, .history-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.order-date, .history-date {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.location-info {
+  margin: 10px 0;
+}
+
+.location-info p {
+  margin: 5px 0;
+}
+
+.price {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #14BF61;
+}
+
+.status {
+  color: #666;
+  font-style: italic;
+}
+
+.loading, .no-orders, .no-history {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.vehicle-type {
+  color: #444;
+  font-weight: 500;
+}
+
+.move-time {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 5px;
+}

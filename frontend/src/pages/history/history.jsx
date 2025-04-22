@@ -9,39 +9,34 @@ const History = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false); // ควบคุมการแสดงผล Popup
     const [ratingItem, setRatingItem] = useState(null); // เก็บข้อมูลของรายการที่กำลังให้คะแนน
     const [rating, setRating] = useState(0); // เก็บคะแนนที่ผู้ใช้เลือก
+    const [isLoading, setIsLoading] = useState(false); // เพิ่ม loading state
     const navigate = useNavigate();
 
-    // ฟังก์ชันสุ่มวันที่และเวลา
-    const getRandomDateTime = () => {
-        const startDate = new Date(2023, 0, 1); // 1 มกราคม 2023
-        const endDate = new Date(2023, 11, 31); // 31 ธันวาคม 2023
-        const randomDate = new Date(
-            startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime())
-        );
-
-        const day = randomDate.getDate().toString().padStart(2, '0');
-        const month = (randomDate.getMonth() + 1).toString().padStart(2, '0'); // เดือนเริ่มที่ 0
-        const year = randomDate.getFullYear();
-        const hour = Math.floor(Math.random() * 24); // สุ่มชั่วโมง 0-23
-        const minute = Math.floor(Math.random() * 60); // สุ่มนาที 0-59
-
-        return `${day}/${month}/${year} ${hour.toString().padStart(2, '0')}:${minute
-            .toString()
-            .padStart(2, '0')}`; // รูปแบบ DD/MM/YYYY HH:MM
-    };
-
     useEffect(() => {
-        fetch('http://localhost:3000/api/get-history')
-          .then((response) => response.json())
-          .then((result) => {
-            const updatedData = result.data.map((item) => ({
-              ...item,
-              hasRated: item.hasRated || false,
-            }));
-            setHistoryData(updatedData);
-          })
-          .catch((error) => console.error('Error loading history:', error));
-      }, []);
+        setIsLoading(true);
+        
+        fetch('http://localhost:3000/api/histories')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((result) => {
+                if (result.success) {
+                    setHistoryData(result.data);
+                } else {
+                    console.error("Error:", result.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading histories:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
     const handleBackClick = () => {
         setShowSection(false); // ซ่อน section เมื่อกดปุ่ม
         setTimeout(() => {
@@ -76,46 +71,52 @@ const History = () => {
                 <FaArrowLeft />
             </button>
 
-            {historyData.map((item) => (
-                <section key={item.providerId} className={`latest-section ${showSection ? 'slide-in' : 'slide-out'}`}>
-                    <div className="card">
-                        <div className="card-row">
-                            <div className="card-icon green-bg">
-                                <i className="bi bi-truck"></i>
+            {isLoading ? (
+                <div>กำลังโหลด...</div>
+            ) : historyData.length > 0 ? (
+                historyData.map((item) => (
+                    <section key={item.providerId} className={`latest-section ${showSection ? 'slide-in' : 'slide-out'}`}>
+                        <div className="card">
+                            <div className="card-row">
+                                <div className="card-icon green-bg">
+                                    <i className="bi bi-truck"></i>
+                                </div>
+                                <div className="card-info">
+                                    <p className="card-date">{item.randomDateTime}</p>
+                                    <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.providerName}</span>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-geo-alt-fill red" style={{ fontSize: '14px' }}></i>
+                                        <p>ต้นทาง: {item.locations.origin.address}</p>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-geo-alt-fill green" style={{ fontSize: '14px' }}></i>
+                                        <p>ปลายทาง: {item.locations.destination.address}</p>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <i className="bi bi-car-front" style={{ fontSize: '14px' }}></i>
+                                        <p>ประเภท: {item.towTruckType}</p>
+                                    </div>
+
+                                    <p className="card-status green-text">ดำเนินการเสร็จสิ้น</p>
+                                    <div className="card-actions">
+                                        {/* ปรับปุ่มให้คะแนน */}
+                                        {!item.hasRated ? (
+                                            <button onClick={() => handleRateClick(item)}>ให้คะแนน</button>
+                                        ) : (
+                                            <p>ให้คะแนนแล้ว</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="card-price">฿ {item.price}</div>
                             </div>
-                            <div className="card-info">
-                                <p className="card-date">{item.randomDateTime}</p>
-                                <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.providerName}</span>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-geo-alt-fill red" style={{ fontSize: '14px' }}></i>
-                                    <p>ต้นทาง: {item.locations.origin.address}</p>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-geo-alt-fill green" style={{ fontSize: '14px' }}></i>
-                                    <p>ปลายทาง: {item.locations.destination.address}</p>
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <i className="bi bi-car-front" style={{ fontSize: '14px' }}></i>
-                                    <p>ประเภท: {item.towTruckType}</p>
-                                </div>
-
-                                <p className="card-status green-text">ดำเนินการเสร็จสิ้น</p>
-                                <div className="card-actions">
-                                    {/* ปรับปุ่มให้คะแนน */}
-                                    {!item.hasRated ? (
-                                        <button onClick={() => handleRateClick(item)}>ให้คะแนน</button>
-                                    ) : (
-                                        <p>ให้คะแนนแล้ว</p>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="card-price">฿ {item.price}</div>
                         </div>
-                    </div>
-                </section>
-            ))}
+                    </section>
+                ))
+            ) : (
+                <div>ไม่พบข้อมูลประวัติ</div>
+            )}
 
             {isPopupOpen && (
                 <div className="popup-overlay">

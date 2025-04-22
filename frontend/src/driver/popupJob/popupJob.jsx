@@ -31,7 +31,7 @@ function PopupJob() {
       <div className={style.locationSection}>
         <div className={style.location}>
           <label className={style.dotGreen}></label>
-          {order.origin}
+          {order.origin} {/* จุด 1 */}
           <br />
           <label className={style.description}>
             {description.descriptionA}
@@ -40,7 +40,7 @@ function PopupJob() {
         <div className={style.verticalLine}></div>
         <div className={style.location}>
           <label className={style.dotRed}></label>
-          {order.destination}
+          {order.destination} {/* จุด 2 */}
           <br />
           <label className={style.description}>
             {description.descriptionB}

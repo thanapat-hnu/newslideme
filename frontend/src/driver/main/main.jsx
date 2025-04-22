@@ -12,21 +12,11 @@ import axios from "axios";
 
 const socket = io("http://localhost:3000");
 
-// import Map from '../map/map';
-
 function Main() {
-  // const [status, setStatus] = useState(false);
   const [income, setIncome] = useState(false);
   const navigator = useNavigate();
   const { location, setLocation, status, setStatus, order, setOrder } =
     useContext(RegistrationContext);
-
-  // test
-  // const [token, setToken] = useState(localStorage.getItem("token"));
-
-  // useEffect(() =>{
-  //   console.log(order)
-  // },[order])
 
   useEffect(() => {
     socket.on("sendJob", async (data) => {
@@ -34,9 +24,7 @@ function Main() {
       setStatus(data.status);
       try {
         const res = await axios.get("http://localhost:3000/api/orders", {
-          params: {
-            order_id: data.orderId,
-          },
+          params: { order_id: data.orderId },
         });
         console.log("API result:", res.data.order);
         setOrder({
@@ -56,35 +44,22 @@ function Main() {
 
     socket.on("jobRequest", (data) => {
       console.log("Received job request:", data);
-      // แสดงผลข้อมูล หรือทำสิ่งที่ต้องการ
       setLocation(data);
     });
 
     return () => {
-      // ระวังการ cleanup เพื่อลดการเกิด memory leaks
       socket.off("jobRequest");
       socket.off("sendJob");
     };
   }, []);
 
   const handleOnline = () => {
-    // setStatus(!status);
     setStatus("sending");
-    // socket.emit("jobRequest", {
-    //   lonA: 100.523186,
-    //   latA: 13.736717,
-    //   lonB: 100.529186,
-    //   latB: 13.741717,
-    // });
-
-    // socket.on("jobRequest", (data) => {
-    //   setLocation(data);
-    // });
   };
 
   return (
     <div className={styles.containerMain}>
-      {/* รายได้,โปรไฟล์ */}
+      {/* รายได้, โปรไฟล์ */}
       <div className={styles.btnTop}>
         {/* รายได้ */}
         <button className={styles.btnIncome} onClick={() => setIncome(!income)}>
@@ -108,33 +83,35 @@ function Main() {
         {/* โปรไฟล์ */}
         <label className={styles.profileImg}></label>
       </div>
-      {/* ปุ่มออนไลน์ */}
+
       {/* ปุ่มด้านล่าง */}
-      {status !== "working" && (
-        <button
-          className={styles.btnOnline}
-          onClick={handleOnline}
-          style={
-            {
-              // backgroundColor: status ? "#14BF61" : "#232323",
-            }
-          }
-        >
-          <box-icon name="power-off" color="#ffffff"></box-icon>&nbsp;ออนไลน์
-        </button>
-      )}
-      {status !== "working" && (
-        <div className={styles.btnBottom}>
-          {["btn1", "btn2", "btn3", "btn4"].map((labelText, i) => (
-            <div key={i} className={styles[`btnBottomItem${i + 1}`]}>
-              <div className={styles.btnBottomIcon}>
-                <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-              </div>
-              <label>{labelText}</label>
-            </div>
-          ))}
+      <div className={styles.btnBottom}>
+        <div className={styles.btnBottomItem1}>
+          <div className={styles.btnBottomIcon}>
+            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+          </div>
+          <label>btn1</label>
         </div>
-      )}
+
+        <div
+          className={styles.btnBottomItem2}
+          onClick={() => navigator("/driver/orders")}
+        >
+          <div className={styles.btnBottomIcon}>
+            <box-icon name="task" color="#fff"></box-icon>
+          </div>
+          <label>งานที่รับ</label>
+        </div>
+
+        {["btn3", "btn4"].map((labelText, i) => (
+          <div key={i + 3} className={styles[`btnBottomItem${i + 3}`]}>
+            <div className={styles.btnBottomIcon}>
+              <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+            </div>
+            <label>{labelText}</label>
+          </div>
+        ))}
+      </div>
 
       {/* แผนที่ */}
       <div className={styles.map} id="map">

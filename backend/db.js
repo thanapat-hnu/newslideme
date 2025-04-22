@@ -9,13 +9,17 @@ const pool = mysql.createPool({
 });
 
 pool.getConnection()
-    .then(() => {
+    .then(connection => {
         console.log("MySQL successfully connected!");
+        console.log("Testing connection...");
+        return connection.query('SELECT COUNT(*) as count FROM order_cus')
+            .then(([rows]) => {
+                console.log('Total orders in database:', rows[0].count);
+                connection.release();
+            });
     })
     .catch((err) => {
-        console.log("Error connecting to DB:", err.message);
+        console.error("Database connection error:", err.message);
     });
-
-
 
 export default pool;
