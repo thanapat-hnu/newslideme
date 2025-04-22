@@ -17,6 +17,8 @@ function LoginDriver() {
         { token }
       );
       if (response.data.success) {
+        // เก็บชื่อคนขับใน localStorage
+        localStorage.setItem("driverName", response.data.data.name);
         console.log("ข้อมูลคนขับ:", {
           ชื่อ: response.data.data.name,
           เบอร์โทร: response.data.data.phone,
