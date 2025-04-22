@@ -19,27 +19,82 @@ function Main() {
   const { location, setLocation, status, setStatus, order, setOrder } =
     useContext(RegistrationContext);
 
+  const getLocationAddress = async (latLngString) => {
+    try {
+      const matches = latLngString.match(/lat:([\d.]+),lng:([\d.]+)/);
+      if (!matches) {
+        console.error("Invalid lat,lng format:", latLngString);
+        return null;
+      }
+
+      const [, lat, lng] = matches;
+      console.log("Extracted coordinates:", { lat, lng });
+
+      const response = await axios.get(
+        "http://localhost:3000/api/reverse-geocode-longdo",
+        {
+          params: { lat, lng }
+        }
+      );
+
+      // แปลงข้อมูลที่ได้จาก Longdo API เป็น string
+      const addressData = response.data;
+      const formattedAddress = [
+        addressData.road,
+        addressData.subdistrict,
+        addressData.district,
+        addressData.province,
+        addressData.postcode
+      ].filter(Boolean).join(' ');
+
+      console.log("Formatted address:", formattedAddress);
+      return {
+        coordinates: { lat, lng },
+        formattedAddress
+      };
+    } catch (error) {
+      console.error("Error getting address:", error);
+      return {
+        coordinates: null,
+        formattedAddress: "ไม่สามารถระบุที่อยู่ได้"
+      };
+    }
+  };
+
   useEffect(() => {
     socket.on("sendJob", async (data) => {
-      console.log(data);
-      setStatus(data.status);
+      console.log("Received job data:", data);
+      setStatus("sending"); // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่า popup จะแสดง
+
       try {
         const res = await axios.get("http://localhost:3000/api/orders", {
           params: { order_id: data.orderId },
         });
-        console.log("API result:", res.data.order);
-        setOrder({
-          destination: res.data.order.destination,
-          order_datetime: res.data.order.order_datetime,
-          order_id: res.data.order.order_id,
-          origin: res.data.order.origin,
-          phone: res.data.order.phone,
-          price: res.data.order.price,
-          shop_name: res.data.order.shop_name,
-          vehicle_type: res.data.order.vehicle_type,
-        });
+        
+        const orderData = res.data.order;
+        console.log("Order data:", orderData);
+
+        // แปลงพิกัดเป็นที่อยู่
+        const origin = await getLocationAddress(orderData.origin);
+        const destination = await getLocationAddress(orderData.destination);
+
+        console.log("Processed addresses:", { origin, destination });
+
+        if (origin && destination) {
+          setOrder({
+            ...orderData,
+            origin: {
+              coordinates: origin.coordinates,
+              address: origin.formattedAddress
+            },
+            destination: {
+              coordinates: destination.coordinates,
+              address: destination.formattedAddress
+            }
+          });
+        }
       } catch (err) {
-        console.log("API error:", err);
+        console.error("Error processing order:", err);
       }
     });
 

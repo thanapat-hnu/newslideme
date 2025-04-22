@@ -71,6 +71,28 @@ router.get("/reverse-geocode", async (req, res) => {
   }
 });
 
+// เพิ่ม route ใหม่สำหรับ reverse geocoding ด้วย Longdo
+router.get("/reverse-geocode-longdo", async (req, res) => {
+  const { lat, lng } = req.query;
+  try {
+    const response = await axios.get(
+      "https://api.longdo.com/map/services/address",
+      {
+        params: {
+          key: "1b4327452cc20e14a37e40cc130bd03a",
+          lon: lng,
+          lat: lat,
+        },
+      }
+    );
+    console.log("Longdo reverse geocode result:", response.data);
+    res.json(response.data);
+  } catch (err) {
+    console.error("❌ Error reverse geocode with Longdo:", err);
+    res.status(500).json({ message: "Reverse geocoding failed" });
+  }
+});
+
 // ✅ /api/save-location
 router.post("/save-location", (req, res) => {
   const { type, lat, lng } = req.body; // type = 'origin' | 'destination'
