@@ -33,7 +33,7 @@ function Main() {
       const response = await axios.get(
         "http://localhost:3000/api/reverse-geocode-longdo",
         {
-          params: { lat, lng }
+          params: { lat, lng },
         }
       );
 
@@ -44,19 +44,21 @@ function Main() {
         addressData.subdistrict,
         addressData.district,
         addressData.province,
-        addressData.postcode
-      ].filter(Boolean).join(' ');
+        addressData.postcode,
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       console.log("Formatted address:", formattedAddress);
       return {
         coordinates: { lat, lng },
-        formattedAddress
+        formattedAddress,
       };
     } catch (error) {
       console.error("Error getting address:", error);
       return {
         coordinates: null,
-        formattedAddress: "ไม่สามารถระบุที่อยู่ได้"
+        formattedAddress: "ไม่สามารถระบุที่อยู่ได้",
       };
     }
   };
@@ -70,8 +72,9 @@ function Main() {
         const res = await axios.get("http://localhost:3000/api/orders", {
           params: { order_id: data.orderId },
         });
-        
+
         const orderData = res.data.order;
+        // setOrder({});
         console.log("Order data:", orderData);
 
         // แปลงพิกัดเป็นที่อยู่
@@ -83,14 +86,21 @@ function Main() {
         if (origin && destination) {
           setOrder({
             ...orderData,
+            firstName: res.data.firstName,
+            lastName: res.data.lastName,
+            order_datetime: res.data.order_datetime,
+            order_id: res.data.order_id,
+            phone: res.data.phone,
+            shop_name: res.data.shop_name,
+            vehicle_type: res.data.vehicle_type,
             origin: {
               coordinates: origin.coordinates,
-              address: origin.formattedAddress
+              address: origin.formattedAddress,
             },
             destination: {
               coordinates: destination.coordinates,
-              address: destination.formattedAddress
-            }
+              address: destination.formattedAddress,
+            },
           });
         }
       } catch (err) {

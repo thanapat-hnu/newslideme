@@ -38,6 +38,8 @@ export function RegistrationProvider({ children }) {
 
   const [order, setOrder] = useState({
     destination: "",
+    firstName: "",
+    lastName: "",
     order_datetime: "",
     order_id: "",
     origin: "",

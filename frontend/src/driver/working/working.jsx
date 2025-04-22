@@ -6,9 +6,11 @@ import io from "socket.io-client";
 const Socket = io("http://localhost:3000");
 
 function Working() {
-  const { status, setStatus } = useContext(RegistrationContext);
+  const { status, setStatus, order, setOrder } =
+    useContext(RegistrationContext);
   const [isFull, setIsFull] = useState(true);
   const [time, setTime] = useState(new Date());
+  const [isAccept, setIsAccept] = useState(false);
 
   const HandleClick = () => {
     setIsFull(!isFull);
@@ -27,6 +29,8 @@ function Working() {
       label: "กำลังเดินทาง",
       value: "กำลังจัดส่ง",
     });
+    console.log(order);
+    setIsAccept(true);
   };
 
   return (
@@ -46,13 +50,19 @@ function Working() {
           </div>
           <div className={style.content}>
             <label style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
-              ชื่อ นามสกุล
+              {order.firstname}&nbsp;{order.lastname}
             </label>
-            <label className={style.address}>
-              ที่อยู่ : Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Non
-            </label>
-            <label>0&nbsp;บาท</label>
+            {isAccept ? (
+              <label className={style.address}>
+                จุดรับส่ง : {order.destination?.address || "กำลังโหลด..."}
+              </label>
+            ) : (
+              <label className={style.address}>
+                จุดรับงาน : {order.origin?.address || "กำลังโหลด..."}
+              </label>
+            )}
+
+            <label>{order.price}&nbsp;บาท</label>
           </div>
           <div className={style.bar}>
             <button className={style.btnBar}>
