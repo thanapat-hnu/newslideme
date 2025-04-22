@@ -134,6 +134,7 @@ function Confirm({
 
         socket.emit("sendJob", {
           status: "sending",
+          orderId: bookRes.data.booking.order_id,
         });
 
         // socket.emit("jobRequest", {

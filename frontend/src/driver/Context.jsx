@@ -36,6 +36,17 @@ export function RegistrationProvider({ children }) {
 
   const [status, setStatus] = useState("");
 
+  const [order, setOrder] = useState({
+    destination: "",
+    order_datetime: "",
+    order_id: "",
+    origin: "",
+    phone: "",
+    price: "",
+    shop_name: "",
+    vehicle_type: "",
+  });
+
   const [description, setDescription] = useState({
     descriptionA: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
     descriptionB: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
@@ -54,6 +65,8 @@ export function RegistrationProvider({ children }) {
         setStatus,
         description,
         setDescription,
+        order,
+        setOrder,
       }}
     >
       {children}

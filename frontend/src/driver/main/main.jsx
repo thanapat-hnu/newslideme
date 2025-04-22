@@ -8,6 +8,7 @@ import { RegistrationContext } from "../Context";
 import DriverMap from "../drivermap/DriverMap";
 import PopupJob from "../popupJob/popupJob";
 import Working from "../working/working";
+import axios from "axios";
 
 const socket = io("http://localhost:3000");
 
@@ -17,16 +18,41 @@ function Main() {
   // const [status, setStatus] = useState(false);
   const [income, setIncome] = useState(false);
   const navigator = useNavigate();
-  const { location, setLocation, status, setStatus } =
+  const { location, setLocation, status, setStatus, order, setOrder } =
     useContext(RegistrationContext);
 
   // test
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
+  // useEffect(() =>{
+  //   console.log(order)
+  // },[order])
+
   useEffect(() => {
-    socket.on("sendJob",(data) => {
-      setStatus(data.status)
-    })
+    socket.on("sendJob", async (data) => {
+      console.log(data);
+      setStatus(data.status);
+      try {
+        const res = await axios.get("http://localhost:3000/api/orders", {
+          params: {
+            order_id: data.orderId,
+          },
+        });
+        console.log("API result:", res.data.order);
+        setOrder({
+          destination: res.data.order.destination,
+          order_datetime: res.data.order.order_datetime,
+          order_id: res.data.order.order_id,
+          origin: res.data.order.origin,
+          phone: res.data.order.phone,
+          price: res.data.order.price,
+          shop_name: res.data.order.shop_name,
+          vehicle_type: res.data.order.vehicle_type,
+        });
+      } catch (err) {
+        console.log("API error:", err);
+      }
+    });
 
     socket.on("jobRequest", (data) => {
       console.log("Received job request:", data);
@@ -37,6 +63,7 @@ function Main() {
     return () => {
       // ระวังการ cleanup เพื่อลดการเกิด memory leaks
       socket.off("jobRequest");
+      socket.off("sendJob");
     };
   }, []);
 
