@@ -181,31 +181,45 @@ router.post('/book-service', async (req, res) => {
 
 
 router.get('/orders', async (req, res) => {
+  const { order_id } = req.query; // ✅ แก้จาก req.body เป็น req.query
+
+  if (!order_id) {
+    return res.status(400).json({ success: false, message: "กรุณาระบุ order_id" });
+  }
+
   try {
     const [rows] = await pool.query(`
       SELECT 
-        order_id,
-        shop_name,
-        origin,
-        destination,
-        vehicle_type,
-        price,
-        order_datetime,
-        phone
-      FROM order_cus
-      WHERE status = 'รอรับออเดอร์'
-      ORDER BY order_datetime DESC
-    `);
+        o.order_id,
+        o.shop_name,
+        o.origin,
+        o.destination,
+        o.vehicle_type,
+        o.price,
+        o.order_datetime,
+        o.phone,
+        o.status,
+        u.firstname,
+        u.lastname
+      FROM order_cus o
+      LEFT JOIN users u ON o.id_user = u.id_user
+      WHERE o.order_id = ?
+    `, [order_id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: "ไม่พบคำสั่งจองนี้" });
+    }
 
     res.json({
       success: true,
-      orders: rows
+      order: rows[0]
     });
   } catch (err) {
-    console.error("❌ Error fetching driver orders:", err);
+    console.error("❌ Error fetching order:", err);
     res.status(500).json({ success: false, message: "ดึงข้อมูลล้มเหลว", error: err.message });
   }
 });
+
 
 
 
