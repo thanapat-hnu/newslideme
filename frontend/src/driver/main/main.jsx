@@ -176,14 +176,23 @@ function Main() {
           <label>งานที่รับ</label>
         </div>
 
-        {["btn3", "btn4"].map((labelText, i) => (
-          <div key={i + 3} className={styles[`btnBottomItem${i + 3}`]}>
-            <div className={styles.btnBottomIcon}>
-              <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
-            </div>
-            <label>{labelText}</label>
+        {/* แก้ไขจาก map เป็นปุ่มแชทโดยตรง */}
+        <div 
+          className={styles.btnBottomItem3}
+          onClick={() => navigator("/driver/chat")}
+        >
+          <div className={styles.btnBottomIcon}>
+            <box-icon name='message-dots' color="#fff"></box-icon>
           </div>
-        ))}
+          <label>แชท</label>
+        </div>
+
+        <div className={styles.btnBottomItem4}>
+          <div className={styles.btnBottomIcon}>
+            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+          </div>
+          <label>btn4</label>
+        </div>
       </div>
 
       {/* แผนที่ */}

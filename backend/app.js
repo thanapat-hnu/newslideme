@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import phoneRoutes from "./All-Routes/routes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
+import chatRoutes from './All-Routes/chatroute.js';
 
 //chat secket
 import { initSocket } from "./socketServer.js";
@@ -15,17 +16,24 @@ import loginDriver from "./driverRoutes/login.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
-const server = createServer(app); // ใช้ HTTP server กับ Socket.IO
+const server = createServer(app);
+
+// Add logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Request body:', req.body);
+  next();
+});
 
 app.use(cors());
-// app.use(bodyParser.json());
 app.use(express.json());
 
-// ✅ ใช้ router ที่รวม logic คุยกับ DB
+// Routes
 app.use("/api", phoneRoutes);
 app.use("/api", mapRoutes);
+app.use('/api/chat', chatRoutes);
 
-// driver
+// driver routes
 app.use("/api/drivers", register);
 app.use("/api/drivers", register2);
 app.use("/api/drivers", loginDriver);
@@ -69,6 +77,7 @@ app.post("/api/verify-otp", (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-  initSocket(server, app); // ✅ เรียกฟังก์ชันพร้อม app สำหรับ set io
+  console.log(`Server running on port ${port}`);
+  console.log(`Chat endpoint available at http://localhost:${port}/api/chat/messages`);
+  initSocket(server, app);
 });

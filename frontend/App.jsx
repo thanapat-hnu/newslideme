@@ -26,6 +26,7 @@ import Main from "./src/driver/main/main";
 import LoginDriver from "./src/driver/login/LoginDriver";
 import Order from "./src/driver/Order/Order";
 import HistoryDri from "./src/driver/Order/HistoryDri";
+import DriverChat from "./src/driver/driverchat/driverchat";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -66,6 +67,7 @@ function App() {
           <Route path="/driver/login" element={<LoginDriver />} />
           <Route path="/driver/orders" element={<Order />} />
           <Route path="/driver/history" element={<HistoryDri />} />
+          <Route path="/driver/chat" element={<DriverChat />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -28,6 +28,10 @@ function Inputphone() {
         { token }
       );
       if (response.data.success) {
+        // เก็บข้อมูลลูกค้าใน localStorage
+        localStorage.setItem('customerName', response.data.data.name || 'Customer');
+        localStorage.setItem('customerPhone', response.data.data.phone);
+        localStorage.setItem('customerType', 'customer'); // เพิ่มประเภทผู้ใช้
         console.log("ข้อมูลลูกค้า:", {
           "ชื่อ": response.data.data.name || 'null',
           "เบอร์โทร": response.data.data.phone || 'null',
