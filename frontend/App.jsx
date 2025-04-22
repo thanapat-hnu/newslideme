@@ -16,7 +16,7 @@ import List from "./src/pages/list/list";
 import History from "./src/pages/history/history";
 import Chat from "./src/pages/Chat/Chat";
 import Payment from "./src/Payment/Payment";
-
+import ServiceStatus from "./src/pages/servicestatus/ServiceStatus"; // ✅ เพิ่มตรงนี้
 
 // import driver
 import DriverHome from "./src/driver/home/home";
@@ -24,7 +24,6 @@ import RegisterDriver from "./src/driver/register/register";
 import RegisterDriver2 from "./src/driver/register/register2";
 import Main from "./src/driver/main/main";
 import LoginDriver from "./src/driver/login/LoginDriver";
-
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -43,7 +42,6 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profileedit />} />
-
           </Route>
 
           {/* auth routes */}
@@ -54,8 +52,8 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/payment" element={<Payment />} />
 
-          {/* fallback route (optional) */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          {/* ✅ เพิ่มหน้าสถานะบริการ */}
+          <Route path="/servicestatus" element={<ServiceStatus />} />
 
           {/* driver routes */}
           <Route path="/driver/index" element={<DriverHome />} />
@@ -63,7 +61,9 @@ function App() {
           <Route path="/driver/register2" element={<RegisterDriver2 />} />
           <Route path="/driver/main" element={<Main />} />
           <Route path="/driver/login" element={<LoginDriver />} />
-          
+
+          {/* fallback route */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
     </div>

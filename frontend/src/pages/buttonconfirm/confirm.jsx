@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ เพิ่ม
 import "./confirm.css";
 import axios from "axios";
 
@@ -26,6 +27,7 @@ function Confirm({
 }) {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [user, setUser] = useState({ firstname: "", lastname: "", phone: "" });
+  const navigate = useNavigate(); // ✅ เพิ่ม
 
   const isButtonVisible =
     button === "a" || button === "b" || (showService && service);
@@ -67,7 +69,7 @@ function Confirm({
     }
 
     const center = map.location();
-    const selected = { lat: center.lat, lng: center.lon }; // พิกัดหมุดกลาง
+    const selected = { lat: center.lat, lng: center.lon };
     console.log("📌 พิกัดหมุดกลาง:", selected);
 
     try {
@@ -91,32 +93,26 @@ function Confirm({
         setButtonText("...");
         setShowMarker(true);
 
-        const providers = await axios.get(
-          "http://localhost:3000/api/providers",
-          {
-            params: { lat: readLocal.lat, lng: readLocal.lng },
-          }
-        );
+        const providers = await axios.get("http://localhost:3000/api/providers", {
+          params: { lat: readLocal.lat, lng: readLocal.lng },
+        });
 
         const providerId = providers.data[0]?.id || "P001";
         console.log("📦 ผู้ให้บริการ:", providers.data);
 
-        // ✅ ส่งข้อมูลจองพร้อมเบอร์โทร
-        const bookRes = await axios.post(
-          "http://localhost:3000/api/book-service",
-          {
-            origin: readLocal,
-            destination: readLocalB,
-            providerId,
-            carType: options,
-            time: new Date().toISOString(),
-            phone: user.phone,
-          }
-        );
+        const bookRes = await axios.post("http://localhost:3000/api/book-service", {
+          origin: readLocal,
+          destination: readLocalB,
+          providerId,
+          carType: options,
+          time: new Date().toISOString(),
+          phone: user.phone,
+        });
 
         console.log("✅ Booking Response:", bookRes.data);
 
-        console.log("✅ Booking & history saved");
+        // ✅ ไปหน้า servicestatus พร้อมข้อมูล booking
+        navigate("/servicestatus", { state: bookRes.data.booking });
       }
     } catch (err) {
       console.error("❌ Error during confirm:", err);
