@@ -15,7 +15,8 @@ import Create from "./src/pages/Create/Create";
 import List from "./src/pages/list/list";
 import History from "./src/pages/history/history";
 import Chat from "./src/pages/chat/chat";
-import Payment from "./src/Payment/Payment";
+import Payment from "./src/pages/Payment/Payment";
+
 import ServiceStatus from "./src/pages/servicestatus/ServiceStatus"; // ✅ เพิ่มตรงนี้
 
 // import driver
@@ -26,6 +27,7 @@ import Main from "./src/driver/main/main";
 import LoginDriver from "./src/driver/login/LoginDriver";
 import Order from "./src/driver/Order/Order";
 import HistoryDri from "./src/driver/Order/HistoryDri";
+import DriverChat from "./src/driver/driverchat/driverchat";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -55,6 +57,7 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/payment" element={<Payment />} />
 
+
           
           
 
@@ -66,6 +69,7 @@ function App() {
           <Route path="/driver/login" element={<LoginDriver />} />
           <Route path="/driver/orders" element={<Order />} />
           <Route path="/driver/history" element={<HistoryDri />} />
+          <Route path="/driver/chat" element={<DriverChat />} />
         </Routes>
       </BrowserRouter>
     </div>

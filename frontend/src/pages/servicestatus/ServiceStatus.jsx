@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ServiceStatus.css";
 import io from "socket.io-client";
-import axios from "axios"; // 👈 เพิ่ม axios
+import axios from "axios";
 
 const Socket = io("http://localhost:3000");
 
@@ -16,6 +16,7 @@ function ServiceStatus() {
   const steps = [
     { label: "ยืนยันคำสั่งจอง", value: "รอรับออเดอร์" },
     { label: "กำลังเดินทาง", value: "กำลังจัดส่ง" },
+    { label: "รอการชำระเงิน", value: "รอชำระเงิน" },
     { label: "สำเร็จ", value: "จัดส่งแล้ว" },
   ];
 
@@ -23,7 +24,6 @@ function ServiceStatus() {
     (step) => step.value === currentStatus
   );
 
-  // ✅ ฟังสถานะจาก Driver
   useEffect(() => {
     if (!booking) return;
 
@@ -37,24 +37,30 @@ function ServiceStatus() {
     };
   }, [booking]);
 
-  // ✅ หากถึงสถานะ "จัดส่งแล้ว" ให้ส่งข้อมูลเข้า history_cus
+  // ✅ หากสถานะ = จัดส่งแล้ว → บันทึกลง history
   useEffect(() => {
     if (currentStatus === "จัดส่งแล้ว") {
       const payload = {
         ...booking,
         status: currentStatus,
-        moved_at: new Date().toISOString(), // เวลาเก็บ
+        moved_at: new Date().toISOString(),
       };
 
-      axios.post("http://localhost:3000/api/move-to-history", payload)
-        .then(res => {
+      axios
+        .post("http://localhost:3000/api/move-to-history", payload)
+        .then((res) => {
           console.log("✅ ข้อมูลถูกเก็บลง history_cus แล้ว");
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("❌ เก็บข้อมูลลง history_cus ล้มเหลว:", err);
         });
     }
   }, [currentStatus]);
+
+  // ✅ ไปหน้า /payment
+  const handlePayment = () => {
+    navigate("/payment", { state: { booking } });
+  };
 
   if (!booking) {
     return (
@@ -95,6 +101,12 @@ function ServiceStatus() {
         <p><strong>เวลาที่จอง:</strong> {new Date(booking.time).toLocaleString("th-TH")}</p>
         <p><strong>สถานะปัจจุบัน:</strong> {currentStatus}</p>
       </div>
+
+      {currentStatus === "รอชำระเงิน" && (
+        <button className="btn-back" onClick={handlePayment}>
+          💳 ชำระเงิน
+        </button>
+      )}
 
       <button className="btn-back" onClick={() => navigate("/home")}>
         กลับหน้าหลัก

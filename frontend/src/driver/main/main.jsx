@@ -173,7 +173,6 @@ function Main() {
         // socket.on("idPersonal", (data) => {
         //   console.log("Received idPersonal:", data);
         // })
-
       } catch (err) {
         console.error("Error fetching personal info:", err);
       }
@@ -241,6 +240,24 @@ function Main() {
             <box-icon name="task" color="#fff"></box-icon>
           </div>
           <label>งานที่รับ</label>
+        </div>
+
+        {/* แก้ไขจาก map เป็นปุ่มแชทโดยตรง */}
+        <div
+          className={styles.btnBottomItem3}
+          onClick={() => navigator("/driver/chat")}
+        >
+          <div className={styles.btnBottomIcon}>
+            <box-icon name="message-dots" color="#fff"></box-icon>
+          </div>
+          <label>แชท</label>
+        </div>
+
+        <div className={styles.btnBottomItem4}>
+          <div className={styles.btnBottomIcon}>
+            <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+          </div>
+          <label>btn4</label>
         </div>
       </div>
 
