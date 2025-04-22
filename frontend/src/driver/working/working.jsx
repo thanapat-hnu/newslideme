@@ -9,6 +9,12 @@ function Working() {
   const { status, setStatus } = useContext(RegistrationContext);
   const [isFull, setIsFull] = useState(true);
   const [time, setTime] = useState(new Date());
+  const [stepIndex, setStepIndex] = useState(0); // 🟢 เพิ่มเพื่อควบคุมลำดับขั้นตอน
+
+  const steps = [
+    { label: "กำลังเดินทาง", value: "กำลังจัดส่ง" },
+    { label: "สำเร็จ", value: "จัดส่งแล้ว" },
+  ];
 
   const HandleClick = () => {
     setIsFull(!isFull);
@@ -16,17 +22,22 @@ function Working() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date()); // อัปเดตเวลาทุก 1 วิ
+      setTime(new Date());
     }, 1000);
-
-    return () => clearInterval(interval); // ล้างเมื่อ component ถูก unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleAccept = () => {
-    Socket.emit("statusUpdate", {
-      label: "กำลังเดินทาง",
-      value: "กำลังจัดส่ง",
-    });
+    if (stepIndex < steps.length) {
+      const currentStep = steps[stepIndex];
+
+      Socket.emit("statusUpdate", {
+        label: currentStep.label,
+        value: currentStep.value,
+      });
+
+      setStepIndex(stepIndex + 1); // 👉 ไปยังขั้นตอนถัดไป
+    }
   };
 
   return (
@@ -49,8 +60,7 @@ function Working() {
               ชื่อ นามสกุล
             </label>
             <label className={style.address}>
-              ที่อยู่ : Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Non
+              ที่อยู่ : Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
             </label>
             <label>0&nbsp;บาท</label>
           </div>
@@ -97,4 +107,5 @@ function Working() {
     </div>
   );
 }
+
 export default Working;

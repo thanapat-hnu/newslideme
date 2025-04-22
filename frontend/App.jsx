@@ -44,6 +44,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profileedit />} />
+            <Route path="/servicestatus" element={<ServiceStatus />} />
           </Route>
 
           {/* auth routes */}
@@ -54,8 +55,8 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/payment" element={<Payment />} />
 
-          {/* ✅ เพิ่มหน้าสถานะบริการ */}
-          <Route path="/servicestatus" element={<ServiceStatus />} />
+          
+          
 
           {/* driver routes */}
           <Route path="/driver/index" element={<DriverHome />} />

@@ -233,6 +233,54 @@ router.get('/orders', async (req, res) => {
 });
 
 
+function formatMySQLDatetime(isoDate) {
+  const date = new Date(isoDate);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mi = String(date.getMinutes()).padStart(2, '0');
+  const ss = String(date.getSeconds()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+}
+
+
+router.post("/move-to-history", async (req, res) => {
+  const {
+    order_id, personal_id, order_datetime, shop_name,
+    origin, destination, vehicle_type, status,
+    price, id_user, phone, moved_at
+  } = req.body;
+
+  try {
+    await pool.query(`
+      INSERT INTO history_cus (
+        order_id, personal_id, order_datetime, shop_name,
+        origin, destination, vehicle_type, status,
+        price, id_user, phone, moved_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      order_id,
+      personal_id,
+      formatMySQLDatetime(order_datetime), // ✅ แปลงรูปแบบให้ถูกต้อง
+      shop_name,
+      origin,
+      destination,
+      vehicle_type,
+      status,
+      price,
+      id_user,
+      phone,
+      formatMySQLDatetime(moved_at) // ✅ แปลงรูปแบบให้ถูกต้อง
+    ]);
+
+    res.json({ success: true, message: "✅ บันทึกลง history_cus แล้ว" });
+  } catch (err) {
+    console.error("❌ INSERT INTO history_cus failed:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 
 
 
