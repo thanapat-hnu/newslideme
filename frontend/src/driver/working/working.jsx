@@ -1,6 +1,9 @@
 import style from "./working.module.css";
 import { useContext, useState, useEffect } from "react";
 import { RegistrationContext } from "../Context";
+import io from "socket.io-client";
+
+const Socket = io("http://localhost:3000");
 
 function Working() {
   const { status, setStatus } = useContext(RegistrationContext);
@@ -19,6 +22,13 @@ function Working() {
     return () => clearInterval(interval); // ล้างเมื่อ component ถูก unmount
   }, []);
 
+  const handleAccept = () => {
+    Socket.emit("statusUpdate", {
+      label: "กำลังเดินทาง",
+      value: "กำลังจัดส่ง",
+    });
+  };
+
   return (
     <div>
       {isFull ? (
@@ -35,7 +45,9 @@ function Working() {
             </button>
           </div>
           <div className={style.content}>
-            <label style={{ fontSize: "1.2rem" ,marginBottom:"0.5rem"}}>ชื่อ นามสกุล</label>
+            <label style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+              ชื่อ นามสกุล
+            </label>
             <label className={style.address}>
               ที่อยู่ : Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Non
@@ -44,12 +56,15 @@ function Working() {
           </div>
           <div className={style.bar}>
             <button className={style.btnBar}>
-            <box-icon name="message-rounded" color="#fff" /><br />
+              <box-icon name="message-rounded" color="#fff" />
+              <br />
               แชท
             </button>
           </div>
           <div className={style.footer}>
-            <button className={style.btn}>ถึงแล้ว</button>
+            <button onClick={handleAccept} className={style.btn}>
+              ถึงแล้ว
+            </button>
           </div>
         </div>
       ) : (
@@ -67,12 +82,15 @@ function Working() {
           </div>
           <div className={style.bar}>
             <button className={style.btnBar}>
-            <box-icon name="message-rounded" color="#fff" /><br />
+              <box-icon name="message-rounded" color="#fff" />
+              <br />
               แชท
             </button>
           </div>
           <div className={style.footer}>
-            <button className={style.btn}>ถึงแล้ว</button>
+            <button onClick={handleAccept} className={style.btn}>
+              ถึงแล้ว
+            </button>
           </div>
         </div>
       )}

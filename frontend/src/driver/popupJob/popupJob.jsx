@@ -1,9 +1,11 @@
 import style from "./popupJob.module.css";
 import { useState, useContext, useEffect } from "react";
 import { RegistrationContext } from "../Context";
+import io from "socket.io-client";
+
+const Socket = io("http://localhost:3000");
 
 function PopupJob() {
-
   const { status, setStatus, description, setDescription, order, setOrder } =
     useContext(RegistrationContext);
 
@@ -13,6 +15,10 @@ function PopupJob() {
 
   const handleAccept = () => {
     setStatus("working");
+    Socket.emit("statusUpdate", {
+      label: "ยืนยันคำสั่งจอง",
+      value: "รอรับออเดอร์",
+    });
   };
 
   //   useEffect(() => {}, []);

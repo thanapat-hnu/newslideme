@@ -1,11 +1,21 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ServiceStatus.css";
+import { useEffect } from "react";
+import io from "socket.io-client";
+
+const Socket = io("http://localhost:3000");
 
 function ServiceStatus() {
   const location = useLocation();
   const navigate = useNavigate();
   const booking = location.state?.booking;
+
+  useEffect(() => {
+    Socket.on("statusUpdate", (data) => {
+      console.log(data);
+    })
+  }, []);
 
   if (!booking) {
     return (

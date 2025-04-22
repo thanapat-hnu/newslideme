@@ -7,9 +7,15 @@ export const sendJobSocket = (socket, io) => {
     io.emit("jobRequest", data);
   });
 
-  socket.on("sendJob",(data) => {
+  socket.on("sendJob", (data) => {
     console.log("📩 Send job:", data);
 
     io.emit("sendJob", data);
-  })
+  });
+
+  socket.on("statusUpdate", (data) => {
+    console.log("📩 Status update:", data);
+
+    io.emit("statusUpdate", data);
+  });
 };
