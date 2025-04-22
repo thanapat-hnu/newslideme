@@ -14,7 +14,7 @@ export const initSocket = (server, app) => {
 
   io.on("connection", (socket) => {
     const ip = socket.handshake.address;
-    console.log(`🔌 New user connected: ${socket.id} from ${ip}`);
+    // console.log(`🔌 New user connected: ${socket.id} from ${ip}`);
 
     // ✅ ส่ง socket เข้าไปให้ sendJobSocket แทน
     sendJobSocket(socket, io);

@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ เพิ่ม
 import "./confirm.css";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 function Confirm({
   button,
@@ -93,26 +96,53 @@ function Confirm({
         setButtonText("...");
         setShowMarker(true);
 
-        const providers = await axios.get("http://localhost:3000/api/providers", {
-          params: { lat: readLocal.lat, lng: readLocal.lng },
-        });
+        const providers = await axios.get(
+          "http://localhost:3000/api/providers",
+          {
+            params: { lat: readLocal.lat, lng: readLocal.lng },
+          }
+        );
 
         const providerId = providers.data[0]?.id || "P001";
         console.log("📦 ผู้ให้บริการ:", providers.data);
 
-        const bookRes = await axios.post("http://localhost:3000/api/book-service", {
-          origin: readLocal,
-          destination: readLocalB,
-          providerId,
-          carType: options,
-          time: new Date().toISOString(),
-          phone: user.phone,
-        });
+        // console.log(`readLocal.lat : ${readLocal.lat}`);
+        // console.log(`readLocal.lng : ${readLocal.lng}`);
+
+        // console.log(`readLocalB.lat : ${readLocalB.lat}`);
+        // console.log(`readLocalB.lng : ${readLocalB.lng}`);
+
+        // ✅ ส่งข้อมูลจองพร้อมเบอร์โทร
+        const bookRes = await axios.post(
+          "http://localhost:3000/api/book-service",
+          {
+            origin: readLocal,
+            destination: readLocalB,
+            providerId,
+            carType: options,
+            time: new Date().toISOString(),
+            phone: user.phone,
+          }
+        );
 
         console.log("✅ Booking Response:", bookRes.data);
 
         // ✅ ไปหน้า servicestatus พร้อมข้อมูล booking
-        navigate("/servicestatus", { state: bookRes.data.booking });
+        // navigate("/servicestatus", { state: bookRes.data.booking });
+
+        console.log("✅ Booking & history saved");
+
+        socket.emit("sendJob", {
+          status: "sending",
+          orderId: bookRes.data.booking.order_id,
+        });
+
+        // socket.emit("jobRequest", {
+        //   lonA: readLocal.lng,
+        //   latA: readLocal.lat,
+        //   lonB: readLocalB.lng,
+        //   latB: readLocalB.lat,
+        // });
       }
     } catch (err) {
       console.error("❌ Error during confirm:", err);

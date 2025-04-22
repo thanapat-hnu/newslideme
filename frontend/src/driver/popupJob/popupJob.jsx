@@ -3,13 +3,8 @@ import { useState, useContext, useEffect } from "react";
 import { RegistrationContext } from "../Context";
 
 function PopupJob() {
-  const [price, setPrice] = useState(0);
-  const [data, setData] = useState({
-    locationA: "กาญจนบุรี",
-    locationB: "ชลบุรี",
-  });
 
-  const { status, setStatus, description, setDescription } =
+  const { status, setStatus, description, setDescription, order, setOrder } =
     useContext(RegistrationContext);
 
   const handleClose = () => {
@@ -28,16 +23,15 @@ function PopupJob() {
         ✖
       </button>
       <div className={style.priceSection}>
-        <label className={style.price}>{price}&nbsp;</label>
+        <label className={style.price}>{order.price}&nbsp;</label>
         <label className={style.unit}>บาท</label>
       </div>
 
-      {/* <hr className={style.hr} /> */}
-
+      {/* <div><label className={style.title}>{order.phone}</label></div> */}
       <div className={style.locationSection}>
         <div className={style.location}>
           <label className={style.dotGreen}></label>
-          {data.locationA}
+          {order.origin}
           <br />
           <label className={style.description}>
             {description.descriptionA}
@@ -46,7 +40,7 @@ function PopupJob() {
         <div className={style.verticalLine}></div>
         <div className={style.location}>
           <label className={style.dotRed}></label>
-          {data.locationB}
+          {order.destination}
           <br />
           <label className={style.description}>
             {description.descriptionB}
