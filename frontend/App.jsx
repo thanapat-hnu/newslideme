@@ -15,7 +15,8 @@ import Create from "./src/pages/Create/Create";
 import List from "./src/pages/list/list";
 import History from "./src/pages/history/history";
 import Chat from "./src/pages/chat/chat";
-import Payment from "./src/Payment/Payment";
+import Payment from "./src/pages/Payment/Payment";
+
 import ServiceStatus from "./src/pages/servicestatus/ServiceStatus"; // ✅ เพิ่มตรงนี้
 
 // import driver
@@ -54,6 +55,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/create" element={<Create />} />
           <Route path="/payment" element={<Payment />} />
+
 
           
           

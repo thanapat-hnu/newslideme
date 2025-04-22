@@ -1,65 +1,63 @@
 .status-container {
-    max-width: 480px;
-    margin: auto;
-    padding: 24px;
-    font-family: 'Prompt', sans-serif;
-    background-color: #f9f9f9;
-  }
-  
-  .step-progress {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 30px 0;
-  }
-  
-  .step-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-  
-  .circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    background-color: white;
-    color: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 13px;
-    transition: 0.3s;
-  }
-  
-  .circle.active {
-    background-color: #00b14f;
-    border-color: #00b14f;
-    color: white;
-  }
-  
-  .step-label {
-    font-size: 12px;
-    text-align: center;
-    margin-top: 6px;
-    color: #333;
-  }
-  
-  .line {
-    width: 40px;
-    height: 2px;
-    background-color: #ccc;
-    margin: 0 4px;
-  }
-  
-  .line.active {
-    background-color: #00b14f;
-  }
+  max-width: 480px;
+  margin: 40px auto; /* 👈 เพิ่มระยะด้านบน */
+  padding: 24px;
+  font-family: 'Prompt', sans-serif;
+  background-color: #f9f9f9;
+}
+.step-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+}
+
+.circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: white;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+.circle.active {
+  background-color: #00b14f;
+  border-color: #00b14f;
+  color: white;
+}
+
+.step-label {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 6px;
+  color: #333;
+  width: 80px;  /* ✅ ปรับความกว้างเพื่อให้ align กัน */
+}
+
+.line {
+  width: 40px;
+  height: 2px;
+  background-color: #ccc;
+}
+
+.line.active {
+  background-color: #00b14f;
+}
   
   .booking-details {
     background: #fff;
