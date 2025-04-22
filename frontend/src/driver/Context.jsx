@@ -54,6 +54,18 @@ export function RegistrationProvider({ children }) {
     descriptionB: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
   });
 
+  const [personal, setPersonal] = useState({
+    id: "",
+    first_name: "",
+    last_name: "",
+    id_card_number: "",
+    birth_date: "",
+    phone_number: "",
+    email: "",
+    id_card_image: null,
+    created_at: "",
+  });
+
   return (
     <RegistrationContext.Provider
       value={{

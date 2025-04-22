@@ -107,19 +107,27 @@ function DriverMap() {
         <button
           onClick={handleWarp}
           style={{
-            padding: "8px 12px",
-            marginRight: "8px",
-            fontSize: "14px",
-            borderRadius: "6px",
-            background: "#007aff",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            background: "#000",
             color: "#fff",
             border: "none",
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "fixed",
+            top: "50%",
+            right: "16px", // ห่างจากขอบขวาเล็กน้อย
+            transform: "translateY(-50%)", // จัดให้อยู่กลางจอแนวตั้ง
+            zIndex: 999, // ลอยอยู่บนสุด
           }}
         >
-          วาร์ปไปตำแหน่งของฉัน
+          <box-icon name="navigation" color="#fff" size="sm"></box-icon>
         </button>
-        <button
+
+        {/* <button
           onClick={handleChangeMarker}
           style={{
             padding: "8px 12px",
@@ -132,7 +140,7 @@ function DriverMap() {
           }}
         >
           เปลี่ยนหมุด
-        </button>
+        </button> */}
       </div>
 
       <div

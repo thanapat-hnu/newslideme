@@ -12,6 +12,7 @@ import { createServer } from "http";
 import register from "./driverRoutes/registerPersonal.js";
 import register2 from "./driverRoutes/RegisterVehicle.js";
 import loginDriver from "./driverRoutes/login.js";
+import getPersonal from "./driverRoutes/getPersonal.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use("/api", mapRoutes);
 app.use("/api/drivers", register);
 app.use("/api/drivers", register2);
 app.use("/api/drivers", loginDriver);
+app.use("/api/drivers", getPersonal);
 
 const otps = {};
 function generateOTP() {

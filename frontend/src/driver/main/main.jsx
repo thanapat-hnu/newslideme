@@ -16,8 +16,16 @@ const socket = io("http://localhost:3000");
 function Main() {
   const [income, setIncome] = useState(false);
   const navigator = useNavigate();
-  const { location, setLocation, status, setStatus, order, setOrder } =
-    useContext(RegistrationContext);
+  const {
+    location,
+    setLocation,
+    status,
+    setStatus,
+    order,
+    setOrder,
+    personal,
+    setPersonal,
+  } = useContext(RegistrationContext);
 
   const [isProfile, setIsProfile] = useState(false);
   const getLocationAddress = async (latLngString) => {
@@ -114,6 +122,8 @@ function Main() {
       setLocation(data);
     });
 
+    getPersonalInfo();
+
     return () => {
       socket.off("jobRequest");
       socket.off("sendJob");
@@ -122,6 +132,22 @@ function Main() {
 
   const handleOnline = () => {
     setStatus("sending");
+  };
+
+  const getPersonalInfo = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/drivers/getPersonal",
+        {
+          params: {
+            email: personal.email, // replace with actual email
+          },
+        }
+      );
+      console.log("xxxxxxxxxxx:",response.data);
+    } catch (error) {
+      console.error("Error fetching personal info:", error);
+    }
   };
 
   return (
@@ -152,9 +178,7 @@ function Main() {
           className={styles.profileImg}
           onClick={() => setIsProfile(!isProfile)}
         ></button>
-        {isProfile && <div className={styles.profilePopup}>
-          ชื่อ นามสกุล
-          </div>}
+        {isProfile && <div className={styles.profilePopup}>ชื่อ นามสกุล</div>}
       </div>
 
       {/* ปุ่มด้านล่าง */}
@@ -176,14 +200,14 @@ function Main() {
           <label>งานที่รับ</label>
         </div>
 
-        {["btn3", "btn4"].map((labelText, i) => (
+        {/* {["btn3", "btn4"].map((labelText, i) => (
           <div key={i + 3} className={styles[`btnBottomItem${i + 3}`]}>
             <div className={styles.btnBottomIcon}>
               <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
             </div>
             <label>{labelText}</label>
           </div>
-        ))}
+        ))} */}
       </div>
 
       {/* แผนที่ */}

@@ -18,9 +18,9 @@ function LoginDriver() {
       );
       if (response.data.success) {
         console.log("ข้อมูลคนขับ:", {
-          "ชื่อ": response.data.data.name,
-          "เบอร์โทร": response.data.data.phone,
-          "อีเมล": response.data.data.email
+          ชื่อ: response.data.data.name,
+          เบอร์โทร: response.data.data.phone,
+          อีเมล: response.data.data.email,
         });
       }
     } catch (err) {
@@ -34,7 +34,7 @@ function LoginDriver() {
         "http://localhost:3000/api/drivers/loginDriver",
         drivers
       );
-      
+
       if (res.data.success && res.data.token) {
         localStorage.setItem("driverToken", res.data.token);
         await decodeAndShowToken(res.data.token);
@@ -87,7 +87,16 @@ function LoginDriver() {
       {/* กลับ */}
       <button
         onClick={() => navigator("/driver/index")}
-        style={{ marginTop: "10px" }}
+        style={{
+          marginTop: "10px",
+          background: "none",
+          border: "none",
+          color: "black",
+          textDecoration: "underline",
+          fontSize: "16px",
+          cursor: "pointer",
+          padding: 0,
+        }}
       >
         กลับ
       </button>
