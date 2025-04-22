@@ -1,16 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
+// app.js
+import express from "express";
+import cors from "cors";
 import phoneRoutes from "./All-Routes/routes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
 
-
-
 //chat secket
-import { initSocket } from './socketServer.js';
-import { createServer } from 'http';
-
-
+import { initSocket } from "./socketServer.js";
+import { createServer } from "http";
 
 // import driver
 import register from "./driverRoutes/registerPersonal.js";

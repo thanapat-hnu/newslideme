@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { sendJobSocket } from "./socketDriver/sendJobSocket.js";
 
 // Mock database using in-memory array
 const messageStore = {};
@@ -68,15 +69,18 @@ export const initSocket = (server, app) => {
   app.set("socketio", io);
   
   io.on("connection", (socket) => {
-    console.log("🔌 New user connected:", socket.id);
-    
+    const ip = socket.handshake.address;
+    // console.log(`🔌 New user connected: ${socket.id} from ${ip}`);
+
+    // ✅ ส่ง socket เข้าไปให้ sendJobSocket แทน
+    sendJobSocket(socket, io);
+
     socket.on("joinRoom", ({ userId, driverId }) => {
       const roomId = generateRoomId(userId, driverId);
       console.log(`🟢 User ${socket.id} joined room: ${roomId}`);
       socket.join(roomId);
     });
     
-    // Chat messaging event
     socket.on("chatMessage", async ({ userId, driverId, message }) => {
       const roomId = generateRoomId(userId, driverId);
       console.log(`💬 Chat message in room ${roomId}:`, message);
@@ -134,7 +138,6 @@ export const initSocket = (server, app) => {
         message: `Driver accepted the job!`,
         jobDetails,
       });
-      console.log("📡 jobConfirmed emitted to room:", roomId);
     });
     
     socket.on("disconnect", () => {
