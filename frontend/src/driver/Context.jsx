@@ -36,6 +36,11 @@ export function RegistrationProvider({ children }) {
 
   const [status, setStatus] = useState("");
 
+  const [description, setDescription] = useState({
+    descriptionA: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+    descriptionB: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+  });
+
   return (
     <RegistrationContext.Provider
       value={{
@@ -47,6 +52,8 @@ export function RegistrationProvider({ children }) {
         setLocation,
         status,
         setStatus,
+        description,
+        setDescription,
       }}
     >
       {children}

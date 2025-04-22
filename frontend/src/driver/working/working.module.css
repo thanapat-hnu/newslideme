@@ -1,0 +1,33 @@
+.fullContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 15px 15px 0px 0px;
+  transition: height 0.4s ease, transform 0.4s ease;
+}
+
+.shortContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 15px 15px 0px 0px;
+  transition: height 0.4s ease, transform 0.4s ease;
+}

@@ -9,12 +9,8 @@ function PopupJob() {
     locationB: "ชลบุรี",
   });
 
-  const [description, setDescription] = useState({
-    descriptionA: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
-    descriptionB: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
-  });
-
-  const { status, setStatus } = useContext(RegistrationContext);
+  const { status, setStatus, description, setDescription } =
+    useContext(RegistrationContext);
 
   const handleClose = () => {
     setStatus("");

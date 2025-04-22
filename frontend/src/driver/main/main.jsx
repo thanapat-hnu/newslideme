@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import { RegistrationContext } from "../Context";
 import DriverMap from "../drivermap/DriverMap";
 import PopupJob from "../popupJob/popupJob";
+import Working from "../working/working";
 
 const socket = io("http://localhost:3000");
 
@@ -76,29 +77,33 @@ function Main() {
         {/* โปรไฟล์ */}
         <label className={styles.profileImg}></label>
       </div>
-
       {/* ปุ่มออนไลน์ */}
-      <button
-        className={styles.btnOnline}
-        onClick={handleOnline}
-        style={{
-          // backgroundColor: status ? "#14BF61" : "#232323",
-        }}
-      >
-        <box-icon name="power-off" color="#ffffff"></box-icon>&nbsp;ออนไลน์
-      </button>
-
       {/* ปุ่มด้านล่าง */}
-      <div className={styles.btnBottom}>
-        {["btn1", "btn2", "btn3", "btn4"].map((labelText, i) => (
-          <div key={i} className={styles[`btnBottomItem${i + 1}`]}>
-            <div className={styles.btnBottomIcon}>
-              <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+      {status !== "working" && (
+        <button
+          className={styles.btnOnline}
+          onClick={handleOnline}
+          style={
+            {
+              // backgroundColor: status ? "#14BF61" : "#232323",
+            }
+          }
+        >
+          <box-icon name="power-off" color="#ffffff"></box-icon>&nbsp;ออนไลน์
+        </button>
+      )}
+      {status !== "working" && (
+        <div className={styles.btnBottom}>
+          {["btn1", "btn2", "btn3", "btn4"].map((labelText, i) => (
+            <div key={i} className={styles[`btnBottomItem${i + 1}`]}>
+              <div className={styles.btnBottomIcon}>
+                <box-icon type="logo" name="postgresql" color="#fff"></box-icon>
+              </div>
+              <label>{labelText}</label>
             </div>
-            <label>{labelText}</label>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* แผนที่ */}
       <div className={styles.map} id="map">
@@ -106,6 +111,7 @@ function Main() {
       </div>
 
       {status === "sending" && <PopupJob />}
+      {status === "working" && <Working />}
     </div>
   );
 }
