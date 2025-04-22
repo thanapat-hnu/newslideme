@@ -100,46 +100,61 @@ router.get('/providers', (req, res) => {
 });
 
 // ✅ /api/book-service
+
+
 router.post('/book-service', async (req, res) => {
   const { origin, destination, providerId, time, carType, phone } = req.body;
 
-  if (!phone) {
-    return res.status(400).json({ message: 'กรุณาระบุเบอร์โทรศัพท์ผู้ใช้' });
-  }
-
   try {
-    // ✅ ดึงชื่อผู้ใช้จาก DB
-    const [userRows] = await pool.query("SELECT firstname, lastname FROM users WHERE phone = ?", [phone]);
+    // ✅ ดึง id_user จาก users table ด้วยเบอร์โทร
+    const [userRows] = await pool.query(
+      "SELECT id_user FROM users WHERE phone = ?",
+      [phone]
+    );
 
     if (userRows.length === 0) {
-      return res.status(404).json({ message: 'ไม่พบข้อมูลผู้ใช้จากเบอร์โทรนี้' });
+      return res.status(404).json({ message: 'ไม่พบผู้ใช้จากเบอร์โทรนี้' });
     }
 
-    const { firstname, lastname } = userRows[0];
+    const id_user = userRows[0].id_user;
 
-    // ✅ ค้นหาผู้ให้บริการจาก mockProviders
+    // ✅ ค้นหา provider
     const matchedProvider = mockProviders.find(p => p.id === providerId);
-
     if (!matchedProvider) {
       return res.status(404).json({ message: 'ไม่พบผู้ให้บริการตามรหัสที่ระบุ' });
     }
 
     const price = matchedProvider.price;
+    const order_datetime = new Date(time).toISOString().slice(0, 19).replace('T', ' ');
 
-    // ✅ Log ข้อมูลการจอง
-    console.log("📦 [BOOKING LOG]");
-    console.log(`👤 ผู้จอง: ${firstname} ${lastname} (${phone})`);
-    console.log(`📍 ต้นทาง:`, origin);
-    console.log(`📍 ปลายทาง:`, destination);
-    console.log(`🚚 ประเภทรถ: ${carType}`);
-    console.log(`🏢 ผู้ให้บริการ: ${matchedProvider.name}`);
-    console.log(`💰 ราคา: ${price} บาท`);
-    console.log(`🕒 เวลา: ${time}`);
-    console.log("=======================================");
+    await pool.query(`
+      INSERT INTO order_cus (
+        order_datetime,
+        shop_name,
+        origin,
+        destination,
+        vehicle_type,
+        status,
+        price,
+        id_user,
+        phone
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      order_datetime,
+      matchedProvider.name,
+      `lat:${origin.lat},lng:${origin.lng}`,
+      `lat:${destination.lat},lng:${destination.lng}`,
+      carType,
+      'รอรับออเดอร์',
+      price,
+      id_user,
+      phone
+    ]);
+
+    console.log("✅ บันทึกการจองสำเร็จ พร้อม id_user =", id_user, "และเบอร์ =", phone);
 
     res.json({
       message: '✅ Booking confirmed',
-      customer: { firstname, lastname },
       booking: {
         origin,
         destination,
@@ -148,12 +163,45 @@ router.post('/book-service', async (req, res) => {
         carType,
         time,
         price,
+        id_user,
+        phone
       },
     });
   } catch (err) {
     console.error('❌ Error booking:', err.message);
-    res.status(500).json({ message: 'Booking failed' });
+    res.status(500).json({ message: 'Booking failed', error: err.message });
   }
 });
+
+
+
+router.get('/orders', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        order_id,
+        shop_name,
+        origin,
+        destination,
+        vehicle_type,
+        price,
+        order_datetime,
+        phone
+      FROM order_cus
+      WHERE status = 'รอรับออเดอร์'
+      ORDER BY order_datetime DESC
+    `);
+
+    res.json({
+      success: true,
+      orders: rows
+    });
+  } catch (err) {
+    console.error("❌ Error fetching driver orders:", err);
+    res.status(500).json({ success: false, message: "ดึงข้อมูลล้มเหลว", error: err.message });
+  }
+});
+
+
 
 export default router;
