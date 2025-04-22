@@ -19,6 +19,7 @@ function Main() {
   const { location, setLocation, status, setStatus, order, setOrder } =
     useContext(RegistrationContext);
 
+  const [isProfile, setIsProfile] = useState(false);
   const getLocationAddress = async (latLngString) => {
     try {
       const matches = latLngString.match(/lat:([\d.]+),lng:([\d.]+)/);
@@ -147,7 +148,13 @@ function Main() {
         )}
 
         {/* โปรไฟล์ */}
-        <label className={styles.profileImg}></label>
+        <button
+          className={styles.profileImg}
+          onClick={() => setIsProfile(!isProfile)}
+        ></button>
+        {isProfile && <div className={styles.profilePopup}>
+          ชื่อ นามสกุล
+          </div>}
       </div>
 
       {/* ปุ่มด้านล่าง */}

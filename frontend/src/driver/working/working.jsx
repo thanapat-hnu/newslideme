@@ -11,6 +11,12 @@ function Working() {
   const [isFull, setIsFull] = useState(true);
   const [time, setTime] = useState(new Date());
   const [isAccept, setIsAccept] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0); // 🟢 เพิ่มเพื่อควบคุมลำดับขั้นตอน
+
+  const steps = [
+    { label: "กำลังเดินทาง", value: "กำลังจัดส่ง" },
+    { label: "สำเร็จ", value: "จัดส่งแล้ว" },
+  ];
 
   const HandleClick = () => {
     setIsFull(!isFull);
@@ -18,19 +24,22 @@ function Working() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date()); // อัปเดตเวลาทุก 1 วิ
+      setTime(new Date());
     }, 1000);
-
-    return () => clearInterval(interval); // ล้างเมื่อ component ถูก unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleAccept = () => {
-    Socket.emit("statusUpdate", {
-      label: "กำลังเดินทาง",
-      value: "กำลังจัดส่ง",
-    });
-    console.log(order);
-    setIsAccept(true);
+    if (stepIndex < steps.length) {
+      const currentStep = steps[stepIndex];
+
+      Socket.emit("statusUpdate", {
+        label: currentStep.label,
+        value: currentStep.value,
+      });
+
+      setStepIndex(stepIndex + 1); // 👉 ไปยังขั้นตอนถัดไป
+    }
   };
 
   return (
@@ -107,4 +116,5 @@ function Working() {
     </div>
   );
 }
+
 export default Working;
