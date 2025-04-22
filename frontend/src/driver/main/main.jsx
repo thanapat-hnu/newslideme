@@ -5,17 +5,19 @@ import styles from "./main.module.css";
 import { useNavigate } from "react-router";
 import { io } from "socket.io-client";
 import { RegistrationContext } from "../Context";
+import DriverMap from "../drivermap/DriverMap";
+import PopupJob from "../popupJob/popupJob";
 
 const socket = io("http://localhost:3000");
 
 // import Map from '../map/map';
-import DriverMap from "../drivermap/DriverMap";
 
 function Main() {
-  const [status, setStatus] = useState(false);
+  // const [status, setStatus] = useState(false);
   const [income, setIncome] = useState(false);
   const navigator = useNavigate();
-  const { location, setLocation } = useContext(RegistrationContext);
+  const { location, setLocation, status, setStatus } =
+    useContext(RegistrationContext);
 
   // test
   // const [token, setToken] = useState(localStorage.getItem("token"));
@@ -34,7 +36,8 @@ function Main() {
   }, []);
 
   const handleOnline = () => {
-    setStatus(!status);
+    // setStatus(!status);
+    setStatus("sending");
     // socket.emit("jobRequest", {
     //   lonA: 100.523186,
     //   latA: 13.736717,
@@ -79,7 +82,7 @@ function Main() {
         className={styles.btnOnline}
         onClick={handleOnline}
         style={{
-          backgroundColor: status ? "#14BF61" : "#232323",
+          // backgroundColor: status ? "#14BF61" : "#232323",
         }}
       >
         <box-icon name="power-off" color="#ffffff"></box-icon>&nbsp;ออนไลน์
@@ -101,6 +104,8 @@ function Main() {
       <div className={styles.map} id="map">
         <DriverMap />
       </div>
+
+      {status === "sending" && <PopupJob />}
     </div>
   );
 }

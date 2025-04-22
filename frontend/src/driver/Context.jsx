@@ -31,8 +31,10 @@ export function RegistrationProvider({ children }) {
     lonA: 0,
     latA: 0,
     lonB: 0,
-    latB: 0
+    latB: 0,
   });
+
+  const [status, setStatus] = useState("");
 
   return (
     <RegistrationContext.Provider
@@ -42,7 +44,9 @@ export function RegistrationProvider({ children }) {
         vehicleData,
         setVehicleData,
         location,
-        setLocation
+        setLocation,
+        status,
+        setStatus,
       }}
     >
       {children}
