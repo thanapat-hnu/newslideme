@@ -1,37 +1,36 @@
-import { useEffect, useRef, useContext } from "react";
+// src/driver/home/main/drivermap/DriverMap.jsx
+import { useEffect, useRef, useContext, useState } from "react";
 import { RegistrationContext } from "../Context";
 
 function DriverMap() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const userMarkerRef = useRef(null); // 📍 marker ของตำแหน่งปัจจุบัน
+  const userMarkerRef = useRef(null);
   const { location } = useContext(RegistrationContext);
 
-  // 🌐 โหลด Longdo Map และ Route
+  // สเตตเพื่อเก็บ URL ไอคอนปัจจุบัน
+  const [markerIcon, setMarkerIcon] = useState(
+    "https://map.longdo.com/mmmap/images/pin_mark.png"
+  );
+
+  // โหลดแผนที่และ route
   useEffect(() => {
     const waitForLongdo = setInterval(() => {
       if (window.longdo && window.longdo.Map) {
         clearInterval(waitForLongdo);
-
         const map = new window.longdo.Map({
           placeholder: mapContainerRef.current,
           language: "th",
         });
-
         map.location({ lat: 13.736717, lon: 100.523186 });
         map.zoom(13);
         mapRef.current = map;
 
         // ซ่อน UI ไม่จำเป็น
-        if (map.Ui?.Crosshair?.visible) map.Ui.Crosshair.visible(false);
-        if (map.Ui?.Zoombar?.visible) map.Ui.Zoombar.visible(false);
-        if (map.Ui?.Toolbar?.visible) map.Ui.Toolbar.visible(false);
-        if (map.Ui?.LayerSelector?.visible) map.Ui.LayerSelector.visible(false);
-        if (map.Ui?.Geolocation?.visible) map.Ui.Geolocation.visible(false);
-        if (map.Ui?.Fullscreen?.visible) map.Ui.Fullscreen.visible(false);
-        if (map.Ui?.Scale?.visible) map.Ui.Scale.visible(false);
-
-        if (window.longdo?.Overlay?.Traffic) {
+        Object.values(map.Ui || {}).forEach((uiCmp) => {
+          if (uiCmp.visible) uiCmp.visible(false);
+        });
+        if (window.longdo.Overlay?.Traffic) {
           map.Overlays.add(window.longdo.Overlay.Traffic);
         }
 
@@ -51,27 +50,25 @@ function DriverMap() {
     }, 200);
   }, [location]);
 
-  // 📍 ดึงตำแหน่งปัจจุบันและอัปเดต marker ทุก 3 วินาที
+  // อัปเดตตำแหน่งและหมุดทุกวินาที
   useEffect(() => {
     const updateLocation = () => {
       if (navigator.geolocation && mapRef.current) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
+          (pos) => {
+            const { latitude, longitude } = pos.coords;
             const map = mapRef.current;
-
-            // ลบ marker เก่าถ้ามี
+            // ลบหมุดเก่า
             if (userMarkerRef.current) {
               map.Overlays.remove(userMarkerRef.current);
             }
-
-            // สร้าง marker ใหม่
+            // สร้างหมุดใหม่
             const marker = new window.longdo.Marker(
               { lat: latitude, lon: longitude },
               {
                 title: "ตำแหน่งของฉัน",
                 icon: {
-                  url: "https://map.longdo.com/mmmap/images/pin_mark.png",
+                  url: markerIcon,
                   offset: { x: 12, y: 45 },
                 },
               }
@@ -79,49 +76,64 @@ function DriverMap() {
             userMarkerRef.current = marker;
             map.Overlays.add(marker);
           },
-          (err) => {
-            console.error("ไม่สามารถดึงตำแหน่ง:", err);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0,
-          }
+          (err) => console.error("ไม่สามารถดึงตำแหน่ง:", err),
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
       }
     };
 
-    updateLocation(); // เรียกครั้งแรกเลย
-    const interval = setInterval(updateLocation, 1000); // แล้วเรียกทุก 3 วิ
+    updateLocation();
+    const interval = setInterval(updateLocation, 1000);
+    return () => clearInterval(interval);
+  }, [markerIcon]); // สังเกตว่าขึ้นกับ markerIcon
 
-    return () => clearInterval(interval); // เคลียร์เมื่อ component ถูก unmount
-  }, []);
+  // ฟังก์ชันสำหรับเปลี่ยนไอคอนหมุด
+  const handleChangeMarker = () => {
+    // เปลี่ยนเป็นไอคอนตัวอย่างใหม่ (ใส่ URL ของคุณได้เลย)
+    setMarkerIcon("https://map.longdo.com/mmmap/images/pin_mark.png");
+  };
+
+  // ฟังก์ชัน warp to my location
+  const handleWarp = () => {
+    if (mapRef.current && userMarkerRef.current) {
+      const { lat, lon } = userMarkerRef.current.location();
+      mapRef.current.location({ lat, lon }, true);
+    }
+  };
 
   return (
     <>
-      <button
-        onClick={() => {
-          if (mapRef.current && userMarkerRef.current) {
-            const { lat, lon } = userMarkerRef.current.location();
-            mapRef.current.location({ lat, lon }, true); // true = smooth zoom
-          }
-        }}
-        style={{
-          position: "absolute",
-          top: 10,
-          left: 10,
-          padding: "10px 16px",
-          fontSize: "16px",
-          borderRadius: "8px",
-          background: "#007aff",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-          zIndex: 1,
-        }}
-      >
-        วาร์ปไปตำแหน่งของฉัน
-      </button>
+      <div style={{ position: "absolute", top: 10, left: 10, zIndex: 1 }}>
+        <button
+          onClick={handleWarp}
+          style={{
+            padding: "8px 12px",
+            marginRight: "8px",
+            fontSize: "14px",
+            borderRadius: "6px",
+            background: "#007aff",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          วาร์ปไปตำแหน่งของฉัน
+        </button>
+        <button
+          onClick={handleChangeMarker}
+          style={{
+            padding: "8px 12px",
+            fontSize: "14px",
+            borderRadius: "6px",
+            background: "#28a745",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          เปลี่ยนหมุด
+        </button>
+      </div>
 
       <div
         ref={mapContainerRef}

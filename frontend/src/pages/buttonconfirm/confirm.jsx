@@ -137,12 +137,12 @@ function Confirm({
           orderId: bookRes.data.booking.order_id,
         });
 
-        // socket.emit("jobRequest", {
-        //   lonA: readLocal.lng,
-        //   latA: readLocal.lat,
-        //   lonB: readLocalB.lng,
-        //   latB: readLocalB.lat,
-        // });
+        socket.emit("jobRequest", {
+          lonA: readLocal.lng,
+          latA: readLocal.lat,
+          lonB: readLocalB.lng,
+          latB: readLocalB.lat,
+        });
       }
     } catch (err) {
       console.error("❌ Error during confirm:", err);
