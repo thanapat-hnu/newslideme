@@ -502,4 +502,90 @@ router.get('/driver/history/:historyId', async (req, res) => {
   }
 });
 
+// เพิ่มฟังก์ชันสร้าง token
+const generateCustomerToken = (userData) => {
+  const tokenData = {
+    name: userData.first_name ? `${userData.first_name} ${userData.last_name}` : null,
+    phone: userData.phone_number || null,
+    email: userData.email || null,
+    timestamp: new Date().getTime()
+  };
+  
+  return Buffer.from(JSON.stringify(tokenData)).toString('base64');
+};
+
+// แก้ไข route login customer
+router.post('/login-customer', async (req, res) => {
+  try {
+    const { phone } = req.body;
+    console.log('Attempting login with phone:', phone); // เพิ่ม logging
+    
+    if (!phone) {
+      return res.status(400).json({
+        success: false,
+        message: "กรุณากรอกเบอร์โทรศัพท์"
+      });
+    }
+
+    // เปลี่ยนจาก personal_info เป็น users และ phone_number เป็น phone
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE phone = ?",
+      [phone]
+    );
+
+    console.log('Database response:', rows); // เพิ่ม logging
+
+    if (rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "ไม่พบบัญชีผู้ใช้"
+      });
+    }
+
+    // แก้ไขการสร้าง token ให้ใช้ชื่อฟิลด์ที่ตรงกับตาราง users
+    const tokenData = {
+      name: rows[0].firstname ? `${rows[0].firstname} ${rows[0].lastname}` : null,
+      phone: rows[0].phone || null,
+      email: rows[0].email || null,
+      timestamp: new Date().getTime()
+    };
+
+    const token = Buffer.from(JSON.stringify(tokenData)).toString('base64');
+
+    return res.json({
+      success: true,
+      token: token
+    });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ"
+    });
+  }
+});
+
+// เพิ่ม endpoint สำหรับถอดรหัส token
+router.post('/decode-customer-token', (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Token is required"
+      });
+    }
+
+    const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
+    return res.json({ success: true, data: decoded });
+  } catch (error) {
+    console.error("Token decode error:", error);
+    return res.status(400).json({
+      success: false,
+      message: "Invalid token format"
+    });
+  }
+});
+
 export default router;

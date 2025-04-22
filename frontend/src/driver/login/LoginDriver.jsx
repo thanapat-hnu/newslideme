@@ -10,24 +10,41 @@ function LoginDriver() {
     idCardNumber: "1234567890123",
   });
 
+  const decodeAndShowToken = async (token) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/drivers/decode-token",
+        { token }
+      );
+      if (response.data.success) {
+        console.log("ข้อมูลคนขับ:", {
+          "ชื่อ": response.data.data.name,
+          "เบอร์โทร": response.data.data.phone,
+          "อีเมล": response.data.data.email
+        });
+      }
+    } catch (err) {
+      console.error("Token decode error:", err);
+    }
+  };
+
   const handleLogin = async () => {
-    try{
+    try {
       const res = await axios.post(
         "http://localhost:3000/api/drivers/loginDriver",
         drivers
       );
-      // console.log(res.data);
-      localStorage.setItem("token", res.data.token);
-      // console.log('token : '+localStorage.getItem("token"));
-      if(localStorage.getItem("token")){
+      
+      if (res.data.success && res.data.token) {
+        localStorage.setItem("driverToken", res.data.token);
+        await decodeAndShowToken(res.data.token);
         navigator("/driver/main");
       }
-      // navigator("/driver/main");
-
-    }catch(err){
-      console.log(err);
+    } catch (err) {
+      console.error("Login error:", err);
     }
   };
+
   return (
     <div className={styles.containerLoginDriver}>
       <h1 style={{ margin: "0", color: "#14BF61" }}>สมัครสมาชิก</h1>
