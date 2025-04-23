@@ -6,6 +6,18 @@ import axios from "axios";
 
 const Socket = io("http://localhost:3000");
 
+const fetchLocationName = async (lat, lng) => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/reverse-geocode", {
+      params: { lat, lon: lng },
+    });
+    return response.data.name || "ไม่ทราบพื้นที่";
+  } catch (error) {
+    console.error("❌ Error fetching location name:", error);
+    return "ไม่ทราบพื้นที่";
+  }
+};
+
 function ServiceStatus() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,6 +25,8 @@ function ServiceStatus() {
 
   const [currentStatus, setCurrentStatus] = useState(booking?.status || "");
   const [personalId, setPersonalId] = useState(null); // ✅ เก็บ personal_id
+  const [originName, setOriginName] = useState("กำลังโหลด...");
+  const [destinationName, setDestinationName] = useState("กำลังโหลด...");
 
   const steps = [
     { label: "ยืนยันคำสั่งจอง", value: "รอรับออเดอร์" },
@@ -82,6 +96,20 @@ function ServiceStatus() {
     }
   }, [currentStatus, personalId]);
 
+  useEffect(() => {
+    if (booking) {
+      // ดึงชื่อสถานที่สำหรับต้นทาง
+      fetchLocationName(booking.origin.lat, booking.origin.lng).then((name) =>
+        setOriginName(name)
+      );
+
+      // ดึงชื่อสถานที่สำหรับปลายทาง
+      fetchLocationName(booking.destination.lat, booking.destination.lng).then((name) =>
+        setDestinationName(name)
+      );
+    }
+  }, [booking]);
+
   const handlePayment = () => {
     navigate("/payment", { state: { booking } });
   };
@@ -132,12 +160,10 @@ function ServiceStatus() {
           <strong>ผู้ให้บริการ:</strong> {booking.providerName}
         </p>
         <p>
-          <strong>ต้นทาง:</strong> lat {booking.origin.lat}, lng{" "}
-          {booking.origin.lng}
+          <strong>ต้นทาง:</strong> {originName}
         </p>
         <p>
-          <strong>ปลายทาง:</strong> lat {booking.destination.lat}, lng{" "}
-          {booking.destination.lng}
+          <strong>ปลายทาง:</strong> {destinationName}
         </p>
         <p>
           <strong>ประเภทรถ:</strong> {booking.carType}
