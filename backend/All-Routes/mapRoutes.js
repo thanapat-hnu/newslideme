@@ -536,39 +536,56 @@ function formatMySQLDatetime(isoDate) {
  *       500:
  *         description: เกิดข้อผิดพลาดระหว่างการบันทึก
  */
-function formatMySQLDatetimeB(datetimeString) {
-  const date = new Date(datetimeString);
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
 router.post("/move-to-history", async (req, res) => {
   const {
-    order_id, personal_id, order_datetime, shop_name,
-    origin, destination, vehicle_type, status,
-    price, id_user, phone, moved_at
+    order_id,
+    personal_id,
+    order_datetime,
+    shop_name,
+    origin,
+    destination,
+    vehicle_type,
+    status,
+    price,
+    id_user,
+    phone,
+    moved_at,
   } = req.body;
 
   try {
-    await pool.query(`
+    // แปลง personal_id เป็นตัวเลข
+    const numericPersonalId = parseInt(personal_id.replace(/\D/g, ""), 10) || null;
+
+    if (!order_id || !order_datetime || !shop_name || !origin || !destination) {
+      return res.status(400).json({
+        success: false,
+        message: "ข้อมูลไม่ครบถ้วน: กรุณาระบุ order_id, order_datetime, shop_name, origin และ destination",
+      });
+    }
+
+    await pool.query(
+      `
       INSERT INTO history_cus (
         personal_id, order_datetime, shop_name,
         origin, destination, vehicle_type, status,
         price, moved_at, order_id, id_user, phone
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      personal_id,
-      formatMySQLDatetime(order_datetime),
-      shop_name,
-      origin,
-      destination,
-      vehicle_type,
-      status,
-      price,
-      formatMySQLDatetime(moved_at),
-      order_id,
-      id_user,
-      phone
-    ]);
+    `,
+      [
+        numericPersonalId, // ใช้ personal_id ที่แปลงเป็นตัวเลข
+        order_datetime || null,
+        shop_name || null,
+        origin || null,
+        destination || null,
+        vehicle_type || null,
+        status || null,
+        price || null,
+        moved_at || new Date().toISOString(),
+        order_id || null,
+        id_user || null,
+        phone || null,
+      ]
+    );
 
     res.json({ success: true, message: "✅ บันทึกลง history_cus แล้ว" });
   } catch (err) {
@@ -578,6 +595,30 @@ router.post("/move-to-history", async (req, res) => {
 });
 
 
+router.get("/get-history", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        history_id,
+        personal_id,
+        order_datetime,
+        shop_name,
+        origin,
+        destination,
+        vehicle_type,
+        status,
+        price,
+        moved_at
+      FROM history_cus
+      ORDER BY moved_at DESC
+    `);
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("❌ Error fetching history:", err);
+    res.status(500).json({ success: false, message: "ดึงข้อมูลล้มเหลว", error: err.message });
+  }
+});
 
 
 export default router;

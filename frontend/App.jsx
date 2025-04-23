@@ -28,13 +28,14 @@ import LoginDriver from "./src/driver/login/LoginDriver";
 import Order from "./src/driver/Order/Order";
 import HistoryDri from "./src/driver/Order/HistoryDri";
 import DriverChat from "./src/driver/driverchat/driverchat";
+import RabNgein from "./src/driver/rabngein/rabngein";
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   return (
     <div className="container-app">
-      <BrowserRouter basename="/slide_me2">
+      <Router basename="/slide_me2">
         <Routes>
           {/* redirect หน้าแรกไป login */}
           <Route path="/" element={<Navigate to="/login" />} />
@@ -70,8 +71,9 @@ function App() {
           <Route path="/driver/orders" element={<Order />} />
           <Route path="/driver/history" element={<HistoryDri />} />
           <Route path="/driver/chat" element={<DriverChat />} />
+          <Route path="/driver/rabngein" element={<RabNgein />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }

@@ -55,21 +55,23 @@ function ServiceStatus() {
         status: currentStatus,
         moved_at: new Date().toISOString(),
       };
+
       console.log("✅ ข้อมูลที่จะเก็บลง history_cus:", payload);
+
       axios
         .post("http://localhost:3000/api/move-to-history", {
           order_id: payload.order_id,
-          personal_id: payload.personal_id,
-          order_datetime: "",
-          shop_name: payload.providerName,
-          origin: "",
-          destination: "",
-          vehicle_type: payload.carType,
-          status: payload.status,
-          price: payload.price,
-          id_user: payload.id_user,
-          phone: payload.phone,
-          moved_at:"",
+          personal_id: payload.personal_id || null,
+          order_datetime: payload.time || null,
+          shop_name: payload.providerName || null,
+          origin: `lat:${payload.origin.lat},lng:${payload.origin.lng}` || null,
+          destination: `lat:${payload.destination.lat},lng:${payload.destination.lng}` || null,
+          vehicle_type: payload.carType || null,
+          status: payload.status || null,
+          price: payload.price || null,
+          id_user: payload.id_user || null,
+          phone: payload.phone || null,
+          moved_at: payload.moved_at || null,
         })
         .then(() => {
           console.log("✅ ข้อมูลถูกเก็บลง history_cus แล้ว");

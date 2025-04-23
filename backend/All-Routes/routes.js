@@ -260,6 +260,211 @@ router.get('/get-user', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /decode-customer-token:
+ *   post:
+ *     summary: ถอดรหัส token ของลูกค้า
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: Token ที่ต้องการถอดรหัส
+ *                 example: "eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0="
+ *     responses:
+ *       200:
+ *         description: ถอดรหัสสำเร็จ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     phone:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     timestamp:
+ *                       type: integer
+ *       400:
+ *         description: Token ไม่ถูกต้อง
+ */
+
+/**
+ * @swagger
+ * /login-customer:
+ *   post:
+ *     summary: เข้าสู่ระบบลูกค้าด้วยเบอร์โทรศัพท์
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: เบอร์โทรศัพท์ของลูกค้า
+ *                 example: "0912345678"
+ *     responses:
+ *       200:
+ *         description: เข้าสู่ระบบสำเร็จ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: ข้อมูลไม่ครบถ้วน
+ *       401:
+ *         description: ไม่พบบัญชีผู้ใช้
+ *       500:
+ *         description: เกิดข้อผิดพลาดจากเซิร์ฟเวอร์
+ */
+
+/**
+ * @swagger
+ * /driver/history/{historyId}:
+ *   get:
+ *     summary: ดึงข้อมูลประวัติการทำงานของคนขับตาม historyId
+ *     tags: [Driver]
+ *     parameters:
+ *       - in: path
+ *         name: historyId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: รหัสประวัติการทำงาน
+ *     responses:
+ *       200:
+ *         description: ดึงข้อมูลสำเร็จ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     historyId:
+ *                       type: string
+ *                     personalId:
+ *                       type: string
+ *                     orderDateTime:
+ *                       type: string
+ *                       format: date-time
+ *                     providerName:
+ *                       type: string
+ *                     locations:
+ *                       type: object
+ *                       properties:
+ *                         origin:
+ *                           type: object
+ *                           properties:
+ *                             address:
+ *                               type: string
+ *                         destination:
+ *                           type: object
+ *                           properties:
+ *                             address:
+ *                               type: string
+ *                     vehicleType:
+ *                       type: string
+ *                     status:
+ *                       type: string
+ *                     price:
+ *                       type: number
+ *                     moveAt:
+ *                       type: string
+ *                       format: date-time
+ *       404:
+ *         description: ไม่พบข้อมูลประวัติ
+ *       500:
+ *         description: เกิดข้อผิดพลาดจากเซิร์ฟเวอร์
+ */
+
+/**
+ * @swagger
+ * /driver/orders/{orderId}:
+ *   get:
+ *     summary: ดึงข้อมูลออเดอร์ของคนขับตาม orderId
+ *     tags: [Driver]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: รหัสออเดอร์
+ *     responses:
+ *       200:
+ *         description: ดึงข้อมูลสำเร็จ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     orderId:
+ *                       type: string
+ *                     providerId:
+ *                       type: string
+ *                     providerName:
+ *                       type: string
+ *                     locations:
+ *                       type: object
+ *                       properties:
+ *                         origin:
+ *                           type: object
+ *                           properties:
+ *                             address:
+ *                               type: string
+ *                         destination:
+ *                           type: object
+ *                           properties:
+ *                             address:
+ *                               type: string
+ *                     towTruckType:
+ *                       type: string
+ *                     price:
+ *                       type: number
+ *                     orderDateTime:
+ *                       type: string
+ *                       format: date-time
+ *                     status:
+ *                       type: string
+ *       404:
+ *         description: ไม่พบข้อมูลออเดอร์
+ *       500:
+ *         description: เกิดข้อผิดพลาดจากเซิร์ฟเวอร์
+ */
 
 /**
  * @swagger
@@ -711,6 +916,8 @@ router.post('/login-customer', async (req, res) => {
     });
   }
 });
+
+
 
 // เพิ่ม endpoint สำหรับถอดรหัส token
 router.post('/decode-customer-token', (req, res) => {
