@@ -4,12 +4,11 @@ import cors from "cors";
 import phoneRoutes from "./All-Routes/routes.js";
 import mapRoutes from "./All-Routes/mapRoutes.js";
 import chatRoutes from './All-Routes/chatroute.js';
+import { swaggerUi, swaggerSpec } from './swagger.js';
 
-//chat secket
 import { initSocket } from "./socketServer.js";
 import { createServer } from "http";
 
-// import driver
 import register from "./driverRoutes/registerPersonal.js";
 import register2 from "./driverRoutes/RegisterVehicle.js";
 import loginDriver from "./driverRoutes/login.js";
@@ -19,7 +18,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const server = createServer(app);
 
-// Add logging middleware
+// Logging
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   console.log('Request body:', req.body);
@@ -28,6 +27,9 @@ app.use((req, res, next) => {
 
 app.use(cors());
 app.use(express.json());
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
 app.use("/api", phoneRoutes);
@@ -48,13 +50,33 @@ function validateOTP(phoneNumber, otp) {
   return otps[phoneNumber] === otp;
 }
 
-// ✅ ส่ง OTP
+/**
+ * @swagger
+ * /api/generate-otp:
+ *   post:
+ *     summary: ส่งรหัส OTP ไปยังหมายเลขโทรศัพท์
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "0891234567"
+ *     responses:
+ *       200:
+ *         description: ส่ง OTP สำเร็จ
+ *       400:
+ *         description: เบอร์โทรศัพท์ไม่ถูกต้อง
+ */
 app.post("/api/generate-otp", (req, res) => {
   const { phoneNumber } = req.body;
   if (!phoneNumber) {
-    return res
-      .status(400)
-      .json({ success: false, message: "กรุณาระบุเบอร์โทรศัพท์" });
+    return res.status(400).json({ success: false, message: "กรุณาระบุเบอร์โทรศัพท์" });
   }
   const otp = generateOTP();
   otps[phoneNumber] = otp;
@@ -62,13 +84,37 @@ app.post("/api/generate-otp", (req, res) => {
   return res.json({ success: true, message: "ส่ง OTP สำเร็จ", otp });
 });
 
-// ✅ ตรวจสอบ OTP
+/**
+ * @swagger
+ * /api/verify-otp:
+ *   post:
+ *     summary: ตรวจสอบ OTP ว่าถูกต้องหรือไม่
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *               - otp
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "0891234567"
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: ยืนยัน OTP สำเร็จ
+ *       400:
+ *         description: OTP ไม่ถูกต้อง หรือข้อมูลไม่ครบ
+ */
 app.post("/api/verify-otp", (req, res) => {
   const { phoneNumber, otp } = req.body;
   if (!phoneNumber || !otp) {
-    return res
-      .status(400)
-      .json({ success: false, message: "ต้องระบุเบอร์โทรศัพท์และ OTP" });
+    return res.status(400).json({ success: false, message: "ต้องระบุเบอร์โทรศัพท์และ OTP" });
   }
   if (validateOTP(phoneNumber, otp)) {
     delete otps[phoneNumber];
@@ -80,6 +126,7 @@ app.post("/api/verify-otp", (req, res) => {
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
   console.log(`Chat endpoint available at http://localhost:${port}/api/chat/messages`);
   initSocket(server, app);
 });

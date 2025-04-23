@@ -20,6 +20,26 @@ const mockProviders = [
   },
 ];
 
+
+/**
+ * @swagger
+ * /search-location:
+ *   get:
+ *     summary: ค้นหาสถานที่ด้วยคำค้น keyword โดยใช้ Longdo Map API
+ *     tags: [Location]
+ *     parameters:
+ *       - in: query
+ *         name: keyword
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: คำค้นหาสำหรับสถานที่ เช่น ชื่อสถานที่หรือที่อยู่
+ *     responses:
+ *       200:
+ *         description: คืนผลลัพธ์สถานที่ที่ค้นพบ
+ *       500:
+ *         description: เกิดข้อผิดพลาดขณะค้นหา
+ */
 // 🔍 ค้นหาสถานที่ (ใช้ Longdo API)
 router.get("/search-location", async (req, res) => {
   const { keyword } = req.query;
@@ -41,6 +61,31 @@ router.get("/search-location", async (req, res) => {
 });
 
 // 🔁 Reverse Geocode
+/**
+ * @swagger
+ * /reverse-geocode:
+ *   get:
+ *     summary: แปลงพิกัดเป็นที่อยู่โดยใช้ OpenStreetMap Nominatim
+ *     tags: [Location]
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: พิกัดละติจูด
+ *       - in: query
+ *         name: lon
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: พิกัดลองจิจูด
+ *     responses:
+ *       200:
+ *         description: คืนชื่อพื้นที่ ถนน และซอย
+ *       500:
+ *         description: เกิดข้อผิดพลาดขณะดึงข้อมูลจาก Nominatim
+ */
 router.get("/reverse-geocode", async (req, res) => {
   const { lat, lon } = req.query;
   try {
@@ -71,7 +116,31 @@ router.get("/reverse-geocode", async (req, res) => {
   }
 });
 
-// เพิ่ม route ใหม่สำหรับ reverse geocoding ด้วย Longdo
+/**
+ * @swagger
+ * /reverse-geocode-longdo:
+ *   get:
+ *     summary: แปลงพิกัดเป็นที่อยู่โดยใช้ Longdo Map API
+ *     tags: [Location]
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: พิกัดละติจูด
+ *       - in: query
+ *         name: lng
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: พิกัดลองจิจูด
+ *     responses:
+ *       200:
+ *         description: คืนข้อมูลที่อยู่จาก Longdo
+ *       500:
+ *         description: เกิดข้อผิดพลาดขณะดึงข้อมูลจาก Longdo
+ */
 router.get("/reverse-geocode-longdo", async (req, res) => {
   const { lat, lng } = req.query;
   try {
@@ -93,14 +162,68 @@ router.get("/reverse-geocode-longdo", async (req, res) => {
   }
 });
 
+
 // ✅ /api/save-location
+/**
+ * @swagger
+ * /save-location:
+ *   post:
+ *     summary: บันทึกพิกัดตำแหน่งต้นทางหรือปลายทาง
+ *     tags: [Location]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - type
+ *               - lat
+ *               - lng
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 enum: [origin, destination]
+ *                 example: origin
+ *                 description: ประเภทของตำแหน่ง (ต้นทางหรือปลายทาง)
+ *               lat:
+ *                 type: number
+ *                 example: 13.7563
+ *               lng:
+ *                 type: number
+ *                 example: 100.5018
+ *     responses:
+ *       200:
+ *         description: บันทึกพิกัดเรียบร้อย
+ */
 router.post("/save-location", (req, res) => {
-  const { type, lat, lng } = req.body; // type = 'origin' | 'destination'
+  const { type, lat, lng } = req.body;
   console.log(`📍 Saved location [${type}]:`, lat, lng);
   res.json({ message: "Location saved" });
 });
 
-// ✅ /api/search-log
+/**
+ * @swagger
+ * /search-log:
+ *   post:
+ *     summary: บันทึกคำค้นหาที่ผู้ใช้ใช้ค้นหา
+ *     tags: [Location]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - keyword
+ *             properties:
+ *               keyword:
+ *                 type: string
+ *                 example: เซ็นทรัลเวิลด์
+ *     responses:
+ *       200:
+ *         description: บันทึกคำค้นหาเรียบร้อย
+ */
 router.post("/search-log", (req, res) => {
   const { keyword } = req.body;
   console.log("🔎 Search logged:", keyword);
@@ -128,6 +251,59 @@ router.get("/providers", (req, res) => {
   ];
   res.json(mockProviders);
 });
+
+
+
+/**
+ * @swagger
+ * /book-service:
+ *   post:
+ *     summary: จองบริการลากรถ
+ *     tags: [Booking]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - origin
+ *               - destination
+ *               - providerId
+ *               - time
+ *               - carType
+ *               - phone
+ *             properties:
+ *               origin:
+ *                 type: object
+ *                 properties:
+ *                   lat: { type: number, example: 13.736717 }
+ *                   lng: { type: number, example: 100.523186 }
+ *               destination:
+ *                 type: object
+ *                 properties:
+ *                   lat: { type: number, example: 13.7563 }
+ *                   lng: { type: number, example: 100.5018 }
+ *               providerId:
+ *                 type: string
+ *                 example: T001
+ *               time:
+ *                 type: string
+ *                 example: "2025-05-01T10:00:00"
+ *               carType:
+ *                 type: string
+ *                 example: "รถลากขนาดกลาง"
+ *               phone:
+ *                 type: string
+ *                 example: "0912345678"
+ *     responses:
+ *       200:
+ *         description: จองบริการเรียบร้อยแล้ว
+ *       404:
+ *         description: ไม่พบผู้ใช้หรือผู้ให้บริการ
+ *       500:
+ *         description: เกิดข้อผิดพลาดขณะบันทึกการจอง
+ */
 
 // ✅ /api/book-service
 
@@ -214,6 +390,31 @@ router.post("/book-service", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     summary: ดูรายละเอียดคำสั่งจองจาก order_id
+ *     tags: [Booking]
+ *     parameters:
+ *       - in: query
+ *         name: order_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: รหัสคำสั่งจองที่ต้องการค้นหา
+ *     responses:
+ *       200:
+ *         description: คืนข้อมูลคำสั่งจอง
+ *       400:
+ *         description: ไม่ได้ส่ง order_id
+ *       404:
+ *         description: ไม่พบคำสั่งจองในระบบ
+ *       500:
+ *         description: เกิดข้อผิดพลาดจากเซิร์ฟเวอร์
+ */
+
 router.get('/orders', async (req, res) => {
   const { order_id } = req.query;
 
@@ -267,6 +468,79 @@ function formatMySQLDatetime(isoDate) {
 }
 
 
+/**
+ * @swagger
+ * /move-to-history:
+ *   post:
+ *     summary: ย้ายคำสั่งจองไปยังประวัติการให้บริการ (history_cus)
+ *     tags: [Booking]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - order_id
+ *               - personal_id
+ *               - order_datetime
+ *               - shop_name
+ *               - origin
+ *               - destination
+ *               - vehicle_type
+ *               - status
+ *               - price
+ *               - id_user
+ *               - phone
+ *               - moved_at
+ *             properties:
+ *               order_id:
+ *                 type: integer
+ *                 example: 1001
+ *               personal_id:
+ *                 type: string
+ *                 example: "P001"
+ *               order_datetime:
+ *                 type: string
+ *                 example: "2025-05-01T10:00:00"
+ *               shop_name:
+ *                 type: string
+ *                 example: "ลากรถด่วน"
+ *               origin:
+ *                 type: string
+ *                 example: "lat:13.736717,lng:100.523186"
+ *               destination:
+ *                 type: string
+ *                 example: "lat:13.7563,lng:100.5018"
+ *               vehicle_type:
+ *                 type: string
+ *                 example: "รถลากขนาดกลาง"
+ *               status:
+ *                 type: string
+ *                 example: "เสร็จสิ้น"
+ *               price:
+ *                 type: number
+ *                 example: 2500
+ *               id_user:
+ *                 type: integer
+ *                 example: 1
+ *               phone:
+ *                 type: string
+ *                 example: "0912345678"
+ *               moved_at:
+ *                 type: string
+ *                 example: "2025-05-01T11:00:00"
+ *     responses:
+ *       200:
+ *         description: บันทึกข้อมูลลง history_cus สำเร็จ
+ *       500:
+ *         description: เกิดข้อผิดพลาดระหว่างการบันทึก
+ */
+function formatMySQLDatetimeB(datetimeString) {
+  const date = new Date(datetimeString);
+  return date.toISOString().slice(0, 19).replace("T", " ");
+}
+
 router.post("/move-to-history", async (req, res) => {
   const {
     order_id, personal_id, order_datetime, shop_name,
@@ -277,23 +551,23 @@ router.post("/move-to-history", async (req, res) => {
   try {
     await pool.query(`
       INSERT INTO history_cus (
-        order_id, personal_id, order_datetime, shop_name,
+        personal_id, order_datetime, shop_name,
         origin, destination, vehicle_type, status,
-        price, id_user, phone, moved_at
+        price, moved_at, order_id, id_user, phone
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
-      order_id,
       personal_id,
-      formatMySQLDatetime(order_datetime), // ✅ แปลงรูปแบบให้ถูกต้อง
+      formatMySQLDatetime(order_datetime),
       shop_name,
       origin,
       destination,
       vehicle_type,
       status,
       price,
+      formatMySQLDatetime(moved_at),
+      order_id,
       id_user,
-      phone,
-      formatMySQLDatetime(moved_at) // ✅ แปลงรูปแบบให้ถูกต้อง
+      phone
     ]);
 
     res.json({ success: true, message: "✅ บันทึกลง history_cus แล้ว" });

@@ -1,3 +1,4 @@
+//routes.js 1/2
 import express from 'express';
 import pool from '../db.js';
 
@@ -52,6 +53,32 @@ const towingHistoryMock = [
   }
 ];
 
+/**
+ * @swagger
+ * /insert-phone:
+ *   post:
+ *     summary: เพิ่มเบอร์โทรศัพท์ของผู้ใช้ใหม่
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "0912345678"
+ *     responses:
+ *       200:
+ *         description: บันทึกเบอร์โทรศัพท์เรียบร้อย
+ *       400:
+ *         description: เบอร์โทรมีอยู่ในระบบแล้วหรือไม่ได้ส่งข้อมูลมา
+ *       500:
+ *         description: เซิร์ฟเวอร์มีข้อผิดพลาด
+ */
 //  เพิ่มเบอร์โทรลง MySQL
 router.post('/insert-phone', async (req, res) => {
   const { phoneNumber } = req.body;
@@ -74,6 +101,51 @@ router.post('/insert-phone', async (req, res) => {
   }
 });
 
+
+
+/**
+ * @swagger
+ * /update-profile:
+ *   post:
+ *     summary: อัปเดตข้อมูลโปรไฟล์ของผู้ใช้ตามเบอร์โทร
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 example: "0912345678"
+ *               email:
+ *                 type: string
+ *                 example: "example@email.com"
+ *               firstname:
+ *                 type: string
+ *                 example: "สมชาย"
+ *               lastname:
+ *                 type: string
+ *                 example: "ใจดี"
+ *               gender:ype: string
+ *                 d
+ *                 type: string
+ *                 example: "male"
+ *               profileImage:
+ *                 tescription: URL หรือ base64 รูปโปรไฟล์ (optional)
+ *     responses:
+ *       200:
+ *         description: อัปเดตโปรไฟล์เรียบร้อย
+ *       400:
+ *         description: ไม่ระบุเบอร์โทรศัพท์
+ *       404:
+ *         description: ไม่พบผู้ใช้ในระบบ
+ *       500:
+ *         description: เซิร์ฟเวอร์มีข้อผิดพลาด
+ */
 // อัปเดตรายละเอียดผู้ใช้ตามเบอร์
 router.post('/update-profile', async (req, res) => {
   const { phone, email, firstname, lastname, gender, profileImage } = req.body;
@@ -103,6 +175,31 @@ router.post('/update-profile', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /check-phone:
+ *   post:
+ *     summary: ตรวจสอบว่าเบอร์โทรมีอยู่ในระบบหรือไม่
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: ผลลัพธ์ว่ามีเบอร์ในระบบหรือไม่
+ *       400:
+ *         description: ไม่ได้ส่งเบอร์โทรมา
+ *       500:
+ *         description: เซิร์ฟเวอร์มีข้อผิดพลาด
+ */
 
 //  ตรวจสอบว่าเบอร์มีอยู่ในระบบหรือไม่
 router.post('/check-phone', async (req, res) => {
@@ -121,7 +218,28 @@ router.post('/check-phone', async (req, res) => {
   }
 });
 
-
+/**
+ * @swagger
+ * /get-user:
+ *   get:
+ *     summary: ดึงข้อมูลผู้ใช้จากเบอร์โทร
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: phone
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: ข้อมูลผู้ใช้
+ *       400:
+ *         description: ไม่ได้ส่งเบอร์โทร
+ *       404:
+ *         description: ไม่พบผู้ใช้
+ *       500:
+ *         description: เซิร์ฟเวอร์มีข้อผิดพลาด
+ */
 router.get('/get-user', async (req, res) => {
   const phone = req.query.phone;
 
@@ -142,6 +260,34 @@ router.get('/get-user', async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /delete-user:
+ *   post:
+ *     summary: ลบบัญชีผู้ใช้ตามเบอร์โทร
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: ลบบัญชีสำเร็จ
+ *       400:
+ *         description: ไม่ได้ส่งเบอร์โทรมา
+ *       404:
+ *         description: ไม่พบผู้ใช้
+ *       500:
+ *         description: เซิร์ฟเวอร์มีข้อผิดพลาด
+ */
 //  ลบบัญชีผู้ใช้ตามเบอร์โทร
 router.post('/delete-user', async (req, res) => {
   const { phone } = req.body;
